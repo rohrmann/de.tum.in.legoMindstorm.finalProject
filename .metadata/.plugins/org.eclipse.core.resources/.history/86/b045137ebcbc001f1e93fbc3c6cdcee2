@@ -1,6 +1,0 @@
-
-public class Helper {
-	public static void drawString(String text, int column, int row){
-		
-	}
-}

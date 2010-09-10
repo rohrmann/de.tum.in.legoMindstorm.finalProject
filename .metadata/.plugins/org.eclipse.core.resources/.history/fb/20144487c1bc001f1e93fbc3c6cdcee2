@@ -1,9 +1,0 @@
-
-public class ColorSettings {
-	private class ColorSettingsEntry{
-		private String name;
-		private int[] rgb;
-		
-		Color
-	}
-}

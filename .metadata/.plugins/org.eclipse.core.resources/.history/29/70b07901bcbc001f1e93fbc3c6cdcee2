@@ -1,7 +1,0 @@
-import lejos.nxt.SensorPort;
-
-
-public class Test {
-	
-	public static void main(String[] args){
-		ColorSensor sensor = new ColorSensor(SensorPort.S1);
