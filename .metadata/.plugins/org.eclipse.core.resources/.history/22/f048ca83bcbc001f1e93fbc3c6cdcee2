@@ -1,0 +1,13 @@
+import lejos.nxt.LCD;
+
+
+public class Helper {
+	public static void drawString(String text, int column, int row){
+		LCD.drawString(text+getWhitespaces(text.length(),16));
+		
+	}
+	
+	public static String getWhitespaces(int textLength,int numChars){
+		
+	}
+}

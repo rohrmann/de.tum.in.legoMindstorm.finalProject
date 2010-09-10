@@ -1,0 +1,50 @@
+import java.util.ArrayList;
+import java.util.List;
+
+
+public class ColorSettings {
+	private class ColorSettingsEntry{
+		String name;
+		int[] rgb;
+		
+		ColorSettingsEntry(String name, int[] rgb){
+			this.name = name;
+			this.rgb =rgb;
+		}
+	}
+	
+	private List<ColorSettingsEntry> colors;
+	
+	public ColorSettings(){
+		colors = new ArrayList<ColorSettingsEntry>();
+	}
+	
+	public boolean addColor(String name, int[] rgb){
+		return colors.add(new ColorSettingsEntry(name,rgb));
+	}
+	
+	public int size(){
+		return colors.size();
+	}
+	
+	public boolean empty(){
+		return size() == 0;
+	}
+	
+	public String getColor(int[] rgb){
+		
+		if(empty()){
+			Helper.log("ColorSettings.getColor: is empty");
+			throw new IndexOutOfBoundsException("ColorSettings.getColor: is empty");
+		}
+		
+		String result = colors.get(0).name;
+		int diff = getQuadraticDiff(rgb,colors.get(0).rgb);
+	}
+	
+	private int getQuadraticDiff(int[] rgb1, int [] rgb2){
+		if(rgb1.length() != rgb2.length()){
+			
+		}
+	}
+}

@@ -1,0 +1,19 @@
+import lejos.nxt.LightSensor;
+import lejos.nxt.SensorPort;
+import lejos.nxt.addon.ColorSensor;
+
+
+public class TestSensorUnit {
+	
+	public static void main(String[] args){
+		ColorSensor color = new ColorSensor(SensorPort.S3);
+		LightSensor left = new LightSensor(SensorPort.S2);
+		LightSensor right = new LightSensor(SensorPort.S1);
+		
+		left.setFloodlight(false);
+		right.setFloodlight(false);
+		ColorSettings
+		
+	}
+
+}

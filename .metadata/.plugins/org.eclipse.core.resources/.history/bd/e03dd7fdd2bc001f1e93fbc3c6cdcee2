@@ -1,0 +1,11 @@
+
+public class LightSettings {
+	private int groundValue;
+	private int tolerance;
+	
+	public LightSettings(int groundValue,int tolerance){
+		this.groundValue = groundValue;
+		this.tolerance = tolerance;
+	}
+
+}

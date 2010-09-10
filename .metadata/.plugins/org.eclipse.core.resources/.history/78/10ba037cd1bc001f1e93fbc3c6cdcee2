@@ -1,0 +1,8 @@
+
+public class TestSensorUnit {
+	
+	public static void main(String[] args){
+		ColorSensor color = new ColorSensor(SensorPort.S3);
+	}
+
+}

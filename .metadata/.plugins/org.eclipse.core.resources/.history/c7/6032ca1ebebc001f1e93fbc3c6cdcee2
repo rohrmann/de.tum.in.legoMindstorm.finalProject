@@ -1,0 +1,20 @@
+import lejos.nxt.SensorPort;
+import lejos.nxt.addon.ColorSensor;
+
+
+public class Test {
+	
+	public static void main(String[] args){
+		ColorSensor c1 = new ColorSensor(SensorPort.S1);
+		ColorSensor c2 = new ColorSensor(SensorPort.S2);
+		
+		while(true){
+			int[] color1 = c1.getColor();
+			Helper.drawString(0,0);
+		}
+		
+		
+	}
+	
+	
+}

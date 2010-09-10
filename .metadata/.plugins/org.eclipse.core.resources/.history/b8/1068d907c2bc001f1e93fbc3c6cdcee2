@@ -1,0 +1,25 @@
+import java.util.ArrayList;
+import java.util.List;
+
+
+public class ColorSettings {
+	private class ColorSettingsEntry{
+		String name;
+		int[] rgb;
+		
+		ColorSettingsEntry(String name, int[] rgb){
+			this.name = name;
+			this.rgb =rgb;
+		}
+	}
+	
+	private List<ColorSettingsEntry> colors;
+	
+	public ColorSettings(){
+		colors = new ArrayList<ColorSettingsEntry>();
+	}
+	
+	public boolean addColor(String name, int[] rgb){
+		return colors.add(new ColorSettingsEntry(name,rgb)));
+	}
+}
