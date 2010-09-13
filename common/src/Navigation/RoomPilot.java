@@ -17,8 +17,6 @@ public class RoomPilot {
 	
 	public Color goToNextRoom(){
 		RoomInformation information= new RoomInformation();
-		robot.getPilot().setMoveSpeed(5);
-		robot.getPilot().setTurnSpeed(5);
 		Behavior driveForward = new DriveForward(robot,information);
 		Behavior followLine = new FollowLine(robot,information);
 		Behavior checkRoom = new CheckRoom(robot,15,5,information);

@@ -1,4 +1,5 @@
 package misc;
+import Graph.Pair;
 import lejos.nxt.Button;
 import lejos.nxt.LCD;
 
@@ -58,5 +59,22 @@ public class Helper {
 	
 	public static void drawInt(int number,int column,int row){
 		drawString(number+"",column,row);
+	}
+	
+	public static Pair calcPos(Pair position, Direction dir){
+		return calcPos(position,dir,1);
+	}
+	
+	public static Pair calcPos(Pair position, Direction dir,int dist){
+		switch(dir){
+		case NORTH:
+			return new Pair(position.getX(),position.getY()+dist);
+		case SOUTH:
+			return new Pair(position.getX(),position.getY()-dist);
+		case WEST:
+			return new Pair(position.getX()-dist,position.getY());
+		default:
+			return new Pair(position.getX()+dist,position.getY());
+		}
 	}
 }

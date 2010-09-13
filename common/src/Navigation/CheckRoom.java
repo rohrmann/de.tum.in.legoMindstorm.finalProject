@@ -35,6 +35,7 @@ public class CheckRoom implements Behavior {
 	@Override
 	public void action() {
 		Sound.beep();
+		robot.getPilot().setMoveSpeed(5);
 		robot.getPilot().forward();
 		long startTime;
 		Color color=Color.UNKNOWN;
@@ -67,6 +68,8 @@ public class CheckRoom implements Behavior {
 	
 		if(active)
 			Helper.error("CheckCrossing.action: Room not found");
+		
+		robot.getPilot().setMoveSpeed(10);
 		
 		active = false;
 		terminated = true;

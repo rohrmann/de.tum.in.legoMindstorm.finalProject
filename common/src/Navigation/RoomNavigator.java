@@ -13,15 +13,18 @@ public class RoomNavigator {
 	private RoomPilot pilot;
 	private Direction heading;
 	private Graph map;
-	private Pair<Integer,Integer> currentPosition;
+	private Pair currentPosition;
 	private LightSettings leftLightSettings;
+	private LightSettings rightLightSettings;
 	
-	public RoomNavigator(Robot robot){
+	public RoomNavigator(Robot robot,Graph map){
 		leftLightSettings = robot.getLeftLight();
+		rightLightSettings = robot.getRightLight();
 		this.pilot = new RoomPilot(robot);
 		this.heading = Direction.NORTH;
 		this.map = new Graph();
-		currentPosition = new Pair<Integer,Integer>(0,0);
+		currentPosition = new Pair(0,0);
+		this.map = map;
 	}
 	
 	public Color goToNextRoom(){
@@ -32,16 +35,16 @@ public class RoomNavigator {
 	private void advanceRoom(){
 		switch(heading){
 		case EAST:
-			currentPosition = new Pair<Integer,Integer>(currentPosition.getX()+1,currentPosition.getY());
+			currentPosition = new Pair(currentPosition.getX()+1,currentPosition.getY());
 			break;
 		case SOUTH:
-			currentPosition = new Pair<Integer,Integer>(currentPosition.getX(),currentPosition.getY()-1);
+			currentPosition = new Pair(currentPosition.getX(),currentPosition.getY()-1);
 			break;
 		case WEST:
-			currentPosition = new Pair<Integer,Integer>(currentPosition.getX()-1,currentPosition.getY());
+			currentPosition = new Pair(currentPosition.getX()-1,currentPosition.getY());
 			break;
 		case NORTH:
-			currentPosition = new Pair<Integer,Integer>(currentPosition.getX(),currentPosition.getY()+1);
+			currentPosition = new Pair(currentPosition.getX(),currentPosition.getY()+1);
 		}
 	}
 	
@@ -52,21 +55,25 @@ public class RoomNavigator {
 	public void turn(boolean left,int intersections){
 		boolean leftFree =true;
 		int curIntersections = 0;
+		LightSettings light = left?leftLightSettings:rightLightSettings;
 		
 		pilot.rotate(left?360:-360,true);
-		if(!leftLightSettings.groundChange()){
-			pilot.stop();
+		while(light.groundChange()){
+			Thread.yield();
 		}
+		pilot.stop();
 		
 		pilot.reset();
 		
+		pilot.rotate(left?360:-360,true);
+		
 		while(pilot.isMoving()){
 			
-			if(!leftLightSettings.groundChange()){
+			if(!light.groundChange()){
 				leftFree = true;
 			}
 			
-			if(leftFree && leftLightSettings.groundChange()){
+			if(leftFree && light.groundChange()){
 				curIntersections++;
 				leftFree = false;
 			}
@@ -189,6 +196,46 @@ public class RoomNavigator {
 		else if(heading == Direction.EAST){
 			turn(true,room.hasNorth()?2:1);
 		}
+	}
+	
+	public Pair getPosition(){
+		return currentPosition;
+	}
+	
+	public int getX(){
+		return currentPosition.getX();
+	}
+	
+	public int getY(){
+		return currentPosition.getY();
+	}
+	
+	public Direction getHeading(){
+		return heading;
+	}
+	
+	public Color move(Direction dir){
+		Color result = Color.UNKNOWN;
+		switch(dir){
+		case NORTH:
+			turnNorth();
+			result = goToNextRoom();
+			break;
+		case SOUTH:
+			turnSouth();
+			result =goToNextRoom();
+			break;
+		case WEST:
+			turnWest();
+			result = goToNextRoom();
+			break;
+		case EAST:
+			turnEast();
+			result =goToNextRoom();
+			break;
+		}
+		
+		return result;
 	}
 	
 }

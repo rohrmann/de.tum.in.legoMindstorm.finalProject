@@ -1,14 +1,17 @@
 package Graph;
 
+import Color.Color;
+import misc.Direction;
+
 public class Node {
-	private TYPE type;
-	private final Pair<Integer,Integer> id;
+	private Type type;
+	private final Pair id;
 	private Node north;
 	private Node west;
 	private Node south;
 	private Node east;
 	
-	public Node(TYPE type, Pair<Integer,Integer> id){
+	public Node(Type type, Pair id){
 		this.type = type;
 		this.id = id;
 		north =null;
@@ -17,15 +20,15 @@ public class Node {
 		east = null;
 	}
 	
-	public TYPE getType(){
+	public Type getType(){
 		return type;
 	}
 	
-	public void setType(TYPE type){
+	public void setType(Type type){
 		this.type = type;
 	}
 	
-	public Pair<Integer,Integer> getID(){
+	public Pair getID(){
 		return id;
 	}
 	
@@ -50,54 +53,62 @@ public class Node {
 		 * Check whether one has to delete an existing connection
 		 */
 		if(this.north != null){
-			Node temp = this.north;
-			this.north = null;
-			temp.setSouth(null);
+			this.north.setSimplexSouth(null);
 		}
 		
 		this.north = north;
 		
 		if(north != null)
-			north.setSouth(this);
+			north.setSimplexSouth(this);
+	}
+	
+	private void setSimplexNorth(Node north){
+		this.north = north;
 	}
 	
 	public void setWest(Node west){
 		if(this.west != null){
-			Node temp = this.west;
-			this.west = null;
-			temp.setEast(null);
+			this.west.setSimplexEast(null);
 		}
 		
 		this.west = west;
 		if(west != null){
-			west.setEast(this);
+			west.setSimplexEast(this);
 		}
+	}
+	
+	private void setSimplexWest(Node west){
+		this.west = west;
 	}
 	
 	public void setSouth(Node south){
 		if(this.south != null){
-			Node temp = this.south;
-			this.south = null;
-			temp.setNorth(null);
+			this.south.setSimplexNorth(null);
 		}
 		
 		this.south = south;
 		if(south!= null)
-			south.setNorth(this);
+		south.setSimplexNorth(this);
+	}
+	
+	private void setSimplexSouth(Node south){
+		this.south = south;
 	}
 	
 	public void setEast(Node east){
 		if(this.east != null){
-			Node temp = this.east;
-			this.east = null;
-			temp.setWest(null);
+			this.east.setSimplexWest(null);
 		}
 		
 		this.east =east;
 		
 		if(east != null){
-			east.setWest(this);
+			east.setSimplexWest(this);
 		}
+	}
+	
+	private void setSimplexEast(Node east){
+		this.east = east;
 	}
 	
 	public boolean hasNorth(){
@@ -115,5 +126,71 @@ public class Node {
 	public boolean hasEast(){
 		return east != null;
 	}
+	
+	public boolean has(Direction dir){
+		switch(dir){
+		case NORTH:
+			return hasNorth();
+		case SOUTH:
+			return hasSouth();
+		case WEST:
+			return hasWest();
+		default:
+			return hasEast();
+		}
+	}
+	
+	public void set(Node node, Direction dir){
+		switch(dir){
+		case NORTH:
+			setNorth(node);
+			break;
+		case SOUTH:
+			setSouth(node);
+			break;
+		case WEST:
+			setWest(node);
+			break;
+		case EAST:
+			setEast(node);
+			break;
+		}
+	}
+	
+	public Node get(Direction dir){
+		switch(dir){
+		case NORTH:
+			return getNorth();
+		case SOUTH:
+			return getSouth();
+		case WEST:
+			return getWest();
+		default:
+			return getEast();
+			
+		}
+	}
 
+	public void setType(Color color){
+		switch(color){
+		case RED:
+			type = Type.EMPTY;
+			break;
+		case YELLOW:
+			type = Type.PULLSTART;
+			break;
+		case GREEN:
+			type = Type.DEST;
+			break;
+		case BLUE:
+			type = Type.BOX;
+			break;
+		}
+	}
+	
+	@Override
+	public String toString(){
+		return "Node:"+id + " Type:"+type + (hasNorth()?"N":"") + (hasWest()?"W":"") + (hasSouth()?"S":"") + (hasEast()?"E":"");
+	}
+	
 }

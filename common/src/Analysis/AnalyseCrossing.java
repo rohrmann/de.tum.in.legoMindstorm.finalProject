@@ -1,82 +1,100 @@
 package Analysis;
 
+import java.util.ArrayList;
 import java.util.List;
 
-import lejos.nxt.Button;
-import lejos.nxt.LCD;
-import lejos.nxt.Motor;
-import lejos.nxt.Sound;
+import Light.LightSettings;
+
+import lejos.robotics.navigation.TachoPilot;
 import misc.Direction;
-import misc.Helper;
 import misc.Robot;
 
 public class AnalyseCrossing {
 
-	private Robot robot;
-	private Direction startDirection;
-	private float drehToleranz = 45;
+	private LightSettings leftLightSettings;
+	private TachoPilot pilot;
 
 	public AnalyseCrossing(Robot robot) {
-		this.robot = robot;
-	}
-
-	public List<Direction> analyseCrossing(Direction heading) {
-		startDirection = heading;
-		List<Direction> directionList;
-		robot.getPilot().rotate(360, true);
-		int a = 0;
-		float winkel = 0;
-		LCD.clearDisplay();
-		while (robot.getLeftLight().groundChange()) {
-
-		}
-		robot.getPilot().reset();
-		while (robot.getPilot().getAngle() < 360) {
-
-			if (robot.getLeftLight().groundChange()) {
-				winkel = robot.getPilot().getAngle();
-				Sound.beep();
-				if (startDirection == Direction.EAST) {
-					winkel = winkel + 270;
-				} else if (startDirection == Direction.SOUTH) {
-					winkel = winkel + 180;
-				} else if (startDirection == Direction.WEST) {
-					winkel = winkel + 90;
-				} else {
-				}
-				winkel = winkel % 360;
-
-				direction(winkel);
-			}
-			a++;
-			while (robot.getLeftLight().groundChange()) {
-
-			}
-
-		}
-
-		try {
-			Thread.sleep(10000);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			// e.printStackTrace();
-		}
-		robot.getPilot().rotate(360, true);
-		return null;
-	}
-	
-	public void direction(float winkel){
-		if (winkel < 20) {
-		} else if (winkel < 110) {
-			Helper.drawString("WEST", 0, 0);
-		} else if (winkel < 200) {
-			Helper.drawString("SOUTH", 0, 1);
-		} else if (winkel < 290) {
-			Helper.drawString("EAST", 0, 2);
-		} else {
-			Helper.drawString("NORTH", 0, 3);
-		}
+		pilot = robot.getPilot();
+		leftLightSettings = robot.getLeftLight();
 		
 	}
 
+	public List<Direction> analyseCrossing(Direction heading) {
+		List<Direction> directionList = new ArrayList<Direction>();
+		boolean leftGround = true;
+		boolean leftLine =false;
+		
+		pilot.rotate(360, true);
+		
+		while (leftLightSettings.groundChange()) 
+			;
+		
+		pilot.stop();
+		pilot.reset();
+		
+		pilot.rotate(360,true);
+		
+		while(pilot.isMoving()){
+			if(!leftLightSettings.groundChange()){
+				leftGround = true;
+				
+				if(leftLine){
+					leftLine = false;
+					directionList.add(getDirection(heading,pilot.getAngle()));
+				}
+			}
+			
+			else if(leftGround && leftLightSettings.groundChange()){
+				leftGround = false;
+				leftLine = true;
+			}
+		}
+
+		pilot.rotate(360, true);
+
+		while (leftLightSettings.groundChange()) 
+			;
+
+		pilot.stop();
+		pilot.reset();
+		
+		return directionList;
+	}
+	
+	public Direction getDirection(Direction heading, float angle){
+		Direction result = Direction.UNDEFINED;
+		if(heading == Direction.WEST){
+			angle += 90;
+		}
+		else if(heading == Direction.SOUTH){
+			angle += 180;
+		}
+		else if(heading == Direction.EAST){
+			angle += 270;
+		}
+
+		while(angle < 0){
+			angle += 360;
+		}
+
+		if(angle >=360){
+			angle %= 360;
+		}
+
+		if(angle <= 45 || angle > 315){
+			result = Direction.NORTH;
+		}
+		else if(angle <= 135){
+			result = Direction.WEST;
+		}
+		else if(angle <= 225){
+			result = Direction.SOUTH;
+		}
+		else
+			result = Direction.EAST;
+		
+		return result;
+
+	}
 }

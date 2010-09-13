@@ -3,9 +3,13 @@ package Color;
 public enum Color {
 	BLACK("black"),
 	WHITE("white"),
+	//Empty
 	RED("red"),
+	//dest
 	GREEN("green"),
+	//pull
 	YELLOW("yellow"),
+	//box
 	BLUE("blue"),
 	UNKNOWN("unknown");
 	

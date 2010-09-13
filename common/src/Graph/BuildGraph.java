@@ -12,17 +12,17 @@ public class BuildGraph {
 		
 		Graph result = new Graph();
 		
-		Node node1 = new Node(TYPE.DEST,new Pair<Integer,Integer>(3,0));
-		Node node2 = new Node(TYPE.EMPTY,new Pair<Integer,Integer>(2,0));
-		Node node3 = new Node(TYPE.EMPTY,new Pair<Integer,Integer>(1,0));
-		Node node4 = new Node(TYPE.DEST,new Pair<Integer,Integer>(0,0));
-		Node node5 = new Node(TYPE.EMPTY,new Pair<Integer,Integer>(1,1));
-		Node node6 = new Node(TYPE.EMPTY,new Pair<Integer,Integer>(0,1));
-		Node node7 = new Node(TYPE.BOX,new Pair<Integer,Integer>(1,2));
-		Node node8 = new Node(TYPE.PULLSTART,new Pair<Integer,Integer>(0,2));
-		Node node9 = new Node(TYPE.EMPTY,new Pair<Integer,Integer>(0,3));
-		Node node10 = new Node(TYPE.BOX,new Pair<Integer,Integer>(0,4));
-		Node node11 = new Node(TYPE.PUSHSTART,new Pair<Integer,Integer>(0,5));
+		Node node1 = new Node(Type.DEST,new Pair(3,0));
+		Node node2 = new Node(Type.EMPTY,new Pair(2,0));
+		Node node3 = new Node(Type.EMPTY,new Pair(1,0));
+		Node node4 = new Node(Type.DEST,new Pair(0,0));
+		Node node5 = new Node(Type.EMPTY,new Pair(1,1));
+		Node node6 = new Node(Type.EMPTY,new Pair(0,1));
+		Node node7 = new Node(Type.BOX,new Pair(1,2));
+		Node node8 = new Node(Type.PULLSTART,new Pair(0,2));
+		Node node9 = new Node(Type.EMPTY,new Pair(0,3));
+		Node node10 = new Node(Type.BOX,new Pair(0,4));
+		Node node11 = new Node(Type.PUSHSTART,new Pair(0,5));
 		
 		node1.setSouth(node2);
 		node2.setSouth(node3);
