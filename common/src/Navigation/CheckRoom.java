@@ -1,6 +1,5 @@
 package Navigation;
 import Color.Color;
-import lejos.nxt.Button;
 import lejos.nxt.Sound;
 import lejos.robotics.subsumption.Behavior;
 import misc.Helper;
@@ -54,7 +53,6 @@ public class CheckRoom implements Behavior {
 			}
 			else if(color== lastColor && color.isRoomColor() && System.currentTimeMillis()-startColor > acceptionPeriodForColor){
 				active = false;
-				Helper.drawText("CheckCrossing.action: Room found. Color:"+color + " Dist:" + robot.getPilot().getTravelDistance());
 				information.setRoomColor(color);
 			}
 			
