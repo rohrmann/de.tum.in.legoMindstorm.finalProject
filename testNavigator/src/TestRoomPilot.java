@@ -1,16 +1,18 @@
-import Color.Color;
-import Color.ColorSettings;
-import Light.LightSettings;
+import lejos.nxt.Button;
 import lejos.nxt.LightSensor;
 import lejos.nxt.Motor;
 import lejos.nxt.SensorPort;
 import lejos.nxt.addon.ColorSensor;
 import lejos.robotics.navigation.TachoPilot;
-import lejos.robotics.subsumption.Arbitrator;
-import lejos.robotics.subsumption.Behavior;
+import misc.Helper;
 import misc.Robot;
+import Color.Color;
+import Color.ColorSettings;
+import Light.LightSettings;
+import Navigation.RoomPilot;
 
-public class TestNavigator {
+
+public class TestRoomPilot {
 	
 	public static void main(String[] args){
 		TachoPilot pilot = new TachoPilot(5.6f,10.35f,Motor.A,Motor.B);
@@ -30,17 +32,17 @@ public class TestNavigator {
 		
 		Robot robot = new Robot(pilot,color,leftLightSettings, rightLightSettings);
 		
+		RoomPilot rPilot = new RoomPilot(robot);
 		
-		pilot.setMoveSpeed(5);
-		pilot.setTurnSpeed(5);
-		Behavior driveForward = new DriveForward(robot);
-		Behavior followLine = new FollowLine(robot);
-		Behavior checkCrossing = new CheckCrossing(robot,15,5);
-		Behavior checkRoom = new CheckRoom(robot);
-		Behavior[] behaviors = {driveForward, followLine, checkCrossing, checkRoom};
-		Arbitrator arbitrator = new Arbitrator(behaviors);
-		
-		arbitrator.start();
+		boolean escapePressed = false;
+		while(!escapePressed){
+			Helper.drawText("Room:"+rPilot.goToNextRoom().toString());
+			
+			int result = Button.waitForPress();
+			
+			if((result & 8) != 0)
+				escapePressed = true;
+		}
 	}
 
 }

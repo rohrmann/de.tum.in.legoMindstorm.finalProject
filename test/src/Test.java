@@ -1,25 +1,24 @@
+import Color.Color;
+import Color.ColorSettings;
 import lejos.nxt.Button;
 import lejos.nxt.SensorPort;
 import lejos.nxt.addon.ColorSensor;
+import misc.Helper;
 
 
 public class Test {
 	
 	public static void main(String[] args){
-		ColorSensor c1 = new ColorSensor(SensorPort.S1);
-		ColorSensor c2 = new ColorSensor(SensorPort.S2);
-		ColorSettings settings1 = null;
-		ColorSettings settings2 = null;
-		String[] colors = {"white","black","blue","red","yellow","green"};
-		int times = 4;
+		ColorSensor c1 = new ColorSensor(SensorPort.S3);
+		ColorSettings settings1 = new ColorSettings(c1);
+		Color[] colors = {Color.WHITE,Color.BLACK,Color.BLUE,Color.GREEN,Color.RED,Color.YELLOW};
+		int times = 5;
+		int pollingInterval = 25;
 		
-		settings1 = Helper.initColors(colors,times,SensorPort.S1);
-		settings2 = Helper.initColors(colors, times, SensorPort.S2);
-		
+		settings1.init(colors, times, pollingInterval);
 		while(!Button.ESCAPE.isPressed()){
 			
-			Helper.drawString(settings1.getColor(c1.getColor()), 0,0);
-			Helper.drawString(settings2.getColor(c2.getColor()), 0, 1);
+			Helper.drawText(settings1.getColorName().toString());
 			
 			try{
 				Thread.sleep(500);

@@ -1,0 +1,5 @@
+package Graph;
+
+public enum TYPE {
+	EMPTY, UNKNOWN,PUSHSTART,PULLSTART,BOX,DEST
+}
