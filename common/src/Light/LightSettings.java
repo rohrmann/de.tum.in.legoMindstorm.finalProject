@@ -51,6 +51,8 @@ public class LightSettings {
 		boolean notPressed = true;
 		boolean pressed = false;
 		
+		this.tolerance = tolerance;
+		
 		while(notPressed){
 			if(Button.readButtons()!= 0)
 				pressed = true;
