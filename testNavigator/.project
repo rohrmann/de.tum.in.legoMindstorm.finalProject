@@ -16,9 +16,14 @@
 	</natures>
 	<linkedResources>
 		<link>
+			<name>srcC</name>
+			<type>2</type>
+			<location>C:/Dokumente und Einstellungen/Prodigy/de.tum.in.legoMindstorm.finalProject/common/src</location>
+		</link>
+		<link>
 			<name>srcCommon</name>
 			<type>2</type>
-			<location>/home/rohrmann/programming/lego/de.tum.in.legoMindstorm.finalProject/common/src</location>
+			<location>C:/home/rohrmann/programming/lego/de.tum.in.legoMindstorm.finalProject/common/src</location>
 		</link>
 	</linkedResources>
 </projectDescription>

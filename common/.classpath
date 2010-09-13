@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="lib" path="/home/rohrmann/lib/lejos_nxj/lib/classes.jar" sourcepath="/home/rohrmann/lib/lejos_nxj/projects"/>
+	<classpathentry kind="lib" path="C:/Programme/leJOS NXJ/lib/classes.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

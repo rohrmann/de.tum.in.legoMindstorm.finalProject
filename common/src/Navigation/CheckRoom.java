@@ -1,6 +1,5 @@
 package Navigation;
 import Color.Color;
-import lejos.nxt.Button;
 import lejos.nxt.Sound;
 import lejos.robotics.subsumption.Behavior;
 import misc.Helper;
