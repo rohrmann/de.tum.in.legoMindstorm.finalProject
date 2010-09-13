@@ -16,4 +16,8 @@ public class Graph {
 	public Node getNode(Pair<Integer,Integer> id){
 		return(Node)nodes.get(id);
 	}
+	
+	public Node getRoom(int x, int y){
+		return (Node)nodes.get(new Pair<Integer,Integer>(x,y));
+	}
 }
