@@ -27,5 +27,29 @@ public class RoomPilot {
 		arbitrator.start();
 		return information.getRoomColor();
 	}
+	
+	public void rotate(float angle){
+		robot.getPilot().rotate(angle);
+	}
+	
+	public void rotate(float angle,boolean immediateReturn){
+		robot.getPilot().rotate(angle, immediateReturn);
+	}
+	
+	public boolean isMoving(){
+		return robot.getPilot().isMoving();
+	}
+	
+	public void stop(){
+		robot.getPilot().stop();
+	}
+	
+	public void reset(){
+		robot.getPilot().reset();
+	}
+	
+	public float getAngle(){
+		return robot.getPilot().getAngle();
+	}
 
 }

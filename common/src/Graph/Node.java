@@ -99,5 +99,21 @@ public class Node {
 			east.setWest(this);
 		}
 	}
+	
+	public boolean hasNorth(){
+		return north != null;
+	}
+	
+	public boolean hasWest(){
+		return west != null;
+	}
+	
+	public boolean hasSouth(){
+		return south != null;
+	}
+	
+	public boolean hasEast(){
+		return east != null;
+	}
 
 }
