@@ -37,6 +37,17 @@ public class BuildGraph {
 		node9.setEast(node10);
 		node11.setEast(node11);
 		
+		result.addNode(node1);
+		result.addNode(node2);
+		result.addNode(node3);
+		result.addNode(node4);
+		result.addNode(node5);
+		result.addNode(node6);
+		result.addNode(node7);
+		result.addNode(node8);	
+		result.addNode(node9);
+		result.addNode(node10);
+		result.addNode(node11);
 		return result;
 		
 		
