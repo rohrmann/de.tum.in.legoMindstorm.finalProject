@@ -2,6 +2,6 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="srcCommon"/>
-	<classpathentry kind="lib" path="/home/rohrmann/lib/lejos_nxj/lib/classes.jar"/>
+	<classpathentry kind="lib" path="C:/Program Files/leJOS NXJ/lib/classes.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
