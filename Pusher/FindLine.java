@@ -1,34 +1,33 @@
-package Navigation;
+package Pusher;
+
 import lejos.nxt.Motor;
 import lejos.robotics.subsumption.Behavior;
 import misc.Robot;
-import misc.RoomInformation;
 
-
-public class FollowLine implements Behavior {
+public class FindLine implements Behavior {
 	
 	private Robot robot;
 	private boolean active;
 	private boolean terminated;
-	private RoomInformation information;
 
-	public FollowLine(Robot robot,RoomInformation information){
+	public FindLine(Robot robot){
 		this.robot = robot;
-		this.information = information;
 		active = false;
 		terminated = true;
 	}
-	@Override
+
 	public void action() {
+		
+		robot.getPilot().setSpeed(100);
 		
 		if(robot.getLeftLight().groundChange()){
 			Motor.B.forward();
-			Motor.A.stop();
+			Motor.A.backward();
 		}
 		else{
 			Motor.A.forward();
-			Motor.B.stop();
-		}
+			Motor.B.backward();
+		}	
 		
 		while(active && robot.getLeftLight().groundChange() ^ robot.getRightLight().groundChange()){
 		}
@@ -38,7 +37,6 @@ public class FollowLine implements Behavior {
 		terminated = true;
 	}
 
-	@Override
 	public void suppress() {
 		active = false;
 		robot.getPilot().stop();	
@@ -47,18 +45,14 @@ public class FollowLine implements Behavior {
 			Thread.yield();
 	}
 
-	@Override
 	public boolean takeControl() {
 		
-		if(!information.roomFound()){
+		boolean result =robot.getLeftLight().groundChange()^robot.getRightLight().groundChange();
 			
-			boolean result =robot.getLeftLight().groundChange()^robot.getRightLight().groundChange();
-			
-			if(result){
-				active =true;
-				terminated = false;
-				return true;
-			}
+		if(result){
+			active =true;
+			terminated = false;
+			return true;
 		}
 		return false;
 	}
