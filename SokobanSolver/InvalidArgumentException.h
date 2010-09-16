@@ -18,7 +18,7 @@ public:
 	InvalidArgumentException(const std::string& message="") throw();
 	virtual ~InvalidArgumentException() throw();
 
-	const char* what(){
+	const char* what() const throw(){
 		return message.c_str();
 	}
 };

@@ -23,9 +23,9 @@ Field Helper::ch2Field(char ch){
 	case ' ':
 		return EMPTY;
 	case '@':
-		return PUSHER;
+		return PUSHERSTART;
 	case '!':
-		return PULLER;
+		return PULLERSTART;
 	case '.':
 		return TARGET;
 	case '*':
@@ -43,9 +43,9 @@ char Helper::field2Ch(Field field){
 		return '#';
 	case EMPTY:
 		return ' ';
-	case PUSHER:
+	case PUSHERSTART:
 		return '@';
-	case PULLER:
+	case PULLERSTART:
 		return '!';
 	case TARGET:
 		return '.';

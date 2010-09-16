@@ -9,30 +9,40 @@
 #define ABSTRACTMAP_HPP_
 
 #include "Field.h"
+#include "Robot.h"
 #include "InvalidArgumentException.h"
 #include <utility>
-#include <vector>
 
 class AbstractMap{
-protected:
-	std::pair<int,int> puller;
-	std::pair<int,int> pusher;
-	std::vector<std::pair<int,int> > boxes;
-	std::vector<std::pair<int,int> > targets;
 public:
 
 	virtual ~AbstractMap(){};
 
 	virtual Field at(int x, int y) const =0;
+	Field at(std::pair<int,int> coords) {
+		return at(coords.first, coords.second);
+	}
 	virtual Field& get(int x, int y) throw(InvalidArgumentException)= 0;
+	Field& get(std::pair<int,int> coords) throw(InvalidArgumentException){
+		return get(coords.first,coords.second);
+	}
+
 	virtual void set(int x, int y, Field type) throw(InvalidArgumentException)= 0;
+	void set(std::pair<int,int> coords, Field type) throw(InvalidArgumentException){
+		set(coords.first,coords.second,type);
+	}
+
+
 	virtual std::pair<int,int> dimensions()const = 0;
 	virtual bool contains(int x, int y)const = 0;
+	bool contains(std::pair<int,int> coords)const{
+		return contains(coords.first,coords.second);
+	}
 
 	virtual bool validCoords(int x, int y) const= 0;
-
-	virtual void clear();
-
+	bool validCoords(std::pair<int,int> coords) const{
+		return validCoords(coords.first,coords.second);
+	}
 };
 
 

@@ -10,12 +10,15 @@
 
 #include <iostream>
 
-class AbstractMap;
+class PrintableMap;
+class AbstractGameMap;
 
 class MapUtils{
 public:
-	virtual AbstractMap* read( std::istream& input) = 0;
-	virtual bool write(const AbstractMap& map, std::ostream& output);
+	static PrintableMap* read( std::istream& input);
+	static bool write(const PrintableMap& map, std::ostream& output);
+	static PrintableMap* convert(const AbstractGameMap& map);
+	static void printMap(const AbstractGameMap& map, std::ostream & output);
 };
 
 
