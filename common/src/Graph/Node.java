@@ -177,7 +177,7 @@ public class Node {
 			type = Type.EMPTY;
 			break;
 		case YELLOW:
-			type = Type.PULLSTART;
+			type = Type.PUSHSTART;
 			break;
 		case GREEN:
 			type = Type.DEST;

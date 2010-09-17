@@ -2,27 +2,7 @@
 import lejos.pc.comm.*; 
 import java.io.*; 
 
-/** 
- * This is a PC sample. It connects to the NXT, and then 
- * sends an integer and waits for a reply, 100 times. 
- * 
- * Compile this program with javac (not nxjc), and run it 
- * with java. 
- * 
- * You need pccomm.jar and bluecove.jar on the CLASSPATH. 
- * On Linux, you will also need bluecove-gpl.jar on the CLASSPATH. 
- * 
- * Run the program by: 
- * 
- *   java BTSend 
- * 
- * Your NXT should be running a sample such as BTReceive or 
- * SignalTest. Run the NXT program first until it is 
- * waiting for a connection, and then run the PC program. 
- * 
- * @author Lawrie Griffiths 
- * 
- */ 
+
 public class BluetoothPC {    
    public static void main(String[] args) { 
       NXTConnector conn = new NXTConnector(); 
