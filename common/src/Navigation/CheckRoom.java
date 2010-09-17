@@ -1,5 +1,6 @@
 package Navigation;
 import Color.Color;
+import ErrorHandling.ErrorHandling;
 import lejos.nxt.Sound;
 import lejos.robotics.subsumption.Behavior;
 import misc.Helper;
@@ -74,8 +75,7 @@ public class CheckRoom implements Behavior {
 				information.setRoomColor(missColor);
 			}else{
 				robot.getPilot().stop();
-				Helper.error("CheckCrossing.action: Room still not found");
-				Sound.buzz();
+				ErrorHandling.resolvebyHand(robot);
 			}
 			
 		}

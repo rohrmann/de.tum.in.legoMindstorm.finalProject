@@ -41,9 +41,6 @@ public class RoomMissed {
 				lastColor = color;
 				color = robot.getColor().getColorName();
 				Helper.drawText(color.toString());
-				Helper
-						.drawText(robot.getPilot().getTravelDistance() + "", 0,
-								2);
 
 				if (color != lastColor) {
 					startColor = System.currentTimeMillis();
@@ -64,9 +61,6 @@ public class RoomMissed {
 			interval -= 1;
 			distanceTravelled = robot.getPilot().getTravelDistance();
 		}
-
-
-
 		return null;
 	}
 
