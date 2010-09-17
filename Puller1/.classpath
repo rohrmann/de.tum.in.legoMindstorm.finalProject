@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/common"/>
+	<classpathentry kind="lib" path="/usr/proj/lego/lenny-i386/lejos_nxj/lib/classes.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

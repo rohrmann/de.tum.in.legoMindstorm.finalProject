@@ -23,6 +23,7 @@ public class BuildGraph {
 		Node node9 = new Node(Type.EMPTY,new Pair(0,3));
 		Node node10 = new Node(Type.BOX,new Pair(0,4));
 		Node node11 = new Node(Type.PUSHSTART,new Pair(0,5));
+		Node node12= new Node(Type.PUSHSTART,new Pair(-3,-9));
 		
 		node1.setSouth(node2);
 		node2.setSouth(node3);
@@ -37,6 +38,18 @@ public class BuildGraph {
 		node9.setEast(node10);
 		node11.setEast(node11);
 		
+		result.addNode(node1);
+		result.addNode(node2);
+		result.addNode(node3);
+		result.addNode(node4);
+		result.addNode(node5);
+		result.addNode(node6);
+		result.addNode(node7);
+		result.addNode(node8);	
+		result.addNode(node9);
+		result.addNode(node10);
+		result.addNode(node11);
+		result.addNode(node12);
 		return result;
 		
 		
