@@ -64,7 +64,6 @@ public class CheckRoom implements Behavior {
 		}
 		
 		robot.getPilot().stop();
-		robot.getPilot().reset();
 	
 		// active is set false when the color of the room is set -> if still active the room was
 		// not found
@@ -73,10 +72,15 @@ public class CheckRoom implements Behavior {
 			if(missColor != null){
 				active = false;
 				information.setRoomColor(missColor);
+			}else{
+				robot.getPilot().stop();
+				Helper.error("CheckCrossing.action: Room still not found");
+				Sound.buzz();
 			}
-			Helper.error("CheckCrossing.action: Room still not found");
+			
 		}
 		
+		robot.getPilot().reset();
 		robot.getPilot().setMoveSpeed(10);
 		
 		active = false;
@@ -103,11 +107,8 @@ public class CheckRoom implements Behavior {
 				tachoReseted = true;
 			}
 			else{
-				if(robot.getPilot().getTravelDistance() >= distanceUntilActivation+tolerance){
-					robot.getPilot().stop();
-					Helper.error("CheckCrossing.takeControl: Room missed");
-				}
-				else if(robot.getPilot().getTravelDistance() >= distanceUntilActivation){
+				if(robot.getPilot().getTravelDistance() >= distanceUntilActivation 
+						&& robot.getPilot().getTravelDistance() <= distanceUntilActivation+tolerance){
 					active = true;
 					terminated = false;
 					Helper.drawText("CheckRoom activated");

@@ -11,6 +11,7 @@ public class RoomPilot {
 	private Arbitrator arbitrator;
 	private Robot robot;
 	
+	
 	public RoomPilot(Robot robot){
 		this.robot = robot;
 	}
