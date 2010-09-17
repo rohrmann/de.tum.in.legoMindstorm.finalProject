@@ -1,6 +1,7 @@
 package Navigation;
 
 import Color.Color;
+import lejos.nxt.Motor;
 import lejos.nxt.Sound;
 import misc.Helper;
 import misc.Robot;
@@ -18,12 +19,23 @@ public class RoomMissed {
 		Color color = Color.UNKNOWN;
 		float distanceTravelled = robot.getPilot().getTravelDistance();
 
-		while (interval > 0) {
+		while (interval < 15) {
 			
 			// drive backward first -> every time a little bit less
 			while (distanceTravelled - interval <= robot.getPilot()
 					.getTravelDistance()) {
-				robot.getPilot().backward();
+				if (distanceTravelled - interval/2 <= robot.getPilot().getTravelDistance()){
+					robot.getPilot().backward();
+				}
+								
+				if(robot.getLeftLight().groundChange()){
+					Motor.B.backward();
+					Motor.A.stop();
+				}
+				else{
+					Motor.A.backward();
+					Motor.B.stop();
+				}
 			}
 
 			long startTime;
@@ -35,8 +47,8 @@ public class RoomMissed {
 
 			while (robot.getPilot().getTravelDistance() < roomDistance
 					+ roomDistanceTolerance) {
-				robot.getPilot().forward();
-
+				//robot.getPilot().forward();
+				
 				startTime = System.currentTimeMillis();
 				lastColor = color;
 				color = robot.getColor().getColorName();
@@ -58,7 +70,7 @@ public class RoomMissed {
 
 			// decrement the interval for the next step to be smaller, update
 			// distance travelled
-			interval -= 1;
+			interval += 1;
 			distanceTravelled = robot.getPilot().getTravelDistance();
 		}
 		return null;
