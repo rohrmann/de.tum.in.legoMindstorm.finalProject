@@ -1,0 +1,7 @@
+DEFAULT_DEP_DIR:=.dep
+DEFAULT_DEPEND:=depend.sh
+DEFAULT_CONFIG:=default.conf
+DEFAULT_VALUE:=default
+DEFAULT_TARGET_NAME:=default
+DEFAULT_MAKEFILE_RULES=Makefile.rules
+DEFAULT_BUILD_INFO=build.info

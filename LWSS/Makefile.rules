@@ -1,0 +1,16 @@
+-include $(patsubst %.c,$(DEP)/%.d,$(filter %.c,$(SRC)))
+-include $(patsubst %.cpp,$(DEP)/%.d,$(filter %.cpp,$(SRC)))
+
+$(DEP)/%.d : %.cpp
+	@ [ -d $(DEP) ] || mkdir $(DEP)
+	@ $(DEPEND) "" $(CXX) $(CXXFLAGS) $< > $@
+	
+$(DEP)/%.d : %.c
+	@ [ -d $(DEP) ] || mkdir $(DEP)
+	@ $(DEPEND) "" $(CC) $(CFLAGS) $< > $@
+
+.cpp.o:
+	$(CXX) $(CXXFLAGS) -c $<
+
+.c.o:
+	$(CC) $(CFLAGS) -c $<
