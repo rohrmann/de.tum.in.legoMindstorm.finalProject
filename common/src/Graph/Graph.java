@@ -13,10 +13,12 @@ public class Graph {
 	public int size(){
 		int i =0;
 		Enumeration enumeration = nodes.keys();
+		
 		while(enumeration.hasMoreElements()){
 			i++;
 			enumeration.nextElement();
 		}
+		
 		return i;
 	}
 	

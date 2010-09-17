@@ -48,6 +48,10 @@ public class RoomNavigator {
 		}
 	}
 	
+	public void forcePosition(Pair pair) {
+		currentPosition = pair;
+	}
+	
 	/**
 	 * 
 	 * @param left turn left if the parameter is true, otherwise turn right
@@ -89,6 +93,12 @@ public class RoomNavigator {
 	public void turnLeft(){
 		turn(true,1);
 	}
+	
+
+	public void updateHeading(Direction direction){
+		heading = direction;
+	}
+	
 	
 	public void updateHeading(float angle){
 		if(heading == Direction.WEST){

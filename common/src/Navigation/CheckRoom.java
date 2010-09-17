@@ -1,5 +1,6 @@
 package Navigation;
 import Color.Color;
+import ErrorHandling.ErrorHandling;
 import lejos.nxt.Sound;
 import lejos.robotics.subsumption.Behavior;
 import misc.Helper;
@@ -64,11 +65,22 @@ public class CheckRoom implements Behavior {
 		}
 		
 		robot.getPilot().stop();
-		robot.getPilot().reset();
 	
-		if(active)
-			Helper.error("CheckCrossing.action: Room not found");
+		// active is set false when the color of the room is set -> if still active the room was
+		// not found
+		if(active){
+			Color missColor = RoomMissed.action(robot, 6);
+			if(missColor != null){
+				active = false;
+				information.setRoomColor(missColor);
+			}else{
+				robot.getPilot().stop();
+				ErrorHandling.resolvebyHand(robot);
+			}
+			
+		}
 		
+		robot.getPilot().reset();
 		robot.getPilot().setMoveSpeed(10);
 		
 		active = false;
@@ -95,18 +107,14 @@ public class CheckRoom implements Behavior {
 				tachoReseted = true;
 			}
 			else{
-				if(robot.getPilot().getTravelDistance() >= distanceUntilActivation+tolerance){
-					robot.getPilot().stop();
-					Helper.error("CheckCrossing.takeControl: Room missed");
-				}
-				else if(robot.getPilot().getTravelDistance() >= distanceUntilActivation){
-					active =true;
+				if(robot.getPilot().getTravelDistance() >= distanceUntilActivation 
+						&& robot.getPilot().getTravelDistance() <= distanceUntilActivation+tolerance){
+					active = true;
 					terminated = false;
 					Helper.drawText("CheckRoom activated");
 					return true;
 				}
 			}
-			
 			return false;
 		}
 		else
