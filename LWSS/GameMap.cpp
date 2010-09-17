@@ -86,27 +86,30 @@ void GameMap::dfs(std::pair<int,int> coordinates,T* data,T value, T notVisited){
 	U test;
 
 	nodes.push(coordinates);
+	data[addr(coordinates)] = value;
 
 	while(!nodes.empty()){
 		std::pair<int,int> node = nodes.top();
 		nodes.pop();
 
-		data[addr(node)] = value;
-
 		if(data[addr(Helper::north(node))] == notVisited && test(getField(Helper::north(node)))){
 			nodes.push(Helper::north(node));
+			data[addr(Helper::north(node))] = value;
 		}
 
 		if(data[addr(Helper::west(node))]==notVisited && test(getField(Helper::west(node)))){
 			nodes.push(Helper::west(node));
+			data[addr(Helper::west(node))] = value;
 		}
 
 		if(data[addr(Helper::south(node))]==notVisited && test(getField(Helper::south(node)))){
 			nodes.push(Helper::south(node));
+			data[addr(Helper::south(node))] = value;
 		}
 
 		if(data[addr(Helper::east(node))] == notVisited && test(getField(Helper::east(node)))){
 			nodes.push(Helper::east(node));
+			data[addr(Helper::east(node))]= value;
 		}
 	}
 }

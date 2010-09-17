@@ -11,7 +11,7 @@
 #include "AbstractGameMap.h"
 
 
-class ArrayMap : public AbstractGameMap {
+class ArrayMap {
 private:
 	Field* map;
 	int* components;

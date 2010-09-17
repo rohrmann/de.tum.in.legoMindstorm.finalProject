@@ -17,7 +17,7 @@ class MapUtils{
 public:
 	static PrintableMap* read( std::istream& input);
 	static bool write(const PrintableMap& map, std::ostream& output);
-	static PrintableMap* convert(const AbstractGameMap& map);
+	static PrintableMap* convert(const GameState& map);
 	static void printMap(const AbstractGameMap& map, std::ostream & output);
 };
 

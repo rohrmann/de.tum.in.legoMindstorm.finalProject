@@ -10,6 +10,7 @@
 
 #include "Game.h"
 #include <unordered_set>
+#include <list>
 #include "HashValue.h"
 #include "PairHasher.h"
 #include "PairEqual.h"
@@ -29,8 +30,6 @@ class ZobristHashing;
 class GameMap : public Map<Game> {
 private:
 	void clipToAccessibleArea();
-	template<typename U,typename T>
-	void dfs(std::pair<int,int> coords, T* data, T value, T notVisited);
 	std::pair<int,int> * getBotComponents();
 public:
 	std::pair<int,int>* bots;
@@ -65,6 +64,9 @@ public:
 	HashValue<HASHLENGTH> getHash(const ZobristHashing<HASHLENGTH>& hashing);
 
 	bool solved();
+
+	template<typename U,typename T>
+	void dfs(std::pair<int,int> coords, T* data, T value, T notVisited);
 
 };
 
