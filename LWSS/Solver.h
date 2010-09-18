@@ -62,6 +62,8 @@ public:
 	int getManhattanDist(int a, int b, std::pair<int,int> c){
 		return getManhattanDist(a,b,c.first,c.second);
 	}
+
+	Move* deleteBranch(Move* branch);
 };
 
 #endif /* SOLVER_H_ */

@@ -10,11 +10,15 @@
 #include "ZobristHashing.h"
 #include <stack>
 
+int Move::counter = 0;
+
 Move::Move() {
 	prev = NULL;
 	level = 0;
 	children = 0;
 	estimatedCosts=0;
+
+	counter++;
 }
 
 Move::Move(Move* prev,int estimatedCosts){
@@ -26,18 +30,22 @@ Move::Move(Move* prev,int estimatedCosts){
 	else
 		level = 0;
 	this->estimatedCosts = estimatedCosts;
+	this->children=0;
+
+	counter++;
 }
 
 Move::~Move() {
-	if(prev->children==1){
-		delete prev;
-	}
-	else
+	if(prev != NULL)
 		prev->children--;
+
+	counter--;
 }
 
 Move* Move::setPrev(Move* prev){
-	removePrev();
+	if(prev != NULL){
+		prev->children--;
+	}
 
 	this->prev = prev;
 	this->level = prev->getLevel()+1;
@@ -47,22 +55,15 @@ Move* Move::setPrev(Move* prev){
 }
 
 Move* Move::removePrev(){
-	Move* temp = prev;
-
 	if(prev != NULL){
-		this->level = 0;
-		if(prev->children == 1){
-			delete prev;
-			temp = NULL;
-		}
-		else{
-			prev->children--;
-		}
-
-		prev = NULL;
+		prev->children--;
 	}
 
-	return temp;
+	Move* result = prev;
+	prev = NULL;
+	level = 0;
+
+	return result;
 }
 
 Move* Move::findCommonAncestor(Move * move){

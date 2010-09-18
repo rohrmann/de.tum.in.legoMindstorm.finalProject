@@ -40,9 +40,15 @@ public:
 		return prev;
 	}
 
-	Move* setPrev(Move* prev);
+	int getChildren() const{
+		return children;
+	}
 
-	Move* removePrev();
+	Move *removePrev();
+
+	Move *findSurvivor();
+
+	Move* setPrev(Move* prev);
 
 	Move* findCommonAncestor(Move* prev);
 
@@ -57,6 +63,8 @@ public:
 	void setEstimatedCosts(int estimatedCosts){
 		this->estimatedCosts = estimatedCosts;
 	}
+
+	static int counter;
 };
 
 #endif /* MOVE_H_ */

@@ -39,8 +39,8 @@ void Solver::solve(){
 		nextMove->doMoves(*map,*hashing,ancestor);
 		lastMove = nextMove;
 
+
 		if(map->solved()){
-			std::cout << "sokoban solved" << std::endl;
 			lastMove->undoMoves(*map,*hashing,startMove);
 
 			std::stack<Move*> solution;
@@ -70,13 +70,31 @@ void Solver::solve(){
 			moves.clear();
 			findPossibleMoves(moves,lastMove);
 
+			if(moves.size() == 0){
+				lastMove = deleteBranch(lastMove);
+			}
+
 			for(std::vector<Move*>::iterator it = moves.begin(); it != moves.end(); ++it){
 				q.push(*it);
 			}
 		}
+		else{
+			lastMove = deleteBranch(lastMove);
+		}
+	}
+}
+
+Move* Solver::deleteBranch(Move* move){
+	Move* current = move;
+	Move* temp;
+	while(current != NULL && current->getChildren() == 0){
+		current->undoMove(*map,*hashing);
+		temp = current;
+		current = current->getPrev();
+		delete temp;
 	}
 
-	std::cout << "not solved" << std::endl;
+	return current;
 }
 
 void Solver::findPossibleMoves(std::vector<Move *, std::allocator<Move*> >& result, Move* lastMove){

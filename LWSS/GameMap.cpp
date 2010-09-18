@@ -159,11 +159,11 @@ std::pair<int,int>* GameMap::getBotComponents(){
 	}
 
 	std::pair<int,int>* result= new std::pair<int,int>[numBots];
-
 	for(unsigned int i=0; i< numBots;i++){
 		result[i] = componentIDs[data[addr(bots[i])]];
 	}
 
+	delete [] data;
 	delete [] componentIDs;
 
 	return result;
