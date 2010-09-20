@@ -33,11 +33,18 @@ public class RoomMissed {
 			} catch (InterruptedException e) {
 			}
 
-			robot.getPilot().stop();
-			try {
-				Thread.sleep(200);
-			} catch (InterruptedException e) {
+			// find line again
+			while (robot.getPilot().getTravelDistance() < roomDistance
+					+ roomDistanceTolerance - 5) {
+				if (robot.getLeftLight().groundChange()) {
+					Motor.B.forward();
+					Motor.A.stop();
+				} else {
+					Motor.A.forward();
+					Motor.B.stop();
+				}
 			}
+
 			long startTime;
 			Color lastColor = Color.UNKNOWN;
 			long startColor = System.currentTimeMillis();
