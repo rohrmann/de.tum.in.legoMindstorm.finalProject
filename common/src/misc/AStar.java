@@ -15,7 +15,7 @@ public class AStar {
 	
 	public static ArrayList<Pair> findPath(Node startNode, Node targetNode)
 	{
-		HashMap<Pair, Node> closedList = new HashMap<Pair, Node>();
+		HashMap<Boolean> closedList = new HashMap<Boolean>();
 		Heap openList = new Heap();
 		
 		openList.insert(new HeapNode(startNode, 0, estimatedScore(startNode, targetNode), null));
@@ -28,7 +28,7 @@ public class AStar {
 				return reconstructPath(currentNode);
 			
 			openList.removeMin();
-			closedList.put(currentNode.getGraphNode().getID(), null);
+			closedList.put(currentNode.getGraphNode().getID(), true);
 			
 			for(int i=0; i<Direction.values().length; i++)
 			{
@@ -38,7 +38,7 @@ public class AStar {
 				
 				Node neighbor = currentNode.getGraphNode().get(dir);
 				
-				if(closedList.containsKey(neighbor.getID()));
+				if(closedList.containsKey(neighbor.getID()))
 					continue;
 					
 				int newCurrentScore = currentNode.getCurrentScore() + edgeScore;
