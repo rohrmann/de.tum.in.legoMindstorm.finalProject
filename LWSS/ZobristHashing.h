@@ -8,58 +8,72 @@
 #ifndef ZOBRISTHASHING_H_
 #define ZOBRISTHASHING_H_
 
-#include <bitset>
 #include <utility>
 #include "Robot.h"
 #include "InvalidArgumentException.h"
 #include "HashValue.h"
 #include "Helper.h"
+#include "defs.h"
 
 template<int L>
 class ZobristHashing {
 private:
 	int length;
-	HashValue<L>* field[2];
+	HashValue<L>* field;
 	HashValue<L>** bot;
 
-	std::pair<int,int> dims;
+	std::pair<dimension,dimension> dims;
 	int bots;
 
-	bool validCoords(std::pair<int,int> coords)const{
+	bool validCoords(std::pair<dimension,dimension> coords)const{
 		return validCoords(coords.first,coords.second);
 	}
 
-	bool validCoords(int x, int y)const{
+	bool validCoords(dimension x, dimension y)const{
 		return 0 <= x && 0 <= y && x < dims.first && y < dims.second;
 	}
 public:
-	ZobristHashing(std::pair<int,int> dims, int bots);
+	ZobristHashing(std::pair<dimension,dimension> dims, int bots);
 	virtual ~ZobristHashing();
 
-	const HashValue<L>& getField(std::pair<int,int> coords, Game gameField)const throw(InvalidArgumentException){
-		return getField(coords.first,coords.second,gameField);
+	const HashValue<L>& getBox(std::pair<dimension,dimension> coords)const throw(InvalidArgumentException){
+		return getBox(coords.first,coords.second);
 	}
-	const HashValue<L>& getField(int x, int y, Game gameField)const  throw(InvalidArgumentException);
+	const HashValue<L>& getBox(dimension x, dimension y)const throw(InvalidArgumentException);
 
-	const HashValue<L>& getBot(std::pair<int,int> coords, int botNum)const throw(InvalidArgumentException){
+	const HashValue<L>& getBot(std::pair<dimension,dimension> coords,unsigned int botNum)const throw(InvalidArgumentException){
 		return getBot(coords.first,coords.second,botNum);
 	}
-	const HashValue<L>& getBot(int x, int y, int botNum)const throw(InvalidArgumentException);
+	const HashValue<L>& getBot(dimension x, dimension y, unsigned int botNum)const throw(InvalidArgumentException);
+
+	const HashValue<L>& getPuller(std::pair<dimension,dimension> coords) const{
+		return getBot(coords.first,coords.second,RPULLER);
+	}
+
+	const HashValue<L>& getPuller(dimension x, dimension y) const{
+		return getBot(x,y,RPULLER);
+	}
+
+	const HashValue<L>& getPusher(std::pair<dimension,dimension> coords) const{
+		return getBot(coords.first,coords.second,RPUSHER);
+	}
+
+	const HashValue<L>& getPusher(dimension x, dimension y) const{
+		return getBot(x,y,RPUSHER);
+	}
 
 	static HashValue<L> randHashValue();
 };
 
 
 template<int L>
-ZobristHashing<L>::ZobristHashing(std::pair<int,int> dims, int bots) {
+ZobristHashing<L>::ZobristHashing(std::pair<dimension,dimension> dims, int bots) {
 	this->dims = dims;
 	this->bots = bots;
-	field[0] = new HashValue<L>[dims.first*dims.second];
-	field[1] = new HashValue<L>[dims.first*dims.second];
+	field = new HashValue<L>[dims.first*dims.second];
 
 	for(int i=0;i < dims.first*dims.second;i++){
-		field[0][i] = randHashValue();
-		field[1][i] = randHashValue();
+		field[i] = randHashValue();
 	}
 
 	bot = new HashValue<L>*[bots];
@@ -89,8 +103,7 @@ HashValue<L> ZobristHashing<L>::randHashValue(){
 template<int L>
 ZobristHashing<L>::~ZobristHashing() {
 
-	delete [] field[0];
-	delete [] field[1];
+	delete [] field;
 
 
 	for(int i =0; i< this->bots;i++){
@@ -101,20 +114,16 @@ ZobristHashing<L>::~ZobristHashing() {
 }
 
 template<int L>
-const HashValue<L>& ZobristHashing<L>::getField(int x, int y, Game gameField) const throw(InvalidArgumentException){
+const HashValue<L>& ZobristHashing<L>::getBox(dimension x, dimension y) const throw(InvalidArgumentException){
 	if(!validCoords(x,y)){
 		throw InvalidArgumentException("ZobristHashing::getField invalid coordinates" + Helper::pair2Str(x,y));
 	}
 
-	if(gameField == GWALL){
-		throw InvalidArgumentException("ZobristHashing::getField wrong game field");
-	}
-
-	return field[gameField][x*dims.second+y];
+	return field[x*dims.second+y];
 }
 
 template<int L>
-const HashValue<L>& ZobristHashing<L>::getBot(int x, int y, int botNum)const throw(InvalidArgumentException){
+const HashValue<L>& ZobristHashing<L>::getBot(dimension x, dimension y,unsigned int botNum)const throw(InvalidArgumentException){
 	if(!validCoords(x,y)){
 		throw InvalidArgumentException("ZobristHashing::getBot invalid coordinates" + Helper::pair2Str(x,y));
 	}

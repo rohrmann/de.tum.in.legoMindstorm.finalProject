@@ -10,33 +10,37 @@
 
 #include <iostream>
 #include "XSB.h"
-#include "Game.h"
+#include "defs.h"
 
 class PrintableMap;
-class GameMap;
+class GameState;
+
+template<int L>
+class ZobristHashing;
 
 class MapUtils{
 public:
 	static PrintableMap* read( std::istream& input);
 	static bool write(const PrintableMap& map, std::ostream& output);
-	static PrintableMap* convert(const GameMap& map);
-	static void printMap(const GameMap& map, std::ostream & output);
+	static PrintableMap* convert(const GameState& map);
+	static void printMap(const GameState& map, std::ostream & output);
 	static char xsb2Ch(XSB xsb);
 	static XSB ch2XSB(char ch);
-	static XSB game2XSB(Game field);
-	static GameMap* buildGameMap(const PrintableMap& map);
+	static GameState* buildGameState(const PrintableMap& map, const ZobristHashing<HASHLENGTH>& hashing);
 
 
 	template<typename T>
-	static void printMap(T*field, std::pair<int,int> dims){
-		for(int i=0;i<dims.first;i++){
-			for(int j =0; j< dims.second;j++){
-				std::cout << field[i*dims.second+j];
+	static void printMap(T*field, std::pair<dimension,dimension> dims){
+		for(dimension i=0;i<dims.first;i++){
+			for(dimension j =0; j< dims.second;j++){
+				std::cout << (int)field[i*dims.second+j];
 			}
 			std::cout << std::endl;
 		}
 	}
 };
+
+
 
 
 #endif /* MAPUTILS_H_ */

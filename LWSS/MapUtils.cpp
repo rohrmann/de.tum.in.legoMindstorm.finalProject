@@ -7,15 +7,20 @@
 
 #include "MapUtils.h"
 #include <utility>
-#include "PrintableMap.h"
-#include "GameMap.h"
+#include <stack>
 #include <vector>
+#include "PrintableMap.h"
+#include "GameState.h"
+#include "ZobristHashing.h"
 #include "Helper.h"
+#include "IsAccessible.h"
+#include "IsComponent.h"
+#include "MapAlgorithms.h"
 
 bool MapUtils::write(const PrintableMap& map, std::ostream & output){
 
-	for(int i = 0; i< map.dims.first;i++){
-		for(int j = 0; j< map.dims.second;j++){
+	for(dimension i = 0; i< map.dims.first;i++){
+		for(dimension j = 0; j< map.dims.second;j++){
 			output << MapUtils::xsb2Ch(map.at(i,j));
 		}
 		output << std::endl;
@@ -64,17 +69,6 @@ char MapUtils::xsb2Ch(XSB xsb){
 	}
 }
 
-XSB MapUtils::game2XSB(Game game){
-	switch(game){
-	case GBOX:
-		return BOX;
-	case GEMPTY:
-		return EMPTY;
-	default:
-		return WALL;
-	}
-}
-
 
 PrintableMap* MapUtils::read(std::istream& input){
 	std::vector<std::string> map;
@@ -113,107 +107,110 @@ PrintableMap* MapUtils::read(std::istream& input){
 		}
 	}
 
-	PrintableMap* printableMap = new PrintableMap(ptr,std::pair<int,int>(map.size(),lineLength));
+	PrintableMap* printableMap = new PrintableMap(ptr,std::pair<dimension,dimension>((dimension)map.size(),(dimension)lineLength));
 
 	return printableMap;
 }
 
-PrintableMap* MapUtils::convert(const GameMap& map){
+PrintableMap* MapUtils::convert(const GameState& map){
 
 	XSB* xsb = new XSB[map.dims.first*map.dims.second];
 
-	for(int i =0; i< map.dims.first*map.dims.second;i++){
+	for(unsigned int i =0; i< map.dims.first*map.dims.second;i++){
 		xsb[i] = WALL;
 	}
 
-	for(int i =0; i< map.dims.first; i++){
-		for(int j =0; j< map.dims.second;j++){
-			xsb[i*map.dims.second+j] = game2XSB(map.at(i,j));
+	for(dimension i =0; i< map.dims.first; i++){
+		for(dimension j =0; j< map.dims.second;j++){
+			if(map.at(i,j)!=0)
+				xsb[i*map.dims.second+j] = EMPTY;
 		}
 	}
 
-	std::pair<int,int> * targets = map.targets;
+	std::pair<dimension,dimension> * targets = map.targets;
 
 	for(unsigned int i =0; i< map.numTargets;i++){
-		int addr = targets[i].first*map.dims.second + targets[i].second;
-		xsb[addr] = xsb[addr] == BOX ? BOXTARGET: TARGET;
+		xsb[map.addr(targets[i])] = TARGET;
 	}
 
-	std::pair<int,int> * bots = map.bots;
+	std::pair<dimension,dimension> * boxes = map.boxes;
 
-	for(unsigned int i =0; i< map.numBots; i++){
-		switch(map.types[i]){
-		case RPULLER:
-			xsb[map.addr(bots[i])] = PULLER;
-			break;
-		case RPUSHER:
-			xsb[map.addr(bots[i])] = PUSHER;
-			break;
-		}
-
+	for(unsigned int i =0; i< map.numBoxes;i++){
+		xsb[map.addr(boxes[i])] = xsb[map.addr(boxes[i])] == TARGET ? BOXTARGET: BOX;
 	}
+
+	xsb[map.addr(map.puller)] = PULLER;
+	xsb[map.addr(map.pusher)] = PUSHER;
 
 	return new PrintableMap(xsb,map.dims);
 }
 
-void MapUtils::printMap(const GameMap & map, std::ostream & output){
+void MapUtils::printMap(const GameState & map, std::ostream & output){
 	PrintableMap* pMap= convert(map);
 	write(*pMap,output);
 
 	delete pMap;
 }
 
-GameMap* MapUtils::buildGameMap(const PrintableMap& map){
-	Game* game = new Game[map.dims.first*map.dims.second];
+GameState* MapUtils::buildGameState(const PrintableMap& map,const ZobristHashing<HASHLENGTH> & hashing){
+	field* componentMap = new field[map.dims.first*map.dims.second];
 
-	for( int i =0; i< map.dims.first*map.dims.second;i++){
-		game[i] = GWALL;
+	for( unsigned int i =0; i< map.dims.first*map.dims.second;i++){
+		componentMap[i] = 0;
 	}
 
-	unsigned int numBots = 0;
-	unsigned int numTargets =0;
+	IsAccessible accessible(map);
+	field component=1;
 
-	for( int i=0; i < map.dims.first; i++){
-		for(int j =0; j < map.dims.second;j++){
-			if(map.at(i,j)==TARGET)
-				numTargets++;
-			else if(map.at(i,j)==PULLER || map.at(i,j) == PUSHER)
-				numBots++;
+	for(dimension i = 0; i< map.dims.first;i++){
+		for(dimension j = 0;j<map.dims.second;j++){
+			if(componentMap[map.addr(i,j)]==0 && accessible(i,j)){
+				dfs(std::make_pair(i,j),componentMap,component++,accessible);
+			}
 		}
 	}
 
-	std::pair<int,int>* bots = new std::pair<int,int>[numBots];
-	Robot * types=  new Robot[numBots];
-	std::pair<int,int>* targets = new std::pair<int,int>[numTargets];
-	numBots =0;
-	numTargets = 0;
+	GameState* state = new GameState(componentMap,map.dims);
 
-	for( int i =0; i < map.dims.first;i++){
-		for(int j=0; j< map.dims.second;j++){
+	unsigned int numTargets =0;
+	unsigned int numBoxes = 0;
+
+	for( dimension i=0; i < map.dims.first; i++){
+		for(dimension j =0; j < map.dims.second;j++){
+			if(map.at(i,j)==TARGET || map.at(i,j) == BOXTARGET)
+				numTargets++;
+			else if(map.at(i,j) == BOX || map.at(i,j) == BOXTARGET)
+				numBoxes++;
+		}
+	}
+
+	std::pair<dimension,dimension>* targets = new std::pair<dimension,dimension>[numTargets];
+	numTargets = 0;
+	std::pair<dimension,dimension>* boxes = new std::pair<dimension,dimension>[numBoxes];
+	numBoxes =0;
+
+	for( dimension i =0; i < map.dims.first;i++){
+		for(dimension j=0; j< map.dims.second;j++){
 			switch(map.at(i,j)){
 			case TARGET:
 				targets[numTargets++] = std::make_pair(i,j);
-				game[map.addr(i,j)] = GEMPTY;
 				break;
 			case BOXTARGET:
 				targets[numTargets++] = std::make_pair(i,j);
-				game[map.addr(i,j)] = GBOX;
+				boxes[numBoxes++] = std::make_pair(i,j);
+				state->hashValue ^= hashing.getBox(i,j);
 				break;
 			case BOX:
-				game[map.addr(i,j)] = GBOX;
+				boxes[numBoxes++] = std::make_pair(i,j);
+				state->hashValue ^= hashing.getBox(i,j);
 				break;
 			case EMPTY:
-				game[map.addr(i,j)] = GEMPTY;
 				break;
 			case PULLER:
-				bots[numBots] = std::make_pair(i,j);
-				types[numBots++] = RPULLER;
-				game[map.addr(i,j)]= GEMPTY;
+				state->puller = std::make_pair(i,j);
 				break;
 			case PUSHER:
-				bots[numBots] = std::make_pair(i,j);
-				types[numBots++] = RPUSHER;
-				game[map.addr(i,j)] = GEMPTY;
+				state->pusher = std::make_pair(i,j);
 				break;
 			default:
 				break;
@@ -221,9 +218,40 @@ GameMap* MapUtils::buildGameMap(const PrintableMap& map){
 		}
 	}
 
-	GameMap* gameMap = new GameMap(bots,types,numBots,targets,numTargets,game,map.dims);
-	return gameMap;
-}
+	state->boxes = boxes;
+	state->numBoxes = numBoxes;
+	state->targets = targets;
+	state->numTargets = numTargets;
 
+	for(unsigned int i=0 ;i < numTargets;i++){
+		state->targetsHash.insert(targets[i]);
+	}
+
+	bool* visited = new bool[map.dims.first*map.dims.second];
+
+	for(unsigned int i =0; i< map.dims.first*map.dims.second;i++){
+		visited[i] = false;
+	}
+
+	IsComponent isComponent(state);
+
+	std::pair<dimension,dimension> topLeft = dfs(state->puller,visited,true,isComponent);
+
+	state->pullerTL = topLeft;
+	state->hashValue ^= hashing.getPuller(topLeft);
+
+	if(state->at(state->puller)!=state->at(state->pusher))
+		topLeft = dfs(state->pusher,visited,true,isComponent);
+
+	state->pusherTL = topLeft;
+	state->hashValue ^= hashing.getPusher(topLeft);
+	state->componentValue = component;
+
+	state->calcEstimatedCosts();
+
+	delete [] visited;
+
+	return state;
+}
 
 

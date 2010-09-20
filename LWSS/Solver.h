@@ -9,10 +9,14 @@
 #define SOLVER_H_
 
 #include "defs.h"
-#include <unordered_set>
-#include <vector>
 #include "PairEqual.h"
 #include "PairHasher.h"
+#include "GameStateComparator.h"
+#include "HashValueHasher.h"
+#include "HashValueEqual.h"
+#include <queue>
+#include "ComponentTester.h"
+
 
 namespace std{
 	template<typename T, typename U>
@@ -22,48 +26,39 @@ namespace std{
 template<int L>
 class ZobristHashing;
 
-class Move;
-class GameMap;
-
-namespace std{
-	template<typename T, typename U>
-	class pair;
-}
+class GameState;
+class PrintableMap;
 
 class Solver {
 private:
-	GameMap* map;
-	ZobristHashing<HASHLENGTH> * hashing;
-	void insertPath(std::pair<int,int> pos, std::pair<int,int> * prev, std::unordered_set<std::pair<int,int>, PairHasher, PairEqual>& nodes);
+	GameState* initialState;
+	GameState* currentState;
+	ZobristHashing<HASHLENGTH>* hashing;
+	std::priority_queue<GameState*, std::vector<GameState*>, GameStateComparator> queue;
+	std::unordered_set< HashValue<HASHLENGTH>, HashValueHasher<HASHLENGTH>,HashValueEqual<HASHLENGTH> > pruning;
+	unsigned char connections[256];
+
+	void initConnections();
 public:
-	Solver(GameMap * map,ZobristHashing<HASHLENGTH>* hashing) : map(map),hashing(hashing){
-	}
+	Solver(const PrintableMap& map);
+
 	virtual ~Solver();
 
 	void solve();
+	unsigned int findNextStates();
 
-	void findPossibleMoves(std::vector<Move*, std::allocator<Move*> >& result,Move* lastMove);
+	bool insertNewState(GameState* state);
 
-	bool checkCollision(unsigned int botNum, const std::unordered_set<std::pair<int,int>, PairHasher, PairEqual>& nodes);
+	bool collision(Robot type, point boxStart, point boxEnd,Direction dir);
 
-	int calcEstimatedCosts(Move* move);
-	int calcEstimatedCosts();
+	void moveBoxNorth(GameState* state,unsigned int boxNum, point boxStart, point boxEnd);
 
-	int getManhattanDist(std::pair<int,int> a, std::pair<int,int> b){
-		return getManhattanDist(a.first,a.second,b.first,b.second);
-	}
+	unsigned int getConnectionIndex(point pos, GameState* state);
 
-	int getManhattanDist(int a, int b, int x, int y);
+	void deleteBranch();
 
-	int getManhattanDist(std::pair<int,int> a, int x, int y){
-		return getManhattanDist(a.first,a.second,x,y);
-	}
+	bool insertState(GameState* state);
 
-	int getManhattanDist(int a, int b, std::pair<int,int> c){
-		return getManhattanDist(a,b,c.first,c.second);
-	}
-
-	Move* deleteBranch(Move* branch);
 };
 
 #endif /* SOLVER_H_ */

@@ -9,7 +9,7 @@
 #include <iostream>
 #include "PrintableMap.h"
 #include "MapUtils.h"
-#include "GameMap.h"
+#include "GameState.h"
 #include "ZobristHashing.h"
 #include "Solver.h"
 
@@ -24,14 +24,9 @@ int main(int argc, char** argv){
 
 	std::ifstream ifs(str.c_str(),std::ios::in);
 	PrintableMap* pMap = MapUtils::read(ifs);
-	GameMap * gMap = MapUtils::buildGameMap(*pMap);
-	ZobristHashing<HASHLENGTH> hashing(gMap->dims,gMap->numBots);
-	gMap->init(hashing);
 
-	Solver solver(gMap,&hashing);
+	Solver solver(*pMap);
 
 	solver.solve();
-
-
 	return 0;
 }
