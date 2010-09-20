@@ -47,6 +47,7 @@ public class DriveForward implements Behavior {
 			active = true;
 			terminated = false;
 		}
+	
 		
 		return !information.roomFound();
 	}
