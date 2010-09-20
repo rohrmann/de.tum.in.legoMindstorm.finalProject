@@ -3,6 +3,7 @@ import Color.Color;
 import ErrorHandling.ErrorHandling;
 import lejos.nxt.Sound;
 import lejos.robotics.subsumption.Behavior;
+import misc.Config;
 import misc.Helper;
 import misc.Robot;
 import misc.RoomInformation;
@@ -16,10 +17,6 @@ public class CheckRoom implements Behavior {
 	private boolean tachoReseted;
 	private int distanceUntilActivation;
 	private int tolerance;
-	private final int roomDistance = 20;
-	private final int roomDistanceTolerance = 3;
-	private final int pollingInterval = 10;
-	private final int acceptionPeriodForColor = 150;
 	private RoomInformation information;
 
 
@@ -33,7 +30,7 @@ public class CheckRoom implements Behavior {
 		this.information = information;
 	}
 
-	@Override
+	//@Override
 	public void action() {
 		Sound.beep();
 		robot.getPilot().setMoveSpeed(5);
@@ -43,7 +40,7 @@ public class CheckRoom implements Behavior {
 		Color lastColor=Color.UNKNOWN;
 		long startColor=System.currentTimeMillis();
 		
-		while(active && robot.getPilot().getTravelDistance() < roomDistance+roomDistanceTolerance){
+		while(active && robot.getPilot().getTravelDistance() < Config.roomDistance+Config.roomDistanceTolerance){
 			startTime = System.currentTimeMillis();
 			lastColor = color;
 			color = robot.getColor().getColorName();
@@ -53,13 +50,13 @@ public class CheckRoom implements Behavior {
 			if(color != lastColor){
 				startColor = System.currentTimeMillis();
 			}
-			else if(color== lastColor && color.isRoomColor() && System.currentTimeMillis()-startColor > acceptionPeriodForColor){
+			else if(color== lastColor && color.isRoomColor() && System.currentTimeMillis()-startColor > Config.acceptionPeriodForColor){
 				active = false;
 				information.setRoomColor(color);
 			}
 			
 			try{
-				Thread.sleep(pollingInterval - (System.currentTimeMillis()-startTime));
+				Thread.sleep(Config.pollingInterval - (System.currentTimeMillis()-startTime));
 			}catch(InterruptedException ex){
 			}
 		}
@@ -87,7 +84,7 @@ public class CheckRoom implements Behavior {
 		terminated = true;
 	}
 
-	@Override
+	//@Override
 	public void suppress() {
 		robot.getPilot().stop();
 		active = false;
@@ -98,7 +95,7 @@ public class CheckRoom implements Behavior {
 		terminated = true;
 	}
 
-	@Override
+	//@Override
 	public boolean takeControl() {
 		
 		if(!information.roomFound() && !active && terminated){
