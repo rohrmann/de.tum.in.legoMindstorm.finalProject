@@ -16,6 +16,7 @@
 #include "defs.h"
 #include "Map.h"
 #include "Robot.h"
+#include "Command.h"
 
 namespace std{
 	template<typename T, typename U>
@@ -38,6 +39,8 @@ public:
 	point pullerTL;
 	point pusher;
 	point pusherTL;
+
+	Command *commands;
 
 	static point* targets;
 	static std::unordered_set< point, PairHasher, PairEqual > targetsHash;
@@ -63,13 +66,17 @@ public:
 		return level + estimatedCosts;
 	}
 
+	HashValue<HASHLENGTH> getHashValue(ZobristHashing<HASHLENGTH>* hashing);
+
 	void setPrev(GameState* state);
 
 	void updateTL();
 	void updateComponents();
 
-	void moveBot(Robot type, point pos, ZobristHashing<HASHLENGTH>* hashing);
-	void moveBox(unsigned int boxNum,point pos, ZobristHashing<HASHLENGTH> * hashing);
+	void moveBot(Robot type, point pos);
+	void movePuller(point pos);
+	void movePusher(point pos);
+	void moveBox(unsigned int boxNum,point pos);
 
 	GameState* copy();
 

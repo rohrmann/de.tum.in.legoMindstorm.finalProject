@@ -9,6 +9,7 @@
 #define HELPER_H_
 
 #include <string>
+#include "defs.h"
 
 namespace std{
 	template<typename T, typename U>
@@ -18,14 +19,14 @@ namespace std{
 class Helper {
 public:
 
-	static std::string pair2Str(std::pair<int,int> pair);
+	static std::string pair2Str(point pair);
 
-	static std::string pair2Str(int x,int y);
+	static std::string pair2Str(dimension x,dimension y);
 
-	static std::pair<int,int> north(std::pair<int,int> origin, int dist=1);
-	static std::pair<int,int> south(std::pair<int,int> origin,int dist =1);
-	static std::pair<int,int> west(std::pair<int,int> origin, int dist =1);
-	static std::pair<int,int> east(std::pair<int,int> origin, int dist = 1);
+	static point north(point origin, int dist=1);
+	static point south(point origin,int dist =1);
+	static point west(point origin, int dist =1);
+	static point east(point origin, int dist = 1);
 
 };
 

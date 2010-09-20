@@ -117,41 +117,43 @@ void GameState::updateTL(){
 	}
 }
 
-void GameState::moveBot(Robot type, point pos, ZobristHashing<HASHLENGTH> * hashing){
+void GameState::moveBot(Robot type, point pos){
 	switch(type){
 	case RPUSHER:
-		pusher = pos;
-		break;
+		return movePusher(pos);
 	case RPULLER:
-		puller = pos;
-		break;
-	}
-
-	point oldPullerTL = pullerTL;
-	point oldPusherTL = pusherTL;
-
-	updateTL();
-
-	if(oldPullerTL != pullerTL){
-		hashValue ^= hashing->getPuller(oldPullerTL);
-		hashValue ^= hashing->getPuller(pullerTL);
-	}
-
-	if(oldPusherTL != pusherTL){
-		hashValue ^= hashing->getPusher(oldPusherTL);
-		hashValue ^= hashing->getPusher(pusherTL);
+		return movePuller(pos);
 	}
 }
 
-void GameState::moveBox(unsigned int boxNum, point pos, ZobristHashing<HASHLENGTH>*hashing){
-	this->hashValue ^= hashing->getBox(this->boxes[boxNum]);
-	this->set(boxes[boxNum],(field)1);
+void GameState::movePuller(point pos){
+	puller = pos;
+}
+
+void GameState::movePusher(point pos){
+	pusher = pos;
+}
+
+void GameState::moveBox(unsigned int boxNum, point pos){
+	this->set(boxes[boxNum],1);
 	this->boxes[boxNum] = pos;
-	this->hashValue^= hashing->getBox(pos);
-
 	this->set(pos,0);
-
 	updateComponents();
+}
+
+HashValue<HASHLENGTH> GameState::getHashValue(ZobristHashing<HASHLENGTH>* hashing){
+	HashValue<HASHLENGTH> result;
+
+	for(unsigned int i = 0; i< numBoxes;i++){
+		result ^= hashing->getBox(boxes[i]);
+	}
+
+	updateTL();
+
+	result ^= hashing->getPuller(pullerTL);
+	result ^= hashing->getPusher(pusherTL);
+
+	return result;
 }
 
 void GameState::updateComponents(){

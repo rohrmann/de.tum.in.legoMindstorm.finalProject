@@ -139,42 +139,39 @@ void Solver::solve(){
 				solution.pop();
 
 				MapUtils::printMap(*currentState,std::cout);
-				std::cout << currentState->hashValue << std::endl;
 			}
 
 			std::cout << "Instances:" << GameState::instanceCounter << std::endl;
 			exit(0);
 		}
 
-		//if(pruning.find(currentState->hashValue) == pruning.end()){
-			pruning.insert(currentState->hashValue);
+		HashValue<HASHLENGTH> hashValue = currentState->getHashValue(hashing);
+
+		if(pruning.find(hashValue) == pruning.end()){
+			pruning.insert(hashValue);
 			if(findNextStates()==0){
 				deleteBranch();
 			}
-		//}
-		//else
-		//	deleteBranch();
+		}
+		else
+			deleteBranch();
 
 	}
 
 }
 
 unsigned int Solver::findNextStates(){
-	bool pusher = false;
-	bool puller = false;
 	unsigned int numberNewStates = 0;
 	for(unsigned int i = 0; i< currentState->numBoxes; i++){
 		point pos = currentState->boxes[i];
-		pusher = false;
-		puller = false;
 
 		//north
 		if(currentState->at(Helper::north(pos)) != 0){
 			if(currentState->at(Helper::south(pos))!= 0 && currentState->at(currentState->pusher)==currentState->at(Helper::south(pos))){
+
 				GameState * newState = currentState->copy();
-				newState->moveBox(i,Helper::north(pos),hashing);
-				newState->moveBot(RPUSHER,pos,hashing);
-				newState->calcEstimatedCosts();
+				newState->moveBox(i,Helper::north(pos));
+				newState->moveBot(RPUSHER,pos);
 
 				if(insertState(newState))
 					numberNewStates++;
@@ -182,8 +179,8 @@ unsigned int Solver::findNextStates(){
 			}
 			else if(currentState->at(Helper::north(pos,2))!=0 && currentState->at(currentState->puller) == currentState->at(Helper::north(pos))){
 				GameState * newState = currentState->copy();
-				newState->moveBox(i,Helper::north(pos),hashing);
-				newState->moveBot(RPULLER,Helper::north(pos,2),hashing);
+				newState->moveBox(i,Helper::north(pos));
+				newState->moveBot(RPULLER,Helper::north(pos,2));
 				newState->calcEstimatedCosts();
 
 				if(insertState(newState))
@@ -195,8 +192,8 @@ unsigned int Solver::findNextStates(){
 		if(currentState->at(Helper::west(pos)) != 0 ){
 			if(currentState->at(Helper::east(pos))!= 0 && currentState->at(currentState->pusher)==currentState->at(Helper::east(pos))){
 				GameState * newState = currentState->copy();
-				newState->moveBox(i,Helper::west(pos),hashing);
-				newState->moveBot(RPUSHER,pos,hashing);
+				newState->moveBox(i,Helper::west(pos));
+				newState->moveBot(RPUSHER,pos);
 				newState->calcEstimatedCosts();
 
 				if(insertState(newState))
@@ -204,8 +201,8 @@ unsigned int Solver::findNextStates(){
 			}
 			else if(currentState->at(Helper::west(pos,2))!=0 && currentState->at(currentState->puller) == currentState->at(Helper::north(pos))){
 				GameState * newState = currentState->copy();
-				newState->moveBox(i,Helper::west(pos),hashing);
-				newState->moveBot(RPULLER,Helper::west(pos,2),hashing);
+				newState->moveBox(i,Helper::west(pos));
+				newState->moveBot(RPULLER,Helper::west(pos,2));
 				newState->calcEstimatedCosts();
 
 				if(insertState(newState))
@@ -217,8 +214,8 @@ unsigned int Solver::findNextStates(){
 		if(currentState->at(Helper::east(pos)) != 0 ){
 			if(currentState->at(Helper::west(pos))!= 0 && currentState->at(currentState->pusher)==currentState->at(Helper::west(pos))){
 				GameState * newState = currentState->copy();
-				newState->moveBox(i,Helper::east(pos),hashing);
-				newState->moveBot(RPUSHER,pos,hashing);
+				newState->moveBox(i,Helper::east(pos));
+				newState->moveBot(RPUSHER,pos);
 				newState->calcEstimatedCosts();
 
 				if(insertState(newState))
@@ -226,8 +223,8 @@ unsigned int Solver::findNextStates(){
 			}
 			else if(currentState->at(Helper::east(pos,2))!=0 && currentState->at(currentState->puller) == currentState->at(Helper::east(pos))){
 				GameState * newState = currentState->copy();
-				newState->moveBox(i,Helper::east(pos),hashing);
-				newState->moveBot(RPULLER,Helper::east(pos,2),hashing);
+				newState->moveBox(i,Helper::east(pos));
+				newState->moveBot(RPULLER,Helper::east(pos,2));
 				newState->calcEstimatedCosts();
 
 				if(insertState(newState))
@@ -239,8 +236,8 @@ unsigned int Solver::findNextStates(){
 		if(currentState->at(Helper::south(pos)) != 0 ){
 			if(currentState->at(Helper::north(pos))!= 0 && currentState->at(currentState->pusher)==currentState->at(Helper::north(pos))){
 				GameState * newState = currentState->copy();
-				newState->moveBox(i,Helper::south(pos),hashing);
-				newState->moveBot(RPUSHER,pos,hashing);
+				newState->moveBox(i,Helper::south(pos));
+				newState->moveBot(RPUSHER,pos);
 				newState->calcEstimatedCosts();
 
 				if(insertState(newState))
@@ -248,8 +245,8 @@ unsigned int Solver::findNextStates(){
 			}
 			else if(currentState->at(Helper::south(pos,2))!=0 && currentState->at(currentState->puller) == currentState->at(Helper::south(pos))){
 				GameState * newState = currentState->copy();
-				newState->moveBox(i,Helper::south(pos),hashing);
-				newState->moveBot(RPULLER,Helper::south(pos,2),hashing);
+				newState->moveBox(i,Helper::south(pos));
+				newState->moveBot(RPULLER,Helper::south(pos,2));
 				newState->calcEstimatedCosts();
 
 				if(insertState(newState))
@@ -301,6 +298,7 @@ unsigned int Solver::findNextStates(){
 }
 
 bool Solver::insertState(GameState* newState){
+	newState->calcEstimatedCosts();
 	newState->setPrev(currentState);
 	queue.push(newState);
 	return true;
