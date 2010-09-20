@@ -1,6 +1,7 @@
 package Navigation;
 import Color.Color;
 import ErrorHandling.ErrorHandling;
+import ErrorHandling.RoomMissed;
 import lejos.nxt.Sound;
 import lejos.robotics.subsumption.Behavior;
 import misc.Config;
@@ -31,7 +32,7 @@ public class CheckRoom implements Behavior {
 	}
 
 	//@Override
-	public void action() {
+	public void action(){
 		Sound.beep();
 		robot.getPilot().setMoveSpeed(5);
 		robot.getPilot().forward();
@@ -66,7 +67,8 @@ public class CheckRoom implements Behavior {
 		// active is set false when the color of the room is set -> if still active the room was
 		// not found
 		if(active){
-			Color missColor = RoomMissed.action(robot, 6);
+			//throw new DrivingException("Error while trying to find room");
+			Color missColor = RoomMissed.action(robot, 6, information);
 			if(missColor != null){
 				active = false;
 				information.setRoomColor(missColor);
