@@ -20,20 +20,27 @@ public class RoomMissed {
 		float distanceTravelled = robot.getPilot().getTravelDistance();
 
 		while (interval < 15) {
-			
-			// drive backward first -> every time a little bit less
+
+			// drive backward first -> every time a little bit more
 			while (distanceTravelled - interval <= robot.getPilot()
 					.getTravelDistance()) {
-				if (distanceTravelled - interval/2 <= robot.getPilot().getTravelDistance()){
-					robot.getPilot().backward();
-				}
-								
-				if(robot.getLeftLight().groundChange()){
-					Motor.B.backward();
+				robot.getPilot().backward();
+			}
+
+			robot.getPilot().stop();
+			try {
+				Thread.sleep(200);
+			} catch (InterruptedException e) {
+			}
+
+			// find line again
+			while (robot.getPilot().getTravelDistance() < roomDistance
+					+ roomDistanceTolerance - 5) {
+				if (robot.getLeftLight().groundChange()) {
+					Motor.B.forward();
 					Motor.A.stop();
-				}
-				else{
-					Motor.A.backward();
+				} else {
+					Motor.A.forward();
 					Motor.B.stop();
 				}
 			}
@@ -47,8 +54,8 @@ public class RoomMissed {
 
 			while (robot.getPilot().getTravelDistance() < roomDistance
 					+ roomDistanceTolerance) {
-				//robot.getPilot().forward();
-				
+				robot.getPilot().forward();
+
 				startTime = System.currentTimeMillis();
 				lastColor = color;
 				color = robot.getColor().getColorName();

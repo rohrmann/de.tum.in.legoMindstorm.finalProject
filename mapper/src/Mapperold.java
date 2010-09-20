@@ -1,4 +1,3 @@
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,11 +7,11 @@ import lejos.nxt.Motor;
 import lejos.nxt.SensorPort;
 import lejos.nxt.addon.ColorSensor;
 import lejos.robotics.navigation.TachoPilot;
+import misc.Config;
 import misc.Direction;
 import misc.Helper;
 import misc.Robot;
 import Analysis.AnalyseCrossing;
-import Bluetooth.BTMapper;
 import Color.Color;
 import Color.ColorSettings;
 import Graph.Graph;
@@ -23,34 +22,30 @@ import Light.LightSettings;
 import Navigation.RoomNavigator;
 
 
-public class Mapper {
+public class Mapperold {
 	
 	private RoomNavigator nav;
 	private AnalyseCrossing analyser;
-	private static Graph map;
+	private Graph map;
 	private final Direction[] searchDirections = {Direction.NORTH,Direction.WEST,Direction.SOUTH,Direction.EAST};
 	
-	public static void main(String[] args) throws IOException, InterruptedException{
-		BTMapper.connectToPC();
-		Mapper mapper = new Mapper();
+	public static void main(String[] args){
+		Mapperold mapper = new Mapperold();
 		Helper.drawText("Press Button for mapping");
 		Button.waitForPress();
 		mapper.map();
-		BTMapper.sendGraph(map);
 	}
 	
-	public Mapper(){
-		TachoPilot pilot = new TachoPilot(5.6f,10.35f,Motor.A,Motor.B);
+	public Mapperold(){
+		TachoPilot pilot = new TachoPilot(Config.wheelHeight,Config.wheelToWheel,Motor.A,Motor.B);
 		
-		pilot.setMoveSpeed(10);
+		pilot.setMoveSpeed(Config.mapperMoveSpeed);
 		ColorSensor colorSensor = new ColorSensor(SensorPort.S3);
 		LightSensor leftLightSensor = new LightSensor(SensorPort.S1);
-		LightSensor rightLightSensor = new LightSensor(SensorPort.S2);
-		int times = 5;
-		int pollingInterval = 25;
+		LightSensor rightLightSensor = new LightSensor(SensorPort.S2);		
 		Color[] colors = {Color.WHITE,Color.BLACK,Color.BLUE,Color.RED,Color.GREEN,Color.YELLOW};
 		ColorSettings color = new ColorSettings(colorSensor);
-		color.init(colors,times,pollingInterval);
+		color.init(colors,Config.colorScanTimes,Config.mapperPollingInterval);
 		LightSettings leftLightSettings = new LightSettings(leftLightSensor);
 		LightSettings rightLightSettings = new LightSettings(rightLightSensor);
 		int tolerance =5;
