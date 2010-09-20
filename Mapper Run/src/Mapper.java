@@ -12,7 +12,7 @@ import misc.Direction;
 import misc.Helper;
 import misc.Robot;
 import Analysis.AnalyseCrossing;
-import Bluetooth.BluetoothBrick;
+import Bluetooth.BTMapper;
 import Color.Color;
 import Color.ColorSettings;
 import Graph.Graph;
@@ -31,12 +31,12 @@ public class Mapper {
 	private final Direction[] searchDirections = {Direction.NORTH,Direction.WEST,Direction.SOUTH,Direction.EAST};
 	
 	public static void main(String[] args) throws IOException, InterruptedException{
-		BluetoothBrick.connectToPC();
+		BTMapper.connectToPC();
 		Mapper mapper = new Mapper();
 		Helper.drawText("Press Button for mapping");
 		Button.waitForPress();
 		mapper.map();
-		BluetoothBrick.sendGraph(map);
+		BTMapper.sendGraph(map);
 	}
 	
 	public Mapper(){
