@@ -78,7 +78,7 @@ public class CheckRoom implements Behavior {
 		}
 		
 		robot.getPilot().reset();
-		robot.getPilot().setMoveSpeed(10);
+		robot.getPilot().setMoveSpeed(15);
 		
 		active = false;
 		terminated = true;
