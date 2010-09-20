@@ -56,7 +56,7 @@ public class CheckRoom implements Behavior {
 			}
 			
 			try{
-				Thread.sleep(Config.pollingInterval - (System.currentTimeMillis()-startTime));
+				Thread.sleep(Config.checkRoomPollingInterval - (System.currentTimeMillis()-startTime));
 			}catch(InterruptedException ex){
 			}
 		}

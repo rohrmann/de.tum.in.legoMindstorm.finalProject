@@ -1,7 +1,5 @@
 package misc;
 
-import java.awt.Robot;
-
 public class Config {
 	
 	// Map
