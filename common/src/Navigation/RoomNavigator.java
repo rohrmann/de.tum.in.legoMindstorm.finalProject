@@ -1,10 +1,14 @@
 package Navigation;
 
+import java.util.ArrayList;
+import java.util.ListIterator;
+
 import Color.Color;
 import Graph.Graph;
 import Graph.Node;
 import Graph.Pair;
 import Light.LightSettings;
+import misc.AStar;
 import misc.Direction;
 import misc.Helper;
 import misc.Robot;
@@ -248,4 +252,32 @@ public class RoomNavigator {
 		return result;
 	}
 	
+	
+	public void moveTo(Pair from, Pair to)
+	{
+		ArrayList<Pair> path = AStar.findPath(map, from, to);
+		
+		ListIterator<Pair> iterator = path.listIterator();
+		
+		Pair pos = iterator.next();
+		Pair nextPos;
+		
+		while(iterator.hasNext())
+		{
+			nextPos = iterator.next();
+			
+			int x = nextPos.getX() - pos.getX();
+			int y = nextPos.getY() - pos.getY();
+			
+			if(x == 1 && y == 0)
+				move(Direction.EAST);
+			else if(x == -1 && y == 0)
+				move(Direction.WEST);
+			else if(x == 0 && y == 1)
+				move(Direction.NORTH);
+			else if(x == 0 && y == -1)
+				move(Direction.SOUTH);
+		}
+		
+	}
 }
