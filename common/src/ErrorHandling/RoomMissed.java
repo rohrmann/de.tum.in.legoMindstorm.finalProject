@@ -1,12 +1,8 @@
 package ErrorHandling;
 
 import Color.Color;
-import Navigation.DriveForward;
-import Navigation.FollowLine;
 import lejos.nxt.Motor;
 import lejos.nxt.Sound;
-import lejos.robotics.subsumption.Arbitrator;
-import lejos.robotics.subsumption.Behavior;
 import misc.Helper;
 import misc.Robot;
 import misc.RoomInformation;
@@ -27,15 +23,18 @@ public class RoomMissed {
 
 			// drive back first -> every time a little bit more
 			robot.getPilot().reset();
+			//robot.getPilot().setMoveSpeed(10);
 			// rotate and find line
-			Behavior turn = new Turn(robot, 180);
-			Behavior findLine = new FindLine(robot);
-			Behavior[] turnAndFindLine = new Behavior[] { turn, findLine };
-			Arbitrator a = new Arbitrator(turnAndFindLine, true);
-			a.start();
+			robot.getPilot().stop();
+			robot.getPilot().rotate(180);
+			try {
+				Thread.sleep(200);
+			} catch (InterruptedException e) {
+			}
+			robot.getPilot().stop();
 
-			// go forward until distance travelled is bigger than interval
-			while (robot.getPilot().getTravelDistance() <= interval) {
+			// go forward until distance traveled is bigger than interval
+			while (robot.getPilot().getTravelDistance() <= interval + roomDistanceTolerance) {
 				if (robot.getLeftLight().groundChange()
 						|| robot.getRightLight().groundChange()) {
 					if (robot.getLeftLight().groundChange()) {
@@ -51,12 +50,17 @@ public class RoomMissed {
 
 			}
 
-			robot.getPilot().reset();
-
 			// rotate and find line again
-			a = new Arbitrator(turnAndFindLine, true);
-			a.start();
-
+			robot.getPilot().reset();
+			robot.getPilot().stop();
+			robot.getPilot().rotate(180);
+			try {
+				Thread.sleep(200);
+			} catch (InterruptedException e) {
+			}
+			
+			robot.getPilot().stop();
+			
 			// go forward until distance to go is 5
 			while (robot.getPilot().getTravelDistance() <= interval - 5) {
 				if (robot.getLeftLight().groundChange()
@@ -73,6 +77,7 @@ public class RoomMissed {
 				}
 			}
 
+			//robot.getPilot().setMoveSpeed(5);
 			long startTime;
 			Color lastColor = Color.UNKNOWN;
 			long startColor = System.currentTimeMillis();
