@@ -1,5 +1,4 @@
 package Bluetooth;
-
 import lejos.nxt.*;
 import lejos.nxt.comm.*;
 import misc.Helper;
@@ -34,16 +33,18 @@ public class BTBrick {
 		dos = btc.openDataOutputStream();
 	}
 	
+	public static DataInputStream getInput(){
+		return dis;
+	}
 	
+	public static DataOutputStream getOutput(){
+		return dos;
+	}
 	
 	public static void receiveTestNumber() throws IOException, InterruptedException{
-		connectToPC();
 		LCD.clearDisplay();
 		Helper.drawInt((int)dis.read(),0,1);
 		Sound.beepSequenceUp();
-//		Helper.drawInt((int)dis.read(),0,2);
-//		Helper.drawInt((int)dis.read(),0,3);
-//		Helper.drawInt((int)dis.read(),0,4);
 		dis.close();
 		dos.close();
 		btc.close();

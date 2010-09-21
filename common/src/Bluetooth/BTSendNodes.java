@@ -20,19 +20,21 @@ public class BTSendNodes {
 	private static DataInputStream dis;
 	private static int arrayLength = 6;
 	private static Graph graph;
-	private static boolean controlFromBrick;
+	private static boolean toBrick;
 
 	public static int getArrayLength() {
 		return arrayLength;
 	}
-
+	
+	
+	
 	public static void sendNodes(Graph graph1, DataOutputStream dataOut,
-			DataInputStream dataIn, boolean controlFromBrick1) throws IOException,
+			DataInputStream dataIn, boolean toBrick1) throws IOException,
 			InterruptedException {
 		dos = dataOut;
 		dis = dataIn;
 		graph = graph1;
-		controlFromBrick = controlFromBrick1;
+		toBrick = toBrick1;
 		sendSize();
 		Enumeration enumeration = graph.getHashtable().keys();
 		byte[] send = new byte[arrayLength];
@@ -64,7 +66,7 @@ public class BTSendNodes {
 			Helper.drawString("Data send", 0, 1);
 			Helper.drawString("Waiting for Data", 0, 2);
 			Helper.drawString("Data received", 0, 3);
-			if (controlFromBrick) {
+			if (toBrick) {
 				dis.read();
 				dis.read();
 			}
@@ -76,7 +78,7 @@ public class BTSendNodes {
 			// Thread.sleep(200);
 			LCD.clearDisplay();
 		}
-		if (!controlFromBrick) {
+		if (!toBrick) {
 			BTBrick.closeConnectionAfterOK();
 		} 
 	}
@@ -105,6 +107,10 @@ public class BTSendNodes {
 			return 5;
 		case UNDEFINED:
 			return 6;
+		case PULLER:
+			return 7;
+		case PUSHER:
+			return 8;
 		}
 		return 6;
 	}
