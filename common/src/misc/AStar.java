@@ -43,7 +43,9 @@ public class AStar {
 					
 				int newCurrentScore = currentNode.getCurrentScore() + edgeScore;
 				
-				HeapNode neighborEntry = openList.get(openList.get((Pair)neighbor.getID()));
+				HeapNode neighborEntry = null;
+				if(openList.contains(neighbor.getID()))
+					neighborEntry = openList.get(openList.get(neighbor.getID()));
 				
 				if(neighborEntry==null)
 				{

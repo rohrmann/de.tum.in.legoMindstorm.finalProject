@@ -17,6 +17,7 @@ public class Heap {
 	public void insert(HeapNode node)
 	{
 		nodes.addElement(node);
+		indices.put(node.getGraphNode().getID(), nodes.size()-1);
 		int pos = heapify(nodes.size()-1);
 	}	
 	
@@ -74,11 +75,17 @@ public class Heap {
 	public HeapNode removeMin()
 	{
 		HeapNode min = getMin();
-		nodes.setElementAt(nodes.removeElement(nodes.size()-1), 0);
-		int pos = siftup(0);
+		
+		nodes.setElementAt(nodes.elementAt(nodes.size()-1), 0);
+		nodes.removeElementAt(nodes.size()-1);
 		indices.remove(min.getGraphNode().getID());
-		indices.remove(((HeapNode) nodes.elementAt(pos)).getGraphNode().getID());
-		indices.put(((HeapNode) nodes.elementAt(pos)).getGraphNode().getID(),pos);
+		
+		if(!nodes.isEmpty())
+		{
+			int pos = siftup(0);
+			indices.remove(((HeapNode) nodes.elementAt(pos)).getGraphNode().getID());
+			indices.put(((HeapNode) nodes.elementAt(pos)).getGraphNode().getID(),pos);
+		}
 		return min;
 	}
 	
@@ -110,7 +117,7 @@ public class Heap {
 	
 	public HeapNode get(int index)
 	{
-		return (HeapNode) nodes.elementAt(index);
+		return (HeapNode) (index < 0 ? null : nodes.elementAt(index));
 	}
 	
 	private int leftChildIndex(int index)
@@ -140,6 +147,6 @@ public class Heap {
 	
 	private HeapNode parent(int index)
 	{
-		return (HeapNode) (parentIndex(index) < 0 ? null : nodes.elementAt(parentIndex(index)));
+		return (HeapNode) (index <= 0 ? null : nodes.elementAt(parentIndex(index)));
 	}
 }
