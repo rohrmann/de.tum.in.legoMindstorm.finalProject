@@ -4,17 +4,13 @@ import lejos.nxt.comm.*;
 import misc.Helper;
 
 import java.io.*;
-import java.util.Enumeration;
 
 import Graph.*;
 
+
 public class BTBrick {
 
-	private static int arrayLength = 6;
 
-	public static int getArrayLength() {
-		return arrayLength;
-	}
 
 	private static BTConnection btc;
 	private static DataInputStream dis;
@@ -26,34 +22,36 @@ public class BTBrick {
 	private static String closing = "Closing...";
 
 	
-	
-	public static void sendGraph(Graph graph1) throws IOException, InterruptedException{
-		graph = graph1;
-		//connectToPC();
-		sendNodesToPC(graph);
-	}
-	
-	public static void sendSize() throws IOException{
-		byte[] numberOfNodes = new byte[1];
-		numberOfNodes[0]= (byte) GraphTools.getSize(graph);
-		dos.write(numberOfNodes);
-		dos.flush();
-	}
-
 	public static void connectToPC() {
-
 		LCD.drawString(waiting, 0, 0);
 		LCD.refresh();
-
 		btc = Bluetooth.waitForConnection();
-
 		LCD.clear();
 		LCD.drawString(connected, 0, 0);
 		LCD.refresh();
-
 		dis = btc.openDataInputStream();
 		dos = btc.openDataOutputStream();
 	}
+	
+	public static DataInputStream getInput(){
+		return dis;
+	}
+	
+	public static DataOutputStream getOutput(){
+		return dos;
+	}
+	
+	public static void receiveTestNumber() throws IOException, InterruptedException{
+		LCD.clearDisplay();
+		Helper.drawInt((int)dis.read(),0,1);
+		Sound.beepSequenceUp();
+		dis.close();
+		dos.close();
+		btc.close();
+		Thread.sleep(10000);
+	}
+	
+
 
 	public static void closeConnectionAfterOK() throws IOException,
 			InterruptedException {
@@ -72,73 +70,10 @@ public class BTBrick {
 			LCD.clear();
 
 		} else {
-			sendNodesToPC(graph);
+			BTSendNodes.sendNodes(graph, dos, dis, false);
 		}
 	}
 
-	public static void sendNodesToPC(Graph graph) throws IOException,
-			InterruptedException {
-		sendSize();
-		Enumeration enumeration = graph.getHashtable().keys();
-		byte[] send = new byte[arrayLength];
-		int control;
-		while (enumeration.hasMoreElements()) {
-			Pair pair = (Pair) enumeration.nextElement();
-			Node node = graph.getNode(pair);
-			int type = typeToInt(node);
-			control = (int) (Math.random() * 255);
-			send[4] = (byte) type;
-			if (pair.getX() < 0) {
-				send[1] = (byte) 1;
-				send[0] = (byte) -pair.getX();
-			} else {
-				send[1] = (byte) 0;
-				send[0] = (byte) pair.getX();
-			}
-			if (pair.getY() < 0) {
-				send[3] = (byte) 1;
-				send[2] = (byte) -pair.getY();
-			} else {
-				send[3] = (byte) 0;
-				send[2] = (byte) pair.getY();
-
-			}
-			send[5] = (byte) control;
-			dos.write(send);
-			dos.flush();
-			Helper.drawString("Data send", 0, 1);
-			Helper.drawString("Waiting for Data", 0, 2);
-			Helper.drawString("Data received", 0, 3);
-			if (dis.read() == control) {
-				Sound.beep();
-			} else {
-				Sound.buzz();
-			}
-			//Thread.sleep(200);
-			LCD.clearDisplay();
-		}
-		closeConnectionAfterOK();
-	}
-
-	public static int typeToInt(Node node) {
-		Type a = node.getType();
-		switch (a) {
-		case EMPTY:
-			return 0;
-		case UNKNOWN:
-			return 1;
-		case PUSHSTART:
-			return 3;
-		case PULLSTART:
-			return 2;
-		case BOX:
-			return 4;
-		case DEST:
-			return 5;
-		case UNDEFINED:
-			return 6;
-		}
-		return 6;
-	}
+	
 
 }

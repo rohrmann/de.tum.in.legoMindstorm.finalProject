@@ -1,14 +1,23 @@
 package misc;
+import java.util.Vector;
+
 import Graph.*;
 
 public class Heap {
 	
-	java.util.Vector nodes;
-	java.util.Hashtable indices;
+	Vector nodes;
+	HashMap<Integer> indices;
+	
+	public Heap()
+	{
+		nodes = new Vector();
+		indices = new HashMap<Integer>();
+	}
 	
 	public void insert(HeapNode node)
 	{
-		nodes.add(node);
+		nodes.addElement(node);
+		indices.put(node.getGraphNode().getID(), nodes.size()-1);
 		int pos = heapify(nodes.size()-1);
 	}	
 	
@@ -19,58 +28,64 @@ public class Heap {
 	
 	private int siftup(int index)
 	{
-		if(parent(index) != null && parent(index).getEstimatedScore() > ((HeapNode) nodes.get(index)).getEstimatedScore())
+		if(parent(index) != null && parent(index).getEstimatedScore() > ((HeapNode) nodes.elementAt(index)).getEstimatedScore())
 		{
 			HeapNode temp = parent(index);
-			nodes.set(parentIndex(index), nodes.get(index));
-			nodes.set(index, temp);
-			indices.remove(((HeapNode)nodes.get(index)).getGraphNode().getID());
-			indices.put(((HeapNode)nodes.get(index)).getGraphNode().getID(), index);
+			nodes.setElementAt(nodes.elementAt(index), parentIndex(index));
+			nodes.setElementAt(temp, index);
+			indices.remove(((HeapNode)nodes.elementAt(index)).getGraphNode().getID());
+			indices.put(((HeapNode)nodes.elementAt(index)).getGraphNode().getID(), index);
 			return siftup(parentIndex(index));
 		}
-		indices.remove(((HeapNode)nodes.get(index)).getGraphNode().getID());
-		indices.put(((HeapNode)nodes.get(index)).getGraphNode().getID(), index);
+		indices.remove(((HeapNode)nodes.elementAt(index)).getGraphNode().getID());
+		indices.put(((HeapNode)nodes.elementAt(index)).getGraphNode().getID(), index);
 		return index;
 	}
 	
 	private int siftdown(int index)
 	{
-		if(leftChild(index) != null && leftChild(index).getEstimatedScore() < ((HeapNode) nodes.get(index)).getEstimatedScore())
+		if(leftChild(index) != null && leftChild(index).getEstimatedScore() < ((HeapNode) nodes.elementAt(index)).getEstimatedScore())
 		{
 			HeapNode temp = leftChild(index);
-			nodes.set(leftChildIndex(index), nodes.get(index));
-			nodes.set(index, temp);
-			indices.remove(((HeapNode)nodes.get(index)).getGraphNode().getID());
-			indices.put(((HeapNode)nodes.get(index)).getGraphNode().getID(), index);
+			nodes.setElementAt(nodes.elementAt(index), leftChildIndex(index));
+			nodes.setElementAt(temp, index);
+			indices.remove(((HeapNode)nodes.elementAt(index)).getGraphNode().getID());
+			indices.put(((HeapNode)nodes.elementAt(index)).getGraphNode().getID(), index);
 			return siftdown(leftChildIndex(index));
 		}
-		else if(rightChild(index) != null && rightChild(index).getEstimatedScore() < ((HeapNode) nodes.get(index)).getEstimatedScore())
+		else if(rightChild(index) != null && rightChild(index).getEstimatedScore() < ((HeapNode) nodes.elementAt(index)).getEstimatedScore())
 		{
 			HeapNode temp = rightChild(index);
-			nodes.set(rightChildIndex(index), nodes.get(index));
-			nodes.set(index, temp);
-			indices.remove(((HeapNode)nodes.get(index)).getGraphNode().getID());
-			indices.put(((HeapNode)nodes.get(index)).getGraphNode().getID(), index);
+			nodes.setElementAt(nodes.elementAt(index), rightChildIndex(index));
+			nodes.setElementAt(temp, index);
+			indices.remove(((HeapNode)nodes.elementAt(index)).getGraphNode().getID());
+			indices.put(((HeapNode)nodes.elementAt(index)).getGraphNode().getID(), index);
 			return siftdown(rightChildIndex(index));
 		}
-		indices.remove(((HeapNode)nodes.get(index)).getGraphNode().getID());
-		indices.put(((HeapNode)nodes.get(index)).getGraphNode().getID(), index);
+		indices.remove(((HeapNode)nodes.elementAt(index)).getGraphNode().getID());
+		indices.put(((HeapNode)nodes.elementAt(index)).getGraphNode().getID(), index);
 		return index;
 	}
 	
 	public HeapNode getMin()
 	{
-		return (HeapNode) (nodes.size() == 0 ? null : nodes.get(0));
+		return (HeapNode) (nodes.size() == 0 ? null : nodes.elementAt(0));
 	}
 	
 	public HeapNode removeMin()
 	{
 		HeapNode min = getMin();
-		nodes.set(0,nodes.remove(nodes.size()-1));
-		int pos = siftup(0);
+		
+		nodes.setElementAt(nodes.elementAt(nodes.size()-1), 0);
+		nodes.removeElementAt(nodes.size()-1);
 		indices.remove(min.getGraphNode().getID());
-		indices.remove(((HeapNode) nodes.get(pos)).getGraphNode().getID());
-		indices.put(((HeapNode) nodes.get(pos)).getGraphNode().getID(),pos);
+		
+		if(!nodes.isEmpty())
+		{
+			int pos = siftup(0);
+			indices.remove(((HeapNode) nodes.elementAt(pos)).getGraphNode().getID());
+			indices.put(((HeapNode) nodes.elementAt(pos)).getGraphNode().getID(),pos);
+		}
 		return min;
 	}
 	
@@ -102,7 +117,7 @@ public class Heap {
 	
 	public HeapNode get(int index)
 	{
-		return (HeapNode) nodes.get(index);
+		return (HeapNode) (index < 0 ? null : nodes.elementAt(index));
 	}
 	
 	private int leftChildIndex(int index)
@@ -112,7 +127,7 @@ public class Heap {
 	
 	private HeapNode leftChild(int index)
 	{
-		return (HeapNode) (leftChildIndex(index) >= nodes.size() ? null : nodes.get(leftChildIndex(index)));  
+		return (HeapNode) (leftChildIndex(index) >= nodes.size() ? null : nodes.elementAt(leftChildIndex(index)));  
 	}
 	
 	private int rightChildIndex(int index)
@@ -122,7 +137,7 @@ public class Heap {
 	
 	private HeapNode rightChild(int index)
 	{
-		return (HeapNode) (rightChildIndex(index) >= nodes.size() ? null : nodes.get(rightChildIndex(index)));  
+		return (HeapNode) (rightChildIndex(index) >= nodes.size() ? null : nodes.elementAt(rightChildIndex(index)));  
 	}
 	
 	private int parentIndex(int index)
@@ -132,6 +147,6 @@ public class Heap {
 	
 	private HeapNode parent(int index)
 	{
-		return (HeapNode) (parentIndex(index) < 0 ? null : nodes.get(parentIndex(index)));
+		return (HeapNode) (index <= 0 ? null : nodes.elementAt(parentIndex(index)));
 	}
 }

@@ -192,5 +192,9 @@ public class Node {
 	public String toString(){
 		return "Node:"+id + " Type:"+type + (hasNorth()?"N":"") + (hasWest()?"W":"") + (hasSouth()?"S":"") + (hasEast()?"E":"");
 	}
+
+	public boolean isFree() {
+		return type != Type.BOX;
+	}
 	
 }

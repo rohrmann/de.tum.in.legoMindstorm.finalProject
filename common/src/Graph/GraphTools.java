@@ -13,4 +13,20 @@ public class GraphTools {
 		}
 		return size;
 	}
+	
+	public static void addConnections(Graph graph){
+		Enumeration enumer = graph.getHashtable().keys();
+		while(enumer.hasMoreElements()){
+			Pair nextElement = (Pair) enumer.nextElement();
+			int x = nextElement.getX();
+			int y = nextElement.getY();
+			if(graph.hasNode(new Pair(x+1,y))){
+				graph.getNode(new Pair(x,y)).setEast(graph.getNode(new Pair(x+1,y)));
+			}
+			if(graph.hasNode(new Pair(x,y+1))){
+				graph.getNode(new Pair(x,y)).setNorth(graph.getNode(new Pair(x,y+1)));
+			}
+		}
+	}
+	
 }

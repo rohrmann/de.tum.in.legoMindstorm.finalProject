@@ -12,7 +12,9 @@ import misc.Direction;
 import misc.Helper;
 import misc.Robot;
 import Analysis.AnalyseCrossing;
+import Bluetooth.BTBrick;
 import Bluetooth.BTMapper;
+import Bluetooth.BTSendNodes;
 import Color.Color;
 import Color.ColorSettings;
 import Graph.Graph;
@@ -31,18 +33,18 @@ public class Mapper {
 	private final Direction[] searchDirections = {Direction.NORTH,Direction.WEST,Direction.SOUTH,Direction.EAST};
 	
 	public static void main(String[] args) throws IOException, InterruptedException{
-		BTMapper.connectToPC();
+		BTBrick.connectToPC();
 		Mapper mapper = new Mapper();
 		Helper.drawText("Press Button for mapping");
 		Button.waitForPress();
 		mapper.map();
-		BTMapper.sendGraph(map);
+		BTSendNodes.sendNodes(map, BTMapper.getMapperOutput(), BTMapper.getMapperInput(), false);
 	}
 	
 	public Mapper(){
 		TachoPilot pilot = new TachoPilot(5.6f,10.35f,Motor.A,Motor.B);
 		
-		pilot.setMoveSpeed(10);
+		pilot.setMoveSpeed(15);
 		ColorSensor colorSensor = new ColorSensor(SensorPort.S3);
 		LightSensor leftLightSensor = new LightSensor(SensorPort.S1);
 		LightSensor rightLightSensor = new LightSensor(SensorPort.S2);

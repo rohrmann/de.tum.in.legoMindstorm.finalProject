@@ -8,7 +8,7 @@ import Graph.Graph;
 import Graph.Node;
 import Graph.Pair;
 import Light.LightSettings;
-import misc.AStar;
+//import misc.AStar;
 import misc.Direction;
 import misc.Helper;
 import misc.Robot;
@@ -212,6 +212,22 @@ public class RoomNavigator {
 		}
 	}
 	
+	public void turn(Direction direction)
+	{
+		if(Direction.NORTH == direction) {
+			turnNorth();
+		}
+		else if(Direction.SOUTH == direction) {
+			turnSouth();
+		}
+		else if(Direction.EAST == direction) {
+			turnEast();
+		}
+		else {
+			turnWest();
+		}
+	}
+	
 	public Pair getPosition(){
 		return currentPosition;
 	}
@@ -252,10 +268,14 @@ public class RoomNavigator {
 		return result;
 	}
 	
+	public void setGraph(Graph map) {
+		this.map = map;
+	}
+	
 	
 	public void moveTo(Pair from, Pair to)
 	{
-		ArrayList<Pair> path = AStar.findPath(map, from, to);
+		ArrayList<Pair> path = misc.AStar.findPath(map, from, to);
 		
 		ListIterator<Pair> iterator = path.listIterator();
 		
@@ -277,6 +297,8 @@ public class RoomNavigator {
 				move(Direction.NORTH);
 			else if(x == 0 && y == -1)
 				move(Direction.SOUTH);
+			
+			pos = nextPos;
 		}
 		
 	}
