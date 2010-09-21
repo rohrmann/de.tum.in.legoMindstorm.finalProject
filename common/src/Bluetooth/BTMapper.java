@@ -1,12 +1,9 @@
 package Bluetooth;
 import lejos.nxt.*;
 import lejos.nxt.comm.*;
-import misc.Helper;
 
 import java.io.*;
-import java.util.Enumeration;
 
-import Graph.*;
 
 public class BTMapper {
 
@@ -15,11 +12,9 @@ public class BTMapper {
 	private static BTConnection btc;
 	private static DataInputStream dis;
 	private static DataOutputStream dos;
-	private static Graph graph;
 
 	private static String connected = "Connected";
 	private static String waiting = "Waiting for Con...";
-	private static String closing = "Closing...";
 
 	
 	public static void connectToPC() {

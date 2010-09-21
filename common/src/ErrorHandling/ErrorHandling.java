@@ -1,10 +1,7 @@
 package ErrorHandling;
 
-import Graph.Pair;
-import Navigation.RoomNavigator;
 import lejos.nxt.Button;
 import lejos.nxt.ButtonListener;
-import misc.Direction;
 import misc.Helper;
 import misc.Robot;
 
