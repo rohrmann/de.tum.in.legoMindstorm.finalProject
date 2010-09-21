@@ -9,7 +9,6 @@ import Graph.Node;
 import Graph.Pair;
 import Light.LightSettings;
 //import misc.AStar;
-import misc.AStar;
 import misc.Direction;
 import misc.Helper;
 import misc.Robot;
@@ -253,8 +252,12 @@ public class RoomNavigator {
 		return result;
 	}
 	
+	public void setGraph(Graph map) {
+		this.map = map;
+	}
 	
-	public void moveTo(Pair from, Pair to)
+	
+	/*public void moveTo(Pair from, Pair to)
 	{
 		ArrayList<Pair> path = AStar.findPath(map, from, to);
 		
@@ -280,5 +283,5 @@ public class RoomNavigator {
 				move(Direction.SOUTH);
 		}
 		
-	}
+	}*/
 }
