@@ -33,7 +33,7 @@ public class AStar {
 			for(int i=0; i<Direction.values().length; i++)
 			{
 				Direction dir = Direction.values()[i];
-				if(!currentNode.getGraphNode().has(dir))// && currentNode.getGraphNode().get(dir).isFree())
+				if(!currentNode.getGraphNode().has(dir) || !currentNode.getGraphNode().get(dir).isFree())
 					continue;
 				
 				Node neighbor = currentNode.getGraphNode().get(dir);

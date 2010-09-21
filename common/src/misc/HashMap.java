@@ -3,10 +3,8 @@ package misc;
 import Graph.Pair;
 
 import java.util.ArrayList;
-import java.util.Hashtable;
 import java.util.Vector;
 
-import sun.security.krb5.internal.crypto.e;
 
 public class HashMap<T> {
 
@@ -27,7 +25,9 @@ public class HashMap<T> {
 	
 	public boolean containsKey(Pair p)
 	{
-		return keys.contains(p);
+		for(int i=0; i<keys.size(); i++)
+			if(keys.elementAt(i) == p) return true;
+		return false;
 	}
 	
 	public void remove(Pair p)
