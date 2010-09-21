@@ -62,10 +62,10 @@ public class BTStreams {
 	}
 	
 	public static void closeAllStreams() throws IOException{
-		mapperIn.close();
-		mapperOut.close();
-//		pullerIn.close();
-//		pullerOut.close();
+//		mapperIn.close();
+//		mapperOut.close();
+		pullerIn.close();
+		pullerOut.close();
 //		pusherIn.close();
 //		pusherOut.close();
 	}

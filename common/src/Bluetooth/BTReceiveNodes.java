@@ -15,7 +15,7 @@ public class BTReceiveNodes {
 	
 	private static int numberOfNodes;
 	
-	private static boolean controlFromBrick;
+	private static boolean toBrick;
 	
 	private static DataInputStream dis;
 	private static DataOutputStream dos;
@@ -26,15 +26,15 @@ public class BTReceiveNodes {
 		return graph;
 	}
 	
-	public static void receiveNodes(DataOutputStream dataOut,
-			DataInputStream dataIn, boolean controlFromBrick1) throws IOException{
+	public static Graph receiveNodes(DataOutputStream dataOut,
+			DataInputStream dataIn, boolean toBrick1) throws IOException{
 		dis = dataIn;
 		dos = dataOut;
-		controlFromBrick = controlFromBrick1;
+		toBrick = toBrick1;
 		receiveSize();
 		int[] arrayFromBrick = new int[4];
 		while (numberOfNodes>0) {
-			if(!controlFromBrick){
+			if(!toBrick){
 				dis.read();
 				dis.read();
 			}
@@ -49,10 +49,10 @@ public class BTReceiveNodes {
 			arrayFromBrick[2] = dis.read();
 			arrayFromBrick[3] = dis.read();
 
-			System.out.println("ende while durchlauf");
-			System.out.println("Daten empfangen: " + "    X: "
-					+ arrayFromBrick[0] + "    Y: " + arrayFromBrick[1]
-					+ "    Enum: " + arrayFromBrick[2]);
+//			System.out.println("ende while durchlauf");
+//			System.out.println("Daten empfangen: " + "    X: "
+//					+ arrayFromBrick[0] + "    Y: " + arrayFromBrick[1]
+//					+ "    Enum: " + arrayFromBrick[2]);
 
 			byte[] check = new byte[1];
 			check[0] = (byte) arrayFromBrick[3];
@@ -65,10 +65,11 @@ public class BTReceiveNodes {
 		}
 		System.out.println("Checking Nodes");
 		GraphTools.addConnections(graph);
-		if(!controlFromBrick){
+		if(!toBrick){
 		//GraphToTxt.writeTxt(graph, PCConfig.getTextFile());
 		//closeConnection();
 		}
+		return graph;
 	}
 	
 public static void makeNode(int a, int x, int y) {
@@ -95,12 +96,18 @@ public static void makeNode(int a, int x, int y) {
 		case 6:
 			graph.addNode(new Node(Type.UNDEFINED, new Pair(x, y)));
 			break;
+		case 7:
+			graph.addNode(new Node(Type.PULLER, new Pair(x, y)));
+			break;
+		case 8:
+			graph.addNode(new Node(Type.PUSHER, new Pair(x, y)));
+			break;
 		}
 		
 	}
 	
 	public static void receiveSize() throws IOException{
-		if(!controlFromBrick){
+		if(!toBrick){
 			dis.read();
 			dis.read();
 		}
