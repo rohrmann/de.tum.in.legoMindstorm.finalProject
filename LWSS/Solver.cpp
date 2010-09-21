@@ -153,7 +153,6 @@ void Solver::solve(){
 				MapUtils::printMap(*currentState,std::cout);
 			}
 
-			std::cout << "Instances:" << GameState::instanceCounter << std::endl;
 			exit(0);
 		}
 
@@ -163,12 +162,10 @@ void Solver::solve(){
 			//std::cout << "next pruned map with costs:" << currentState->getCosts() << std::endl;
 			//MapUtils::printMap(*currentState,std::cout);
 			pruning.insert(hashValue);
-			if(findNextStates()==0){
-				deleteBranch();
-			}
+			findNextStates();
 		}
-		else
-			deleteBranch();
+
+		deleteBranch();
 
 	}
 
