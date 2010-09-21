@@ -4,6 +4,7 @@ import lejos.nxt.Button;
 import lejos.nxt.ButtonListener;
 import miscBrick.Helper;
 import miscBrick.Robot;
+import Navigation.RoomNavigator;
 
 public class ErrorHandling {
 
@@ -14,15 +15,14 @@ public class ErrorHandling {
 	private static int xCount = 0;
 	private static int yCount = 0;
 
-	public static void resolvebyHand(Robot robot/* , final RoomNavigator navi */) {
+	public static void resolvebyHand(Robot robot , final RoomNavigator navi) {
 		robot.getPilot().stop();
 
 		heading = true;
 		x = false;
 		active = true;
 
-		Helper
-				.drawText("Default: North, x:0, y:0. " +
+		Helper.drawText("Default: North, x:0, y:0. " +
 						"Change with left and right ->Choose heading first.");
 
 		Button.ENTER.addButtonListener(new ButtonListener() {
@@ -41,19 +41,19 @@ public class ErrorHandling {
 					switch (dirCount) {
 					case 0:
 						result += "North chosen";
-						// navi.updateHeading(Direction.NORTH);
+						navi.updateHeading(Direction.NORTH);
 						break;
 					case 1:
 						result += "East chosen";
-						// navi.updateHeading(Direction.EAST);
+						navi.updateHeading(Direction.EAST);
 						break;
 					case 2:
 						result += "South chosen";
-						// navi.updateHeading(Direction.SOUTH);
+						navi.updateHeading(Direction.SOUTH);
 						break;
 					case 3:
 						result += "West chosen";
-						// navi.updateHeading(Direction.WEST);
+						navi.updateHeading(Direction.WEST);
 						break;
 					}
 					result += " ->Choose x-coordinate";
@@ -64,12 +64,15 @@ public class ErrorHandling {
 							+ " ->Now choose y-coordinate");
 				} else {
 					Helper.drawText("Y chosen: " + yCount);
+					navi.forcePosition(new Pair(xCount, yCount));
 					try {
 						Thread.sleep(5000);
 					} catch (InterruptedException e) {
 					}
+					Helper.drawText(" " + navi.getPosition().toString());
+					
 					active = false;
-					// navi.forcePosition(new Pair(xCount, yCount));
+
 				}
 			}
 		});

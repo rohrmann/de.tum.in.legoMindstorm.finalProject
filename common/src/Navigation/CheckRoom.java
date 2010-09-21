@@ -8,6 +8,7 @@ import misc.Config;
 import misc.Helper;
 import misc.Robot;
 import misc.RoomInformation;
+import Navigation.RoomNavigator;
 
 
 public class CheckRoom implements Behavior {
@@ -19,9 +20,11 @@ public class CheckRoom implements Behavior {
 	private int distanceUntilActivation;
 	private int tolerance;
 	private RoomInformation information;
+	private RoomNavigation navi;
 
 
-	public CheckRoom(Robot robot,int distanceUntilActivation,int tolerance,RoomInformation information){
+	public CheckRoom(Robot robot,int distanceUntilActivation,int tolerance,RoomInformation information, 
+			RoomNavigator navi){
 		this.robot = robot;
 		this.distanceUntilActivation = distanceUntilActivation;
 		this.tolerance = tolerance;
@@ -29,6 +32,7 @@ public class CheckRoom implements Behavior {
 		terminated = true;
 		tachoReseted = false;
 		this.information = information;
+		this.navi = navi;
 	}
 
 	//@Override
@@ -54,6 +58,7 @@ public class CheckRoom implements Behavior {
 			else if(color== lastColor && color.isRoomColor() && System.currentTimeMillis()-startColor > Config.acceptionPeriodForColor){
 				active = false;
 				information.setRoomColor(color);
+				navi.getErrorInformation.setError(false);
 			}
 			
 			try{
@@ -72,9 +77,11 @@ public class CheckRoom implements Behavior {
 			if(missColor != null){
 				active = false;
 				information.setRoomColor(missColor);
+				navi.getErrorInformation.setError(false);
 			}else{
 				robot.getPilot().stop();
-				ErrorHandling.resolvebyHand(robot);
+				ErrorHandling.resolvebyHand(robot, navi);
+				navi.getErrorInformation.setError(true);
 			}
 			
 		}
