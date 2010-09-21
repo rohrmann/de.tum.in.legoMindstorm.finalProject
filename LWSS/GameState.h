@@ -11,12 +11,13 @@
 #include <unordered_set>
 #include <list>
 #include "HashValue.h"
-#include "PairHasher.h"
-#include "PairEqual.h"
+#include "PointHasher.h"
+#include "PointEqual.h"
 #include "defs.h"
 #include "Map.h"
 #include "Robot.h"
-#include "Command.h"
+#include "RobotMovement.h"
+#include "BoxMovement.h"
 
 namespace std{
 	template<typename T, typename U>
@@ -26,6 +27,9 @@ namespace std{
 
 template<int L>
 class ZobristHashing;
+
+class RobotMovement;
+class BoxMovement;
 
 class GameState : public Map<field> {
 public:
@@ -40,10 +44,11 @@ public:
 	point pusher;
 	point pusherTL;
 
-	Command *commands;
+	RobotMovement* robotMovement;
+	BoxMovement* boxMovement;
 
 	static point* targets;
-	static std::unordered_set< point, PairHasher, PairEqual > targetsHash;
+	static std::unordered_set< point, PointHasher, PointEqual > targetsHash;
 	static unsigned int numTargets;
 
 	static int instanceCounter;
@@ -80,12 +85,30 @@ public:
 
 	GameState* copy();
 
+	void apply(RobotMovement* movement);
+	void apply(BoxMovement* movement);
+
 	void calcEstimatedCosts();
 
 	unsigned char getFingerPrint(point coords);
 
 	field getNextComponentValue();
 
+	bool bfs(point start, point dest,std::unordered_set<point, PointHasher, PointEqual>& nodes);
+
+	bool findEvasionField(point start, const std::unordered_set<point,PointHasher,PointEqual>& nodes, point& result);
+
+	RobotMovement* path(Robot type, point dest,std::unordered_set<point,PointHasher,PointEqual>& excludedNodes, unsigned int maxElements);
+
+	RobotMovement* recPathfinding(Robot type,point botA, point botB, point dest,std::unordered_set<point,PointHasher,PointEqual>& excludedNodes,unsigned int maxElements);
+
+
+	void findAdjacentComponents(point point, unsigned int& numComponents, field* components);
+
+	void findEvasionFields(point start, unsigned int numComponents, field* components,const std::unordered_set<point,PointHasher,PointEqual>& nodes,GameState* tempState, unsigned int& numEvasionFields, point* evasionFields);
+
+	void printMovements(std::ostream& os);
+	void printConvertedMovements(std::ostream&os);
 };
 
 #endif /* ARRAYMAP_H_ */

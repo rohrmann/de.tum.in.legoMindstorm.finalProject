@@ -19,6 +19,7 @@ namespace std{
 class Helper {
 public:
 
+	static std::string pair2Str(std::pair<int,int> pair);
 	static std::string pair2Str(point pair);
 
 	static std::string pair2Str(dimension x,dimension y);

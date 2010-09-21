@@ -9,7 +9,7 @@
 #include <utility>
 #include "ZobristHashing.h"
 #include <stack>
-#include <vector>
+#include <queue>
 #include "MapUtils.h"
 #include <string.h>
 #include "ComponentTester.h"
@@ -18,7 +18,7 @@
 
 unsigned int GameState::numTargets =0;
 std::pair<dimension,dimension>* GameState::targets = NULL;
-std::unordered_set< std::pair<dimension,dimension>, PairHasher, PairEqual > GameState::targetsHash;
+std::unordered_set< std::pair<dimension,dimension>, PointHasher, PointEqual > GameState::targetsHash;
 int GameState::instanceCounter=0;
 
 GameState::~GameState(){
@@ -26,6 +26,14 @@ GameState::~GameState(){
 
 	if(prev!=NULL){
 		prev->children--;
+	}
+
+	if(robotMovement != NULL){
+		delete robotMovement;
+	}
+
+	if(boxMovement != NULL){
+		delete boxMovement;
 	}
 }
 
@@ -50,6 +58,9 @@ void GameState::init(point puller,point pullerTL,point pusher,point pusherTL,poi
 	this->numBoxes = numBoxes;
 	this->estimatedCosts = estimatedCosts;
 	this->componentValue = componentValue;
+
+	this->boxMovement = NULL;
+	this->robotMovement = NULL;
 
 	this->prev = prev;
 	this->children = 0;
@@ -91,6 +102,22 @@ GameState* GameState::copy(){
 	memcpy(newMap,map,sizeof(field)*dims.first*dims.second);
 
 	return new GameState(puller,pullerTL,pusher,pusherTL,newBoxes,numBoxes,estimatedCosts,componentValue,prev,newMap,dims);
+}
+
+void GameState::apply(RobotMovement* movement){
+	movement->doMove(this);
+
+	if(robotMovement ==NULL){
+		robotMovement = movement;
+	}
+	else
+		robotMovement->insert(movement);
+}
+
+void GameState::apply(BoxMovement* movement){
+	movement->doMove(this);
+
+	boxMovement = movement;
 }
 
 void GameState::updateTL(){
@@ -232,4 +259,357 @@ unsigned char GameState::getFingerPrint(point pos){
 
 field GameState::getNextComponentValue(){
 	return componentValue++;
+}
+
+bool GameState::bfs(point start, point dest, std::unordered_set<point,PointHasher,PointEqual>& nodes){
+	std::queue<point> queue;
+	unsigned int * prev = new unsigned int[dims.first*dims.second];
+	bool* visited = new bool[dims.first*dims.second];
+
+	for(unsigned int i=0;i<dims.first*dims.second;i++){
+		prev[i] = i;
+		visited[i] = false;
+	}
+
+
+
+	queue.push(start);
+	visited[addr(start)] = true;
+	point pos = start;
+
+	while(!queue.empty()){
+		pos = queue.front();
+		queue.pop();
+
+		if(pos == dest)
+			break;
+
+		if(at(Helper::north(pos)) != 0 && !visited[addr(Helper::north(pos))]){
+			visited[addr(Helper::north(pos))] = true;
+			point newPos = Helper::north(pos);
+			queue.push(newPos);
+			prev[addr(newPos)] = addr(pos);
+		}
+
+		if(at(Helper::west(pos))!= 0 && !visited[addr(Helper::west(pos))]){
+			visited[addr(Helper::west(pos))] = true;
+			point newPos = Helper::west(pos);
+			queue.push(newPos);
+			prev[addr(newPos)] = addr(pos);
+		}
+
+		if(at(Helper::south(pos)) != 0 && !visited[addr(Helper::south(pos))]){
+			visited[addr(Helper::south(pos))] = true;
+			point newPos = Helper::south(pos);
+			queue.push(newPos);
+			prev[addr(newPos)] = addr(pos);
+		}
+
+		if(at(Helper::east(pos))!=0&& !visited[addr(Helper::east(pos))]){
+			visited[addr(Helper::east(pos))]=true;
+			point newPos = Helper::east(pos);
+			queue.push(newPos);
+			prev[addr(newPos)] = addr(pos);
+		}
+	}
+
+
+
+	if(pos == dest){
+		unsigned int destAddr = addr(dest);
+
+		while(destAddr != prev[destAddr]){
+			nodes.insert(make_point(destAddr/dims.second,destAddr%dims.second));
+			destAddr = prev[destAddr];
+		}
+
+		nodes.insert(make_point(destAddr/dims.second,destAddr%dims.second));
+
+	}
+
+	delete [] prev;
+	delete [] visited;
+
+	return pos==dest;
+}
+
+bool GameState::findEvasionField(point start,const std::unordered_set<point, PointHasher, PointEqual>& nodes, point& result){
+	bool* visited = new bool[dims.first*dims.second];
+	std::queue<point> queue;
+	bool found = false;
+
+	for(unsigned int i =0; i < dims.first*dims.second;i++){
+		visited[i] = false;
+	}
+
+	visited[addr(start)] = true;
+	queue.push(start);
+
+	point pos = start;
+
+	while(!queue.empty()){
+
+		pos = queue.front();
+		queue.pop();
+
+		if(nodes.find(pos) == nodes.end()){
+			found = true;
+			break;
+		}
+
+		if(at(Helper::north(pos)) != 0 && !visited[addr(Helper::north(pos))]){
+			visited[addr(Helper::north(pos))] = true;
+			queue.push(Helper::north(pos));
+		}
+
+		if(at(Helper::west(pos))!= 0 && !visited[addr(Helper::west(pos))]){
+			visited[addr(Helper::west(pos))] = true;
+			queue.push(Helper::west(pos));
+		}
+
+		if(at(Helper::south(pos))!= 0 && !visited[addr(Helper::south(pos))]){
+			visited[addr(Helper::south(pos))] = true;
+			queue.push(Helper::south(pos));
+		}
+
+		if(at(Helper::east(pos))!= 0 && !visited[addr(Helper::east(pos))]){
+			visited[addr(Helper::east(pos))] = true;
+			queue.push(Helper::east(pos));
+		}
+	}
+
+	delete [] visited;
+
+	if(found){
+		result = pos;
+		return true;
+	}
+	else
+		return false;
+}
+
+RobotMovement* GameState::path(Robot type,point dest,std::unordered_set<point,PointHasher,PointEqual>& excludedNodes,unsigned int maxElements){
+	return recPathfinding(type,(type==RPULLER? puller: pusher),(type==RPULLER? pusher:puller),dest,excludedNodes,maxElements);
+}
+
+RobotMovement* GameState::recPathfinding(Robot type, point botA, point botB, point dest,std::unordered_set<point, PointHasher, PointEqual>& excludedNodes, unsigned int maxElements){
+
+	RobotMovement* movements =NULL;
+	std::unordered_set<point,PointHasher,PointEqual> nodes;
+	point oldBotA = make_point(0,0);
+
+	unsigned int curElements = 1;
+
+	while(maxElements > curElements){
+
+		if(botA != oldBotA){
+			nodes = excludedNodes;
+			if(!bfs(botA,dest,nodes)){
+				if(movements != NULL)
+					delete movements;
+
+				return NULL;
+			}
+			oldBotA = botA;
+		}
+
+		if(nodes.find(botB) == nodes.end()){
+			if(movements==NULL)
+				return new RobotMovement(type,dest,NULL);
+			else{
+				movements->insert(new RobotMovement(type,dest,NULL));
+				return movements;
+			}
+		}
+		else{
+			point newDest;
+
+			field savedComponent = at(botA);
+			set(botA,0);
+			if(!findEvasionField(botB,nodes,newDest)){
+				set(botA,savedComponent);
+				if(!findEvasionField(botB,nodes,newDest)){
+					if(movements!= NULL)
+						delete movements;
+					return NULL;
+				}
+			}
+
+			set(botA,savedComponent);
+
+			std::unordered_set<point, PointHasher, PointEqual> dummy;
+			RobotMovement* newMovements = recPathfinding((type==RPULLER?RPUSHER:RPULLER),botB,botA,newDest,dummy,maxElements-curElements);
+
+			if(newMovements == NULL){
+				if(movements!= NULL)
+					delete movements;
+
+				return NULL;
+			}
+
+			if(movements == NULL){
+				movements = newMovements;
+			}
+			else
+				movements->insert(newMovements);
+
+			curElements = 1 + movements->count();
+
+			botA = type == RPULLER? movements->getPuller(botA): movements->getPusher(botA);
+			botB = type == RPULLER? movements->getPusher(botB): movements->getPuller(botB);
+		}
+	}
+
+	if(movements!= NULL){
+		delete movements;
+	}
+
+	return NULL;
+}
+
+void GameState::findAdjacentComponents(point point, unsigned int& numComponents, field* components){
+	field component = at(Helper::north(point));
+	bool found = false;
+
+	if(component != 0){
+		for(unsigned int i =0; i< numComponents;i++){
+			if(components[i] == component)
+				found = true;
+		}
+
+		if(!found){
+			components[numComponents++] = component;
+		}
+	}
+
+	component = at(Helper::west(point));
+	found = false;
+
+	if(component != 0){
+		for(unsigned int i =0; i< numComponents;i++){
+			if(components[i] == component)
+				found = true;
+		}
+
+		if(!found){
+			components[numComponents++] = component;
+		}
+	}
+
+	component = at(Helper::east(point));
+	found = false;
+
+	if(component != 0){
+		for(unsigned int i =0; i< numComponents;i++){
+			if(components[i] == component)
+				found = true;
+		}
+
+		if(!found){
+			components[numComponents++] = component;
+		}
+	}
+
+	component = at(Helper::south(point));
+	found = false;
+
+	if(component != 0){
+		for(unsigned int i =0; i< numComponents;i++){
+			if(components[i] == component)
+				found = true;
+		}
+
+		if(!found){
+			components[numComponents++] = component;
+		}
+	}
+}
+
+void GameState::findEvasionFields(point start, unsigned int numComponents,field* components,const std::unordered_set<point,PointHasher,PointEqual>&nodes,GameState* tempState,unsigned int & numEvasionFields,point* evasionFields){
+	std::queue<point> queue;
+	bool* visited = new bool[dims.first*dims.second];
+	bool found[4];
+
+	for(unsigned int i =0; i< 4;i++){
+		found[i] = false;
+	}
+
+	for(unsigned int i =0; i< dims.first*dims.second;i++){
+		visited[i] = false;
+	}
+
+	visited[addr(start)] = true;
+
+	queue.push(start);
+
+	while(!queue.empty()){
+		point pos = queue.front();
+		queue.pop();
+
+		if(nodes.find(pos) == nodes.end()){
+			field component = tempState->at(pos);
+
+			for(unsigned int i = 0; i< numComponents;i++){
+				if(found[i] == false && component == components[i]){
+					found[i] = true;
+					evasionFields[numEvasionFields++] = pos;
+					break;
+				}
+			}
+		}
+
+		bool terminated = true;
+
+		for(unsigned int i =0; i< numComponents;i++){
+			if(!found[i]){
+				terminated = false;
+				break;
+			}
+		}
+
+		if(terminated)
+			break;
+
+		if(at(Helper::north(pos)) != 0 && !visited[addr(Helper::north(pos))]){
+			visited[addr(Helper::north(pos))] = true;
+			queue.push(Helper::north(pos));
+		}
+
+		if(at(Helper::west(pos)) != 0 && !visited[addr(Helper::west(pos))]){
+			visited[addr(Helper::west(pos))] = true;
+			queue.push(Helper::west(pos));
+		}
+
+		if(at(Helper::south(pos)) != 0 && !visited[addr(Helper::south(pos))]){
+			visited[addr(Helper::south(pos))] = true;
+			queue.push(Helper::south(pos));
+		}
+
+		if(at(Helper::east(pos))!= 0 && !visited[addr(Helper::east(pos))]){
+			visited[addr(Helper::east(pos))] = true;
+			queue.push(Helper::east(pos));
+		}
+	}
+
+	delete [] visited;
+}
+
+void GameState::printMovements(std::ostream & os){
+	if(robotMovement != NULL){
+		os << robotMovement->toString() << std::endl;
+	}
+
+	if(boxMovement != NULL){
+		os << boxMovement->toString() << std::endl;
+	}
+}
+
+void GameState::printConvertedMovements(std::ostream & os){
+	if(robotMovement != NULL){
+		os << robotMovement->toConvertedString(dims.first) << std::endl;
+	}
+
+	if(boxMovement != NULL){
+		os << boxMovement->toConvertedString(dims.first) << std::endl;
+	}
 }

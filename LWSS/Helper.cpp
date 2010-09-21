@@ -13,6 +13,14 @@
 std::string Helper::pair2Str(point pair){
 	std::stringstream ss;
 
+	ss<< "(" << (int)pair.first << "," << (int)pair.second << ")";
+
+	return ss.str();
+}
+
+std::string Helper::pair2Str(std::pair<int,int> pair){
+	std::stringstream ss;
+
 	ss<< "(" << pair.first << "," << pair.second << ")";
 
 	return ss.str();

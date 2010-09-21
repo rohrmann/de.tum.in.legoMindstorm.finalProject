@@ -10,7 +10,9 @@
 
 #include <utility>
 
-#define HASHLENGTH 8
+#define HASHLENGTH 64
+
+#define MAXELEMENTS 10
 
 typedef unsigned char field;
 typedef unsigned char dimension;

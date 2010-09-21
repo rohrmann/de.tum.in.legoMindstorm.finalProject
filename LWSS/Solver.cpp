@@ -13,6 +13,8 @@
 #include "ZobristHashing.h"
 #include "FlowTester.h"
 #include "MapAlgorithms.h"
+#include "BoxMovement.h"
+#include "RobotMovement.h"
 
 Solver::Solver(const PrintableMap& map){
 	hashing = new ZobristHashing<HASHLENGTH>(map.dims,2);
@@ -116,14 +118,22 @@ void Solver::initConnections(){
 
 void Solver::solve(){
 
+/*	RobotMovement* movements = initialState->path(RPULLER,make_point(2,5),10);
+
+	while(movements!= NULL){
+		std::cout << (movements->type == RPULLER? "Puller:" : "Pusher:") << Helper::pair2Str(movements->dest) << std::endl;
+		movements = movements->next;
+	}*/
+
 	queue.push(initialState);
 
 	while(!queue.empty()){
 		currentState = queue.top();
 		queue.pop();
 
+		//std::cout << "Next map with costs:"<< currentState->getCosts() << std::endl;
 		//MapUtils::printMap(*currentState,std::cout);
-		//MapUtils::printMap(currentState->map,currentState->dims);
+
 		//std::cout << "Level:" << currentState->level << " EstimatedCosts:" << currentState->estimatedCosts << " Costs:" <<currentState->getCosts() << std::endl;
 
 		if(currentState->solved()){
@@ -138,6 +148,8 @@ void Solver::solve(){
 				currentState = solution.top();
 				solution.pop();
 
+
+				currentState->printConvertedMovements(std::cout);
 				MapUtils::printMap(*currentState,std::cout);
 			}
 
@@ -148,6 +160,8 @@ void Solver::solve(){
 		HashValue<HASHLENGTH> hashValue = currentState->getHashValue(hashing);
 
 		if(pruning.find(hashValue) == pruning.end()){
+			//std::cout << "next pruned map with costs:" << currentState->getCosts() << std::endl;
+			//MapUtils::printMap(*currentState,std::cout);
 			pruning.insert(hashValue);
 			if(findNextStates()==0){
 				deleteBranch();
@@ -168,89 +182,85 @@ unsigned int Solver::findNextStates(){
 		//north
 		if(currentState->at(Helper::north(pos)) != 0){
 			if(currentState->at(Helper::south(pos))!= 0 && currentState->at(currentState->pusher)==currentState->at(Helper::south(pos))){
+				GameState * tempState = currentState->copy();
+				tempState->moveBox(i,Helper::north(pos));
+				BoxMovement movement(i,pos,NORTH,RPUSHER);
+				generateMovements(tempState,movement);
 
-				GameState * newState = currentState->copy();
-				newState->moveBox(i,Helper::north(pos));
-				newState->moveBot(RPUSHER,pos);
-
-				if(insertState(newState))
-					numberNewStates++;
+				delete tempState;
 
 			}
-			else if(currentState->at(Helper::north(pos,2))!=0 && currentState->at(currentState->puller) == currentState->at(Helper::north(pos))){
-				GameState * newState = currentState->copy();
-				newState->moveBox(i,Helper::north(pos));
-				newState->moveBot(RPULLER,Helper::north(pos,2));
-				newState->calcEstimatedCosts();
 
-				if(insertState(newState))
-					numberNewStates++;
+			if(currentState->at(Helper::north(pos,2))!=0 && currentState->at(currentState->puller) == currentState->at(Helper::north(pos))){
+				GameState * tempState = currentState->copy();
+				tempState->moveBox(i,Helper::north(pos));
+				BoxMovement movement(i,pos,NORTH,RPULLER);
+				generateMovements(tempState,movement);
+
+				delete tempState;
 			}
 		}
 
 		//west
 		if(currentState->at(Helper::west(pos)) != 0 ){
 			if(currentState->at(Helper::east(pos))!= 0 && currentState->at(currentState->pusher)==currentState->at(Helper::east(pos))){
-				GameState * newState = currentState->copy();
-				newState->moveBox(i,Helper::west(pos));
-				newState->moveBot(RPUSHER,pos);
-				newState->calcEstimatedCosts();
+				GameState * tempState = currentState->copy();
+				tempState->moveBox(i,Helper::west(pos));
+				BoxMovement movement(i,pos,WEST,RPUSHER);
+				generateMovements(tempState,movement);
 
-				if(insertState(newState))
-					numberNewStates++;
+				delete tempState;
 			}
-			else if(currentState->at(Helper::west(pos,2))!=0 && currentState->at(currentState->puller) == currentState->at(Helper::north(pos))){
-				GameState * newState = currentState->copy();
-				newState->moveBox(i,Helper::west(pos));
-				newState->moveBot(RPULLER,Helper::west(pos,2));
-				newState->calcEstimatedCosts();
 
-				if(insertState(newState))
-					numberNewStates++;
+			if(currentState->at(Helper::west(pos,2))!=0 && currentState->at(currentState->puller) == currentState->at(Helper::west(pos))){
+				GameState * tempState = currentState->copy();
+				tempState->moveBox(i,Helper::west(pos));
+				BoxMovement movement(i,pos,WEST,RPULLER);
+				generateMovements(tempState,movement);
+
+				delete tempState;
 			}
 		}
 
 		//east
 		if(currentState->at(Helper::east(pos)) != 0 ){
 			if(currentState->at(Helper::west(pos))!= 0 && currentState->at(currentState->pusher)==currentState->at(Helper::west(pos))){
-				GameState * newState = currentState->copy();
-				newState->moveBox(i,Helper::east(pos));
-				newState->moveBot(RPUSHER,pos);
-				newState->calcEstimatedCosts();
+				GameState * tempState = currentState->copy();
+				tempState->moveBox(i,Helper::east(pos));
+				BoxMovement movement(i,pos,EAST,RPUSHER);
+				generateMovements(tempState,movement);
 
-				if(insertState(newState))
-					numberNewStates++;
+				delete tempState;
 			}
-			else if(currentState->at(Helper::east(pos,2))!=0 && currentState->at(currentState->puller) == currentState->at(Helper::east(pos))){
-				GameState * newState = currentState->copy();
-				newState->moveBox(i,Helper::east(pos));
-				newState->moveBot(RPULLER,Helper::east(pos,2));
-				newState->calcEstimatedCosts();
 
-				if(insertState(newState))
-					numberNewStates++;
+			if(currentState->at(Helper::east(pos,2))!=0 && currentState->at(currentState->puller) == currentState->at(Helper::east(pos))){
+				GameState * tempState = currentState->copy();
+				tempState->moveBox(i,Helper::east(pos));
+				BoxMovement movement(i,pos,EAST,RPULLER);
+				generateMovements(tempState,movement);
+
+				delete tempState;
 			}
 		}
 
 		//south
 		if(currentState->at(Helper::south(pos)) != 0 ){
 			if(currentState->at(Helper::north(pos))!= 0 && currentState->at(currentState->pusher)==currentState->at(Helper::north(pos))){
-				GameState * newState = currentState->copy();
-				newState->moveBox(i,Helper::south(pos));
-				newState->moveBot(RPUSHER,pos);
-				newState->calcEstimatedCosts();
+				GameState * tempState = currentState->copy();
+				tempState->moveBox(i,Helper::south(pos));
+				BoxMovement movement(i,pos,SOUTH,RPUSHER);
+				generateMovements(tempState,movement);
 
-				if(insertState(newState))
-					numberNewStates++;
+				delete tempState;
 			}
-			else if(currentState->at(Helper::south(pos,2))!=0 && currentState->at(currentState->puller) == currentState->at(Helper::south(pos))){
-				GameState * newState = currentState->copy();
-				newState->moveBox(i,Helper::south(pos));
-				newState->moveBot(RPULLER,Helper::south(pos,2));
-				newState->calcEstimatedCosts();
 
-				if(insertState(newState))
-					numberNewStates++;
+			if(currentState->at(Helper::south(pos,2))!=0 && currentState->at(currentState->puller) == currentState->at(Helper::south(pos))){
+				GameState * tempState = currentState->copy();
+				tempState->moveBox(i,Helper::south(pos));
+				BoxMovement movement(i,pos,SOUTH,RPULLER);
+				generateMovements(tempState,movement);
+
+				delete tempState;
 			}
 		}
 
@@ -301,6 +311,9 @@ bool Solver::insertState(GameState* newState){
 	newState->calcEstimatedCosts();
 	newState->setPrev(currentState);
 	queue.push(newState);
+
+	//std::cout<<"Possible new state with costs:" << newState->getCosts() << std::endl;
+	//MapUtils::printMap(*newState,std::cout);
 	return true;
 }
 
@@ -312,47 +325,6 @@ void Solver::deleteBranch(){
 		currentState = currentState->prev;
 
 		delete temp;
-	}
-}
-
-bool Solver::collision(Robot type,point boxStart, point boxEnd,Direction dir){
-	if(type == RPUSHER){
-		point puller = currentState->puller;
-		point botStart;
-
-		switch(dir){
-		case NORTH:
-			botStart = Helper::south(boxStart);
-			return puller.second == botStart.second && puller.first >= boxEnd.first && puller.first <= botStart.first;
-		case WEST:
-			botStart = Helper::east(boxStart);
-			return puller.first == botStart.first && puller.second >= boxEnd.second && puller.second <= botStart.second;
-		case EAST:
-			botStart = Helper::west(boxStart);
-			return puller.first == botStart.first && puller.second <= boxEnd.second && puller.second >= botStart.second;
-		case SOUTH:
-			botStart = Helper::north(boxStart);
-			return puller.second == botStart.second && puller.first >= botStart.first && puller.first <= boxEnd.first;
-		}
-	}
-	else{
-		point pusher = currentState->pusher;
-		point botEnd;
-
-		switch(dir){
-		case NORTH:
-			botEnd = Helper::north(boxEnd);
-			return pusher.second == boxStart.second && pusher.first <= boxStart.first && pusher.first >= botEnd.first;
-		case SOUTH:
-			botEnd = Helper::south(boxEnd);
-			return pusher.second == boxStart.second && pusher.first <= botEnd.first && pusher.first >= boxStart.first;
-		case WEST:
-			botEnd = Helper::west(boxEnd);
-			return pusher.first == boxStart.first && pusher.second <= boxStart.second && pusher.second >= botEnd.second;
-		case EAST:
-			botEnd = Helper::east(boxEnd);
-			return pusher.first == boxStart.first && pusher.second <= botEnd.second&& pusher.second >= boxStart.second;
-		}
 	}
 }
 
@@ -415,4 +387,50 @@ void Solver::moveBoxNorth(GameState* state,unsigned int i, point pos, point newP
 	state->boxes[i] = newPos;
 	state->hashValue ^= hashing->getBox(pos);
 	state->hashValue ^= hashing->getBox(newPos);
+}
+
+void Solver::generateMovements(GameState* tempState,const BoxMovement& movement){
+	unsigned int numComponents =0;
+	field components[4];
+	point evasionFields[4];
+	unsigned int numEvasionFields = 0;
+	std::unordered_set<point, PointHasher, PointEqual> nodes;
+
+	tempState->findAdjacentComponents(movement.dest(),numComponents,components);
+
+	currentState->bfs(movement.bot == RPUSHER? currentState->pusher:currentState->puller,movement.srcBot(),nodes);
+
+	nodes.insert(movement.destBot());
+	nodes.insert(movement.dest());
+	nodes.insert(movement.src());
+
+	currentState->findEvasionFields(movement.bot == RPUSHER? currentState->puller: currentState->pusher,numComponents, components, nodes, tempState,numEvasionFields,evasionFields);
+
+	for(unsigned int i = 0; i< numEvasionFields; i++){
+		nodes.clear();
+		RobotMovement* rMove = currentState->path(movement.bot == RPUSHER?RPULLER:RPUSHER,evasionFields[i],nodes,MAXELEMENTS);
+
+		if(rMove != NULL){
+			GameState* newState = currentState->copy();
+			newState->apply(rMove);
+
+			//MapUtils::printMap(*newState,std::cout);
+
+			nodes.insert(movement.dest());
+			nodes.insert(movement.destBot());
+
+			rMove = newState->path(movement.bot,movement.srcBot(),nodes,MAXELEMENTS);
+
+			if(rMove == NULL){
+				delete newState;
+				continue;
+			}
+
+			newState->apply(rMove);
+			//MapUtils::printMap(*newState,std::cout);
+			newState->apply(new BoxMovement(movement));
+
+			insertState(newState);
+		}
+	}
 }

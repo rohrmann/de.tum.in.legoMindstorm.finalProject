@@ -11,6 +11,7 @@
 #include <iostream>
 #include "XSB.h"
 #include "defs.h"
+#include <iomanip>
 
 class PrintableMap;
 class GameState;
@@ -33,7 +34,7 @@ public:
 	static void printMap(T*field, std::pair<dimension,dimension> dims){
 		for(dimension i=0;i<dims.first;i++){
 			for(dimension j =0; j< dims.second;j++){
-				std::cout << (int)field[i*dims.second+j];
+				std::cout <<std::setw(4)<< (int)field[i*dims.second+j];
 			}
 			std::cout << std::endl;
 		}

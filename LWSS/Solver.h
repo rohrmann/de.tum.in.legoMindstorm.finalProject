@@ -9,13 +9,14 @@
 #define SOLVER_H_
 
 #include "defs.h"
-#include "PairEqual.h"
-#include "PairHasher.h"
 #include "GameStateComparator.h"
 #include "HashValueHasher.h"
 #include "HashValueEqual.h"
 #include <queue>
 #include "ComponentTester.h"
+
+class BoxCommand;
+class Command;
 
 
 namespace std{
@@ -49,7 +50,6 @@ public:
 
 	bool insertNewState(GameState* state);
 
-	bool collision(Robot type, point boxStart, point boxEnd,Direction dir);
 
 	void moveBoxNorth(GameState* state,unsigned int boxNum, point boxStart, point boxEnd);
 
@@ -58,6 +58,9 @@ public:
 	void deleteBranch();
 
 	bool insertState(GameState* state);
+
+	void generateMovements(GameState* tempState, const BoxMovement& movement);
+
 
 };
 
