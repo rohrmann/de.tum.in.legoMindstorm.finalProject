@@ -1,7 +1,7 @@
 package Bluetooth;
 import java.io.IOException;
 
-import Config.PCConfig;
+import ConfigPC.PCConfig;
 
 import lejos.pc.comm.NXTConnector;
 import misc.RobotType;

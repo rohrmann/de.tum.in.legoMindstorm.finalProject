@@ -7,21 +7,25 @@ import lejos.nxt.Motor;
 import lejos.nxt.SensorPort;
 import lejos.nxt.addon.ColorSensor;
 import lejos.robotics.navigation.TachoPilot;
-import misc.Config;
+import miscBrick.Config;
 import misc.Direction;
-import misc.Helper;
-import misc.Robot;
-import Analysis.AnalyseCrossing;
+import miscBrick.Helper;
+import miscBrick.Robot;
+import AnalysisBrick.AnalyseCrossing;
 import Color.Color;
-import Color.ColorSettings;
+import ColorBrick.ColorSettings;
 import Graph.Graph;
 import Graph.Node;
 import Graph.Pair;
 import Graph.Type;
-import Light.LightSettings;
-import Navigation.RoomNavigator;
+import LightBrick.LightSettings;
+import NavigationBrick.RoomNavigator;
 
-
+/**
+ * 
+ * @author rohrmann
+ *
+ */
 public class Mapper {
 	
 	private RoomNavigator nav;

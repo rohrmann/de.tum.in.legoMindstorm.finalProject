@@ -1,21 +1,21 @@
 
 import java.io.IOException;
 
-import Bluetooth.BTBrick;
-import Bluetooth.BTReceiveCommand;
+import BluetoothBrick.BTBrick;
+import BluetoothBrick.BTReceiveCommand;
 import Bluetooth.BTReceiveNodes;
 import Color.Color;
-import Color.ColorSettings;
+import ColorBrick.ColorSettings;
 import Graph.Graph;
 import Graph.Pair;
-import Graph.*;
-import Light.LightSettings;
-import Navigation.RoomNavigator;
+import LightBrick.LightSettings;
+import NavigationBrick.RoomNavigator;
 import lejos.nxt.*;
 import lejos.nxt.addon.ColorSensor;
 import lejos.robotics.navigation.TachoPilot;
 import misc.Direction;
-import misc.Robot;
+import misc.GraphExample;
+import miscBrick.Robot;
 
 public class Puller
 {

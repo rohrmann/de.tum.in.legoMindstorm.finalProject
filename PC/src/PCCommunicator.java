@@ -3,15 +3,8 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 
 import Bluetooth.BTPCConnectToBrick;
-import Bluetooth.BTReceiveNodes;
 import Bluetooth.BTSendCommand;
 import Bluetooth.BTStreams;
-import Config.PCConfig;
-import Graph.Graph;
-import Text.GraphToTxt;
-import Text.TxtToGraph;
-
-
 
 import misc.RobotType;
 

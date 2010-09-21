@@ -9,20 +9,20 @@ import lejos.nxt.SensorPort;
 import lejos.nxt.addon.ColorSensor;
 import lejos.robotics.navigation.TachoPilot;
 import misc.Direction;
-import misc.Helper;
-import misc.Robot;
-import Analysis.AnalyseCrossing;
-import Bluetooth.BTBrick;
-import Bluetooth.BTMapper;
-import Bluetooth.BTSendNodes;
+import miscBrick.Helper;
+import miscBrick.Robot;
+import AnalysisBrick.AnalyseCrossing;
+import BluetoothBrick.BTBrick;
+import BluetoothBrick.BTMapper;
+import BluetoothBrick.BTSendNodes;
 import Color.Color;
-import Color.ColorSettings;
+import ColorBrick.ColorSettings;
 import Graph.Graph;
 import Graph.Node;
 import Graph.Pair;
 import Graph.Type;
-import Light.LightSettings;
-import Navigation.RoomNavigator;
+import LightBrick.LightSettings;
+import NavigationBrick.RoomNavigator;
 
 
 public class Mapper {

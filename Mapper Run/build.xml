@@ -11,6 +11,7 @@
   <property name="main.class" value="ConnectionTest"/>
   <property name="binary" value="${build}/${main.class}.nxj" />
   <property name="srcCommon" location="../common/src"/>
+  <property name="srcBrick" location="../commonBrick/src"/>
 	
   <!-- deletes generated files -->
   <target name="clean" description="clean up all generated files">
@@ -21,7 +22,7 @@
         description="compile the source " >
     <!-- Compile the java code from ${src} to ${build}  -->
   	<mkdir dir="${build}"/>
-    <javac srcdir="${src};${srcCommon}" destdir="${build}">
+    <javac srcdir="${src};${srcCommon};${srcBrick}" destdir="${build}">
       <bootclasspath>
         <pathelement location="${nxj.classes.home}/lib/classes.jar"/>
       </bootclasspath>

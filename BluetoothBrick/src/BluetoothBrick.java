@@ -1,6 +1,6 @@
 import lejos.nxt.*; 
 import lejos.nxt.comm.*; 
-import misc.Helper;
+import miscBrick.Helper;
 
 import java.io.*; 
 import java.util.Enumeration;
