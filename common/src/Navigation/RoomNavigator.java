@@ -212,6 +212,22 @@ public class RoomNavigator {
 		}
 	}
 	
+	public void turn(Direction direction)
+	{
+		if(Direction.NORTH == direction) {
+			turnNorth();
+		}
+		else if(Direction.SOUTH == direction) {
+			turnSouth();
+		}
+		else if(Direction.EAST == direction) {
+			turnEast();
+		}
+		else {
+			turnWest();
+		}
+	}
+	
 	public Pair getPosition(){
 		return currentPosition;
 	}
@@ -257,9 +273,9 @@ public class RoomNavigator {
 	}
 	
 	
-	/*public void moveTo(Pair from, Pair to)
+	public void moveTo(Pair from, Pair to)
 	{
-		ArrayList<Pair> path = AStar.findPath(map, from, to);
+		ArrayList<Pair> path = misc.AStar.findPath(map, from, to);
 		
 		ListIterator<Pair> iterator = path.listIterator();
 		
@@ -281,7 +297,9 @@ public class RoomNavigator {
 				move(Direction.NORTH);
 			else if(x == 0 && y == -1)
 				move(Direction.SOUTH);
+			
+			pos = nextPos;
 		}
 		
-	}*/
+	}
 }
