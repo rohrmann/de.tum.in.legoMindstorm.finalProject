@@ -15,6 +15,8 @@ public class BTReceiveMessage {
 			return MessageType.ACTION;
 		case 3:
 			return MessageType.MAP;
+		case 6:
+			return MessageType.UPDATE;
 		}
 		return null;
 	}
@@ -29,6 +31,8 @@ public class BTReceiveMessage {
 				BTReceiveAnything.receiveAction(dataOut, dataIn);
 			case MAP:
 				BTReceiveAnything.receiveNodes(dataOut, dataIn);
+			case UPDATE:
+				BTReceiveAnything.receiveUpdate(dataOut, dataIn);
 			}
 		}
 }

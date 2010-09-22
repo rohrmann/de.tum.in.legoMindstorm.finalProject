@@ -28,5 +28,13 @@ public class GraphTools {
 			}
 		}
 	}
+
+	public static void resetNodes(Graph graph) {
+		Enumeration enumer = graph.getHashtable().keys();
+		while(enumer.hasMoreElements()){
+			Pair nextElement = (Pair) enumer.nextElement();
+			graph.getNode(nextElement).setType(Type.EMPTY);
+		}
+	}
 	
 }

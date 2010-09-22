@@ -18,14 +18,14 @@ public class TxtToGraph {
 	private static Graph graph = new Graph();
 
 
-	public static Graph readtxt(String source) throws IOException {
+	public static void readtxt(String source) throws IOException {
 		FileReader datenstrom;
 		datenstrom = new FileReader(source);
 		BufferedReader eingabe = new BufferedReader(datenstrom);
 		String a = eingabe.readLine();
 		int maxX = 0;
 		int maxY = 0;
-		while (a != null) {
+		while (a != null && a.charAt(0) == '#'){
 			maxY++;
 			if (a.length() > maxX) {
 				maxX = a.length();
@@ -38,16 +38,48 @@ public class TxtToGraph {
 		BufferedReader eingabe2 = new BufferedReader(datenstrom2);
 		System.out.println("maxLength: " + maxX);
 		System.out.println("maxHeigth: " + maxY);
-		for (int y = maxY - 1; y > 0; y--) {
+		for (int y = maxY; y >= 0; y--) {
 			a = eingabe2.readLine();
 			for (int x = 0; x < a.length(); x++) {
 				System.out.print(a.charAt(x));
-				newNode(a.charAt(x), x - 1, y - 1);
+				newNode(a.charAt(x), x, y);
 			}
 			System.out.println();
 		}
 		addConnections(graph);
-		return graph;
+		Memory.Map.setMap(graph);
+		parseCommands(eingabe);
+	}
+	
+	public static void parseCommands(BufferedReader eingabe) throws IOException{
+		String a = eingabe.readLine();
+		while(a != null){
+			if (a.startsWith("puller")){
+				String b = (String) a.subSequence(7, a.length()-1);
+				System.out.println(b);
+			}else if (a.startsWith("pusher")){
+				String b = (String) a.subSequence(7, a.length()-1);
+				System.out.println(b);
+			}else if (a.startsWith("push")){
+				String b = (String) a.subSequence(5, a.length()-1);
+				System.out.println(b);
+			}else if (a.startsWith("pull")){
+				
+			}else {
+				
+			}
+			
+			String[] b = a.split("(");
+			
+			if(b[0].equalsIgnoreCase("puller")){
+				String[] c = b[1].split(",");
+				for(int i=0; i<c.length;i++){
+					System.out.println(c[i]);
+				}
+			}
+			
+			a = eingabe.readLine();
+		}
 	}
 	
 	@SuppressWarnings("unchecked")

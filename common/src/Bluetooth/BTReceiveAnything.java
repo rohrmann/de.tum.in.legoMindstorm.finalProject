@@ -99,5 +99,23 @@ public static void makeNode(int x, int y, int a) {
 		Map.setMap(graph);
 		
 	}
+
+
+	public static void receiveUpdate(DataOutputStream dataOut,
+			DataInputStream dataIn) throws IOException {
+		Graph graph = Memory.Map.getMap();
+		GraphTools.resetNodes(graph);
+		dis = dataIn;
+		dos = dataOut;
+		int numberOfBoxes;
+		numberOfBoxes = dis.readInt();
+		for(int i=0; i<numberOfBoxes; i++){
+			graph.getNode(new Pair(dis.readInt(),dis.readInt())).setType(Type.BOX);
+		}
+		
+		graph.getNode(new Pair(dis.readInt(),dis.readInt())).setType(Type.PUSHER);
+		graph.getNode(new Pair(dis.readInt(),dis.readInt())).setType(Type.PULLER);
+		Memory.Map.setMap(graph);
+	}
 	
 }

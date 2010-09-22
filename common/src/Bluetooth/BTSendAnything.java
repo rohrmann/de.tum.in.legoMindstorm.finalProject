@@ -12,6 +12,7 @@ import Graph.GraphTools;
 import Graph.Node;
 import Graph.Pair;
 import Graph.Type;
+import Memory.Update;
 
 public class BTSendAnything {
 
@@ -85,6 +86,31 @@ public class BTSendAnything {
 			}
 		}
 	}
+	
+	public static void sendUpdate(DataOutputStream dataOut,
+			DataInputStream dataIn) throws IOException {
+		dos = dataOut;
+		dis = dataIn;
+		Pair[] x = Update.getBoxPositions();
+		dos.writeInt(x.length);
+		dos.flush();
+		for(int i=0; i<x.length;i++){
+			dos.writeInt(x[i].getX());
+			dos.flush();
+			dos.writeInt(x[i].getX());
+			dos.flush();
+		}
+		dos.writeInt(Update.getPusher().getX());
+		dos.flush();
+		dos.writeInt(Update.getPusher().getY());
+		dos.flush();
+		
+		dos.writeInt(Update.getPuller().getX());
+		dos.flush();
+		dos.writeInt(Update.getPuller().getY());
+		dos.flush();
+	}		
+	
 
 	public static void sendSize() throws IOException {
 		dos.writeInt(GraphTools.getSize(graph));
@@ -115,5 +141,7 @@ public class BTSendAnything {
 		}
 		return 6;
 	}
+
+	
 
 }

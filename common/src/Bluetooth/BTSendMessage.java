@@ -7,6 +7,7 @@ import java.io.IOException;
 import Memory.Action;
 import Memory.Map;
 import Memory.Move;
+import Memory.Update;
 
 
 public class BTSendMessage {
@@ -18,6 +19,8 @@ public class BTSendMessage {
 			return 2;
 		case MAP:
 			return 3;
+		case UPDATE:
+			return 6;
 		}
 		return 0;
 	}
@@ -33,6 +36,8 @@ public class BTSendMessage {
 				BTSendAnything.sendAction(Action.getAction(), dataOut, dataIn);
 			case MAP:
 				BTSendAnything.sendNodes(Map.getMap(),dataOut,dataIn);
+			case UPDATE:
+				BTSendAnything.sendUpdate(dataOut, dataIn);
 			}
 		}
 	}
