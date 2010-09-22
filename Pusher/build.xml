@@ -1,45 +1,47 @@
-<project name="ConnectionTest" default="uploadandrun">
+<project name="sample" default="uploadandrun">
     <description>
-    	test build file
+    	Sample build file
     </description>
 
   <!-- set properties for this build -->
-  <property environment = "env"/>
-  <property file="build.properties"/>
+  <property environment="env"/>
+  <property file="../samples.properties"/>
   <property name="src" location="src"/>
-  <property name="build" location="build"/>
-  <property name="main.class" value="Pusher"/>
-  <property name="binary" value="${build}/${main.class}.nxj" />
-  <property name="srcCommon" location="../common/src"/>
-  <property name="srcBrick" location="../commonBrick/src"/>
+	<property name="srcCommon" location="../common/src"/>
+	<property name="build" location="build"/>
+  <basename property="program" file="."/>
+  <property name="binary" value="${program}.nxj" />
 	
-  <!-- deletes generated files -->
+  <!-- deletes class files -->
   <target name="clean" description="clean up all generated files">
-  	<delete dir="build"/>
+    <delete>
+      <fileset dir="."> 
+        <include name="**/*.class"/>
+      </fileset>
+     </delete>
   </target>
 
   <target name="compile" depends="clean"
-        description="compile the source " >
-    <!-- Compile the java code from ${src} to ${build}  -->
-  	<mkdir dir="${build}"/>
-    <javac srcdir="${src};${srcCommon};${srcBrick}" destdir="${build}">
+        description="compile the source" >
+    <!-- Compile the java code from ${src}  -->
+    <javac srcdir="${src};${srcCommon}" destdir="${build}">
       <bootclasspath>
-        <pathelement location="${nxj.classes.home}/lib/classes.jar"/>
-      </bootclasspath>
+        <pathelement location="${nxj.classes.jar}"/>
+       </bootclasspath>
     </javac>
   </target>
 
   <target name="link" depends="compile"
-        description="link the binary " >
+        description="link the binary" >
     <!-- Link the binary and create a signature file -->
     <java classname="js.tinyvm.TinyVM">
       <arg value="--bootclasspath"/>
-      <arg path="${nxj.classes.jar}" />
+      <arg path="${nxj.classes.jar}" /> 
       <arg value="--classpath"/>
-      <arg path="${build}" />
+      <arg path="${build}" /> 
       <arg value="--writeorder" />
       <arg value="LE" />
-      <arg value="${main.class}"/>
+      <arg value="${program}"/>
       <arg value="-o"/>
       <arg value="${binary}"/>
       <arg value="-v"/>
@@ -87,16 +89,4 @@
       </classpath>
     </java>
   </target>
-
-  <!--  used only for modifying the Netbeans NXJPlugin -->
-    <target name="Zip for Netbeans" description="Zip the application to the sample project">
-        <property name="build.classes.dir" location="/build"/>
-        <property name="plugin" location="../NXJPlugin/src/nxjplugin/"/>
-        <zip basedir="." destfile="${plugin}/NXJSampleProject.zip">
-            <exclude name="**/build/"/>
-            <exclude name="**/bin/"/>
-            <exclude name="**/dist/"/>
-            <exclude name="**/nbproject/private/"/>
-        </zip>
-    </target>
 </project>

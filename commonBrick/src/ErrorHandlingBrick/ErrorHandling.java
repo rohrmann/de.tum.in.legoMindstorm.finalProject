@@ -29,12 +29,12 @@ public class ErrorHandling {
 
 		Button.ENTER.addButtonListener(new ButtonListener() {
 
-			@Override
+			//@Override
 			public void buttonReleased(Button arg0) {
 
 			}
 
-			@Override
+			//@Override
 			public void buttonPressed(Button arg0) {
 				if (heading == true) {
 					heading = false;
@@ -80,12 +80,12 @@ public class ErrorHandling {
 
 		Button.RIGHT.addButtonListener(new ButtonListener() {
 
-			@Override
+			//@Override
 			public void buttonReleased(Button arg0) {
 
 			}
 
-			@Override
+			//@Override
 			public void buttonPressed(Button arg0) {
 				if (heading == true) {
 					dirCount = (dirCount + 1) % 4;
@@ -116,12 +116,12 @@ public class ErrorHandling {
 
 		Button.LEFT.addButtonListener(new ButtonListener() {
 
-			@Override
+			//@Override
 			public void buttonReleased(Button arg0) {
 
 			}
 
-			@Override
+			//@Override
 			public void buttonPressed(Button arg0) {
 				if (heading == true) {
 					dirCount = dirCount -1;

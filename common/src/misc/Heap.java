@@ -99,13 +99,14 @@ public class Heap {
 		return nodes.isEmpty();
 	}
 	
-	public void update(Pair id, int currentScore, int estimatedScore, HeapNode predecessor)
+	public void update(Pair id, int currentScore, int estimatedScore, HeapNode predecessor, Direction heading)
 	{
 		int index = get(id);
 		
 		get(index).setCurrentScore(currentScore);
 		get(index).setEstimatedScore(estimatedScore);
 		get(index).setPredecessor(predecessor);
+		get(index).setHeading(heading);
 		
 		heapify(index);
 	}

@@ -23,7 +23,6 @@ import Graph.Pair;
 import Graph.Type;
 import LightBrick.LightSettings;
 import NavigationBrick.RoomNavigator;
-import ErrorHandlingBrick.ErrorInformation;
 
 
 public class Mapper {
@@ -32,7 +31,6 @@ public class Mapper {
 	private AnalyseCrossing analyser;
 	private static Graph map;
 	private final Direction[] searchDirections = {Direction.NORTH,Direction.WEST,Direction.SOUTH,Direction.EAST};
-	private ErrorInformation errorinfo;
 	
 	public static void main(String[] args) throws IOException, InterruptedException{
 		BTBrick.connectToPC();
@@ -63,8 +61,7 @@ public class Mapper {
 		
 		Robot robot = new Robot(pilot,color,leftLightSettings, rightLightSettings);
 		map = new Graph();
-		errorinfo = new ErrorInformation();
-		nav = new RoomNavigator(robot,map, errorinfo); 
+		nav = new RoomNavigator(robot,map); 
 		
 		analyser = new AnalyseCrossing(robot);
 	}
@@ -79,6 +76,10 @@ public class Mapper {
 	public void dfs(Node startNode,Direction sourceDirection){
 		Node current = startNode;
 		
+		try {
+			Thread.sleep(4000);
+		} catch (InterruptedException e1){
+		}
 		List<Direction> streets = analyser.analyseCrossing(nav.getHeading());
 		
 		addNodes(streets,current);
@@ -86,6 +87,13 @@ public class Mapper {
 		for(int i =0;i< searchDirections.length;i++){
 			if(map.getType(Helper.calcPos(nav.getPosition(), searchDirections[i]))==Type.UNKNOWN){
 				Color color = nav.move(searchDirections[i]);
+				if(color == Color.UNKNOWN){
+					try {
+						Thread.sleep(3000);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+					}
+				}
 				Node node = startNode.get(searchDirections[i]);
 				node.setType(color);
 				dfs(node,searchDirections[i].opposite());

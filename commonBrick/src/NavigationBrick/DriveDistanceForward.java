@@ -1,6 +1,7 @@
-package Pusher;
+package NavigationBrick;
+
 import lejos.robotics.subsumption.Behavior;
-import misc.Robot;
+import miscBrick.Robot;
 
 
 public class DriveDistanceForward implements Behavior{
@@ -23,10 +24,13 @@ public class DriveDistanceForward implements Behavior{
 	}
 	
 	public void action() {
+		//robot.getPilot().travel(distance, false);
 		robot.getPilot().forward();
 		
-		while(active && distance > robot.getPilot().getTravelDistance()) 
-		{ Thread.yield(); }
+		while(active && distance > robot.getPilot().getTravelDistance())
+		{
+			//if(!robot.getPilot().isMoving()) robot.getPilot().forward();
+		}
 		
 		suppress();
 		
