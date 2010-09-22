@@ -5,7 +5,7 @@ import miscBrick.Helper;
 
 import java.io.*;
 
-import BluetoothBrick.BTSendNodes;
+import Bluetooth.BTSendNodes;
 import Graph.*;
 
 

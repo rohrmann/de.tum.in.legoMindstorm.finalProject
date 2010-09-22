@@ -19,7 +19,7 @@ public class RoomMissed {
 		Helper.drawString("RoomMissed started", 0, 5);
 		Color color = Color.UNKNOWN;
 
-		while (interval < 15) {
+		while (interval < 10) {
 
 			// drive back first -> every time a little bit more
 			robot.getPilot().reset();

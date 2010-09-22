@@ -6,6 +6,7 @@ import BluetoothBrick.BTReceiveCommand;
 import Bluetooth.BTReceiveNodes;
 import Color.Color;
 import ColorBrick.ColorSettings;
+import ErrorHandlingBrick.ErrorInformation;
 import Graph.Graph;
 import Graph.Pair;
 import LightBrick.LightSettings;
@@ -37,6 +38,7 @@ public class Puller
 	static int newX;
 	static int oldY;
 	static int newY;
+	private static ErrorInformation errorinfo;
 
 	public static void main(String[] args) {
 
@@ -64,6 +66,7 @@ public class Puller
 		rightLightSettings = new LightSettings(rightLightSensor);
 		rightLightSettings.init(toleranceRight);	
 		leftLightSettings.init(toleranceLeft);
+		errorinfo = new ErrorInformation();
 
 		robot = new Robot(pilot,color,leftLightSettings, rightLightSettings);
 
@@ -78,7 +81,7 @@ public class Puller
 
 		int[] a = {0,0,0,0,0};
 		Graph g = GraphExample.getGraph();
-		navi = new RoomNavigator(robot, g);
+		navi = new RoomNavigator(robot, g, errorinfo);
 
 		while(true){
 			try {

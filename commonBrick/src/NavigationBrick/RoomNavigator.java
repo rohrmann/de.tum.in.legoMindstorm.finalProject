@@ -8,6 +8,7 @@ import java.util.Queue;
 import java.util.Stack;
 
 import Color.Color;
+import ErrorHandlingBrick.ErrorInformation;
 import Graph.Graph;
 import Graph.Node;
 import Graph.Pair;
@@ -31,15 +32,17 @@ public class RoomNavigator {
 	private Pair currentPosition;
 	private LightSettings leftLightSettings;
 	private LightSettings rightLightSettings;
+	private ErrorInformation errinfo;
 	
-	public RoomNavigator(Robot robot,Graph map){
+	public RoomNavigator(Robot robot,Graph map, ErrorInformation errorinfo){
 		leftLightSettings = robot.getLeftLight();
 		rightLightSettings = robot.getRightLight();
-		this.pilot = new RoomPilot(robot);
+		this.pilot = new RoomPilot(robot, this);
 		this.heading = Direction.NORTH;
 		this.map = new Graph();
 		currentPosition = new Pair(0,0);
 		this.map = map;
+		this.errinfo = errorinfo;
 	}
 	
 	public Color goToNextRoom(){
@@ -432,5 +435,13 @@ public class RoomNavigator {
 			pos = nextPos;
 		}
 		
+	}
+	
+	public Graph getGraph(){
+		return map;
+	}
+	
+	public ErrorInformation getErrorInformation(){
+		return errinfo;
 	}
 }
