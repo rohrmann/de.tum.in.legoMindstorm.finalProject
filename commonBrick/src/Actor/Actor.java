@@ -1,8 +1,5 @@
 package Actor;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-
 import lejos.nxt.LightSensor;
 import lejos.nxt.Motor;
 import lejos.nxt.SensorPort;
