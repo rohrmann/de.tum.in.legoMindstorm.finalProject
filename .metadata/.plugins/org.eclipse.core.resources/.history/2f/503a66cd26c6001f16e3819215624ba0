@@ -1,0 +1,5 @@
+package misc;
+
+public enum MessageType {
+	MOVE,ACTION,MAP
+	}

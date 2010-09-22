@@ -1,0 +1,16 @@
+package Memory;
+
+import Graph.Pair;
+
+public class Action {
+private static Pair boxIs;
+private static Pair boxDestination;
+	
+	public static Pair getMove(){
+		return move;
+	}
+	
+	public static void setMove(int x, int y){
+		move = new Pair(x,y);
+	}
+}

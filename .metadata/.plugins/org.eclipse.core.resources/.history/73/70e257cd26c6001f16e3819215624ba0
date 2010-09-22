@@ -1,0 +1,21 @@
+package Bluetooth;
+
+import misc.MessageType;
+
+public class BTSendMessage {
+	public static int sendType(MessageType type){
+		switch(type){
+		case MOVE:
+			return 1;
+		case ACTION:
+			return 2;
+		case MAP:
+			return 3;
+		}
+		return 0;
+	}
+	
+	public static void sendMessage(MessageType type, ){
+		
+	}
+}

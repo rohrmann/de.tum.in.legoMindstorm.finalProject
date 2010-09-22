@@ -1,0 +1,5 @@
+package Bluetooth;
+
+public class BTSendMessage {
+
+}

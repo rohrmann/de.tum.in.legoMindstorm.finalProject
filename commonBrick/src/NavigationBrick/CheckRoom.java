@@ -78,7 +78,7 @@ public class CheckRoom implements Behavior {
 				information.setRoomColor(missColor);
 			}else{
 				robot.getPilot().stop();
-				ErrorHandling.resolvebyHand(robot);
+			//	ErrorHandling.resolvebyHand(robot);
 			}
 			
 		}
