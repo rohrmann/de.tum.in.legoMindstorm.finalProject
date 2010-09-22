@@ -1,15 +1,21 @@
 package NavigationBrick;
 
 import java.util.ArrayList;
+import java.util.Hashtable;
+import java.util.List;
 import java.util.ListIterator;
+import java.util.Queue;
+import java.util.Stack;
 
 import Color.Color;
 import Graph.Graph;
 import Graph.Node;
 import Graph.Pair;
+import Graph.Type;
 import LightBrick.LightSettings;
 //import misc.AStar;
 import misc.Direction;
+import misc.RobotType;
 import miscBrick.Helper;
 import miscBrick.Robot;
 
@@ -273,8 +279,128 @@ public class RoomNavigator {
 		return result;
 	}
 	
-	public void setGraph(Graph map) {
+	public void setGraph(Graph map,RobotType robot) {
 		this.map = map;
+		
+		switch(robot){
+		case PUSHER:
+			currentPosition = map.find(Type.PUSHSTART);
+			break;
+		case PULLER:
+			currentPosition = map.find(Type.PULLSTART);
+			break;
+		case MAPPER:
+			break;
+		}
+	}
+	
+	public void moveStraightForward(int rooms){
+		
+		boolean nodesFound = true;
+		Pair pos = getPosition();
+		for(int i =0; i< rooms;i++){
+			pos = pos.getNeighbour(getHeading());
+			
+			if(!map.hasNode(pos)){
+				nodesFound =false;
+				break;
+			}
+		}
+		
+		if(!nodesFound){
+			Helper.error("RoomNavigator.movesStraigthForward: room not existing");
+		}
+		
+		for(int i =0; i< rooms;i++){
+			goToNextRoom();
+		}
+	}
+	
+	public void moveTo(Pair to){
+		List<Pair> path = bfs(to);
+		
+		if(path == null){
+			Helper.error("RoomNavigator.moveTo: could not find a path from:" + getPosition() + " to:" + to);
+		}
+		
+		for(int i =0; i< path.size(); i++){
+			Direction dir = findDir(path.get(i));
+			
+			if(dir == Direction.UNDEFINED){
+				Helper.error("RoomNavigator.moveTo: could not find the direction");
+			}
+			
+			turn(dir);
+			goToNextRoom();
+		}
+	}
+	
+	public Direction findDir(Pair to){
+		int x = to.getX() - getPosition().getX();
+		int y = to.getY() - getPosition().getY();
+		
+		if(x == 0 && y == 1)
+			return Direction.NORTH;
+		else if(x == 0 && y == -1){
+			return Direction.SOUTH;
+		}
+		else if(y ==0 && x ==1 ){
+			return Direction.EAST;
+		}
+		else if(y==0 && x == -1){
+			return Direction.WEST;
+		}
+		else
+			return Direction.UNDEFINED;
+	}
+	
+	public List<Pair> bfs(Pair to){
+		Hashtable visited = new Hashtable();
+		Hashtable prev = new Hashtable();
+		
+		Direction[] dirs= {Direction.NORTH,Direction.WEST,Direction.SOUTH,Direction.EAST};
+		
+		Queue queue = new Queue();
+		Node node = map.getNode(to);
+		queue.push(node);
+		visited.put(node, true);
+		
+		while(!queue.empty()){
+			node =(Node)queue.pop();
+			
+			if(node.getID() == to){
+				break;
+			}
+			
+			for(Direction dir : dirs){
+				if(node.has(dir) && visited.get(node.get(dir)) == null){
+					queue.push(node.get(dir));
+					visited.put(node.get(dir), true);
+					prev.put(node.get(dir),node);
+				}
+			}
+		}
+		
+		if(node.getID() != to)
+			return null;
+		else{
+			Stack stack = new Stack();
+			
+			while(node.getID() != getPosition()){
+				stack.push(node.getID());
+				node = (Node)prev.get(node);
+			}
+			
+			List<Pair> result = new ArrayList<Pair>();
+			
+			while(!stack.empty()){
+				node = (Node)stack.pop();
+				
+				result.add(node.getID());
+			}
+			
+			return result;
+		}
 	}
 	
 	

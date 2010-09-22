@@ -2,9 +2,11 @@ package ErrorHandlingBrick;
 
 import lejos.nxt.Button;
 import lejos.nxt.ButtonListener;
+import misc.Direction;
 import miscBrick.Helper;
 import miscBrick.Robot;
-import Navigation.RoomNavigator;
+import Graph.Pair;
+import NavigationBrick.RoomNavigator;
 
 public class ErrorHandling {
 
