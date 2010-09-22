@@ -1,3 +1,5 @@
+package NavigationBrick;
+
 import lejos.robotics.subsumption.Behavior;
 import miscBrick.Robot;
 

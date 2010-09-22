@@ -10,7 +10,6 @@ public class Node {
 	private Node west;
 	private Node south;
 	private Node east;
-	private Obstacle obstacle;
 
 	public Node(Type type, Pair id){
 		this.type = type;
@@ -19,15 +18,6 @@ public class Node {
 		west = null;
 		south = null;
 		east = null;
-		setObstacle(Obstacle.EMPTY);
-	}
-		
-	public Obstacle getObstacle() {
-		return obstacle;
-	}
-
-	public void setObstacle(Obstacle obstacle) {
-		this.obstacle = obstacle;
 	}
 
 	public Type getType(){
@@ -204,7 +194,7 @@ public class Node {
 	}
 
 	public boolean isFree() {
-		return obstacle == Obstacle.EMPTY;
+		return type.isAccessible();
 	}
 	
 }
