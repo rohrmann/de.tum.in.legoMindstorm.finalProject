@@ -22,10 +22,11 @@ public class CheckRoom implements Behavior {
 	private int distanceUntilActivation;
 	private int tolerance;
 	private RoomInformation information;
+	private boolean roomMissedActive;
 
 
 	public CheckRoom(Robot robot,int distanceUntilActivation,int tolerance,
-			RoomInformation information){
+			RoomInformation information, boolean roomMissedActive){
 		this.robot = robot;
 		this.distanceUntilActivation = distanceUntilActivation;
 		this.tolerance = tolerance;
@@ -33,6 +34,7 @@ public class CheckRoom implements Behavior {
 		terminated = true;
 		tachoReseted = false;
 		this.information = information;
+		this.roomMissedActive = roomMissedActive;
 	}
 
 	//@Override
@@ -71,10 +73,12 @@ public class CheckRoom implements Behavior {
 		// active is set false when the color of the room is set -> if still active the room was
 		// not found
 		if(active){
-			Color missColor = RoomMissed.action(robot, 6, information);
+			Color missColor = null; 
+				if(roomMissedActive){
+					missColor = RoomMissed.action(robot, 6, information);
+				}
 			information.setRoomColor(missColor);
 			}
-
 		
 		robot.getPilot().reset();
 		robot.getPilot().setMoveSpeed(10);

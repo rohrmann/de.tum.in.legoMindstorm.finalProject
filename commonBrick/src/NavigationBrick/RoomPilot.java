@@ -15,21 +15,27 @@ public class RoomPilot {
 	
 	private Arbitrator arbitrator;
 	private Robot robot;
+	private boolean roomMissedActive;
 	
 	
-	public RoomPilot(Robot robot){
+	public RoomPilot(Robot robot, boolean roomMissedActive){
 		this.robot = robot;
+		this.roomMissedActive = roomMissedActive;
 	}
 	
 	public Color goToNextRoom(){
 		RoomInformation information= new RoomInformation();
 		Behavior driveForward = new DriveForward(robot,information);
 		Behavior followLine = new FollowLine(robot,information);
-		Behavior checkRoom = new CheckRoom(robot,15,5,information);
+		Behavior checkRoom = new CheckRoom(robot,15,5,information, roomMissedActive);
 		Behavior[] behaviors = {driveForward, followLine, checkRoom};
 		arbitrator = new Arbitrator(behaviors,true);
 		arbitrator.start();
 		return information.getRoomColor();
+	}
+	
+	public void setRoomMissedActive(boolean roomMissedActive){
+		this.roomMissedActive = roomMissedActive;
 	}
 	
 	public void rotate(float angle){

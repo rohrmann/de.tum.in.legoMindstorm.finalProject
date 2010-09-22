@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.Queue;
 import java.util.Stack;
-
 import Color.Color;
 import ErrorHandlingBrick.ErrorHandling;
 import Graph.Graph;
@@ -37,16 +36,18 @@ public class RoomNavigator {
 	private LightSettings leftLightSettings;
 	private LightSettings rightLightSettings;
 	private Robot robot;
+	private boolean roomMissedActive;
 	
 	public RoomNavigator(Robot robot,Graph map){
 		this.robot = robot;
 		leftLightSettings = robot.getLeftLight();
 		rightLightSettings = robot.getRightLight();
-		this.pilot = new RoomPilot(robot);
+		this.pilot = new RoomPilot(robot, roomMissedActive);
 		this.heading = Direction.NORTH;
 		this.map = new Graph();
 		currentPosition = new Pair(0,0);
 		this.map = map;
+		roomMissedActive = false;
 	}
 	
 	public Color goToNextRoom(){
@@ -57,6 +58,10 @@ public class RoomNavigator {
 			color = goToNextRoom();
 		}
 		return color;
+	}
+	
+	public void setRoomMissedActive(boolean roomMissedActive){
+		pilot.setRoomMissedActive(roomMissedActive);
 	}
 	
 	private void advanceRoom(){
@@ -285,7 +290,7 @@ public class RoomNavigator {
 		
 		DriveForward driveForward = new DriveForward(robot, roomInfo);
 		FollowLine followLine = new FollowLine(robot, roomInfo);
-		CheckRoom checkRoom = new CheckRoom(robot, (int)(distanceToRoom-Config.checkRoomTolerance), Config.checkRoomTolerance, roomInfo);
+		CheckRoom checkRoom = new CheckRoom(robot, (int)(distanceToRoom-Config.checkRoomTolerance), Config.checkRoomTolerance, roomInfo, roomMissedActive);
 		
 		Behavior[] returnToRoom = new Behavior[]{driveForward, followLine, checkRoom};
 		Arbitrator a = new Arbitrator(returnToRoom, true);
