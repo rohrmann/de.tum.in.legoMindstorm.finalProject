@@ -1,7 +1,7 @@
 import java.io.IOException;
 
-import Bluetooth.BTBrick;
-import Bluetooth.BTReceiveCommand;
+import BluetoothBrick.BTBrick;
+import BluetoothBrick.BTReceiveCommand;
 
 
 public class ConnectionTest {

@@ -1,8 +1,11 @@
+<<<<<<< HEAD:Pusher/src/FindLine.java
 
+=======
+>>>>>>> 64c22e7248cf1cbf1f6be4c8e1a315120336d30c:Pusher/src/FindLine.java
 
 import lejos.nxt.Motor;
 import lejos.robotics.subsumption.Behavior;
-import misc.Robot;
+import miscBrick.Robot;
 
 public class FindLine implements Behavior {
 	

@@ -7,27 +7,33 @@ import lejos.nxt.Motor;
 import lejos.nxt.SensorPort;
 import lejos.nxt.addon.ColorSensor;
 import lejos.robotics.navigation.TachoPilot;
-import misc.Config;
+import miscBrick.Config;
 import misc.Direction;
-import misc.Helper;
-import misc.Robot;
-import Analysis.AnalyseCrossing;
+import miscBrick.Helper;
+import miscBrick.Robot;
+import AnalysisBrick.AnalyseCrossing;
 import Color.Color;
-import Color.ColorSettings;
+import ColorBrick.ColorSettings;
+import ErrorHandlingBrick.ErrorInformation;
 import Graph.Graph;
 import Graph.Node;
 import Graph.Pair;
 import Graph.Type;
-import Light.LightSettings;
-import Navigation.RoomNavigator;
+import LightBrick.LightSettings;
+import NavigationBrick.RoomNavigator;
 
-
+/**
+ * 
+ * @author rohrmann
+ *
+ */
 public class Mapper {
 	
 	private RoomNavigator nav;
 	private AnalyseCrossing analyser;
 	private Graph map;
 	private final Direction[] searchDirections = {Direction.NORTH,Direction.WEST,Direction.SOUTH,Direction.EAST};
+	private ErrorInformation errorinfo;
 	
 	public static void main(String[] args){
 		Mapper mapper = new Mapper();
@@ -54,8 +60,8 @@ public class Mapper {
 		
 		Robot robot = new Robot(pilot,color,leftLightSettings, rightLightSettings);
 		map = new Graph();
-		
-		nav = new RoomNavigator(robot,map); 
+		errorinfo = new ErrorInformation();
+		nav = new RoomNavigator(robot,map, errorinfo); 
 		
 		analyser = new AnalyseCrossing(robot);
 	}
@@ -76,14 +82,22 @@ public class Mapper {
 		
 		for(int i =0;i< searchDirections.length;i++){
 			if(map.getType(Helper.calcPos(nav.getPosition(), searchDirections[i]))==Type.UNKNOWN){
+				Helper.drawText(searchDirections[i].toString());
 				Color color = nav.move(searchDirections[i]);
+				while(color == null || errorinfo.isError()){
+					color = nav.move(searchDirections[i]);
+				}
+				//Helper.drawText("Nextdfsstep");
 				Node node = startNode.get(searchDirections[i]);
 				node.setType(color);
 				dfs(node,searchDirections[i].opposite());
 			}
 		}
-		
+		//Helper.drawText("Backtracking");
 		nav.move(sourceDirection);
+		while(errorinfo.isError()){
+			nav.move(sourceDirection);
+		}
 	}
 	
 	private List<Node> addNodes(List<Direction> streets, Node node){

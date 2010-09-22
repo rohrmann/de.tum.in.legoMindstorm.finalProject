@@ -9,20 +9,21 @@ import lejos.nxt.SensorPort;
 import lejos.nxt.addon.ColorSensor;
 import lejos.robotics.navigation.TachoPilot;
 import misc.Direction;
-import misc.Helper;
-import misc.Robot;
-import Analysis.AnalyseCrossing;
-import Bluetooth.BTBrick;
-import Bluetooth.BTMapper;
-import Bluetooth.BTSendNodes;
+import miscBrick.Helper;
+import miscBrick.Robot;
+import AnalysisBrick.AnalyseCrossing;
+import BluetoothBrick.BTBrick;
+import BluetoothBrick.BTMapper;
+import BluetoothBrick.BTSendNodes;
 import Color.Color;
-import Color.ColorSettings;
+import ColorBrick.ColorSettings;
 import Graph.Graph;
 import Graph.Node;
 import Graph.Pair;
 import Graph.Type;
-import Light.LightSettings;
-import Navigation.RoomNavigator;
+import LightBrick.LightSettings;
+import NavigationBrick.RoomNavigator;
+import ErrorHandlingBrick.ErrorInformation;
 
 
 public class Mapper {
@@ -31,6 +32,7 @@ public class Mapper {
 	private AnalyseCrossing analyser;
 	private static Graph map;
 	private final Direction[] searchDirections = {Direction.NORTH,Direction.WEST,Direction.SOUTH,Direction.EAST};
+	private ErrorInformation errorinfo;
 	
 	public static void main(String[] args) throws IOException, InterruptedException{
 		BTBrick.connectToPC();
@@ -61,8 +63,8 @@ public class Mapper {
 		
 		Robot robot = new Robot(pilot,color,leftLightSettings, rightLightSettings);
 		map = new Graph();
-		
-		nav = new RoomNavigator(robot,map); 
+		errorinfo = new ErrorInformation();
+		nav = new RoomNavigator(robot,map, errorinfo); 
 		
 		analyser = new AnalyseCrossing(robot);
 	}

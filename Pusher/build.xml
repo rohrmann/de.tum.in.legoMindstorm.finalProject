@@ -1,11 +1,11 @@
-<project name="Pusher" default="uploadandrun">
+<project name="sample" default="uploadandrun">
     <description>
     	Sample build file
     </description>
 
   <!-- set properties for this build -->
   <property environment="env"/>
-  <property file="samples.properties"/>
+  <property file="../samples.properties"/>
   <property name="src" location="src"/>
 	<property name="srcCommon" location="../common/src"/>
 	<property name="build" location="build"/>

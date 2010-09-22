@@ -1,21 +1,22 @@
 
 import java.io.IOException;
 
-import Bluetooth.BTBrick;
-import Bluetooth.BTReceiveCommand;
+import BluetoothBrick.BTBrick;
+import BluetoothBrick.BTReceiveCommand;
 import Bluetooth.BTReceiveNodes;
 import Color.Color;
-import Color.ColorSettings;
+import ColorBrick.ColorSettings;
+import ErrorHandlingBrick.ErrorInformation;
 import Graph.Graph;
 import Graph.Pair;
-import Graph.*;
-import Light.LightSettings;
-import Navigation.RoomNavigator;
+import LightBrick.LightSettings;
+import NavigationBrick.RoomNavigator;
 import lejos.nxt.*;
 import lejos.nxt.addon.ColorSensor;
 import lejos.robotics.navigation.TachoPilot;
 import misc.Direction;
-import misc.Robot;
+import misc.GraphExample;
+import miscBrick.Robot;
 
 public class Puller
 {
@@ -37,6 +38,7 @@ public class Puller
 	static int newX;
 	static int oldY;
 	static int newY;
+	private static ErrorInformation errorinfo;
 
 	public static void main(String[] args) {
 
@@ -64,6 +66,7 @@ public class Puller
 		rightLightSettings = new LightSettings(rightLightSensor);
 		rightLightSettings.init(toleranceRight);	
 		leftLightSettings.init(toleranceLeft);
+		errorinfo = new ErrorInformation();
 
 		robot = new Robot(pilot,color,leftLightSettings, rightLightSettings);
 
@@ -78,7 +81,7 @@ public class Puller
 
 		int[] a = {0,0,0,0,0};
 		Graph g = GraphExample.getGraph();
-		navi = new RoomNavigator(robot, g);
+		navi = new RoomNavigator(robot, g, errorinfo);
 
 		while(true){
 			try {
