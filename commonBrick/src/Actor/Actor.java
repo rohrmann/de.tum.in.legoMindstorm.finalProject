@@ -8,15 +8,19 @@ import lejos.nxt.Motor;
 import lejos.nxt.SensorPort;
 import lejos.nxt.addon.ColorSensor;
 import lejos.robotics.navigation.TachoPilot;
+import misc.Action;
 import misc.RobotType;
 import miscBrick.Config;
+import miscBrick.Helper;
 import miscBrick.Robot;
 
+import Bluetooth.BluetoothCommunicator;
 import Bluetooth.BluetoothConnection;
 import Bluetooth.MessageType;
 import BluetoothBrick.BTBrickFactory;
 import Color.Color;
 import ColorBrick.ColorSettings;
+import ErrorHandlingBrick.ErrorInformation;
 import Graph.Graph;
 import Graph.Pair;
 import LightBrick.LightSettings;
@@ -44,59 +48,62 @@ abstract public class Actor {
 		robot = new Robot(pilot,color,leftLightSettings, rightLightSettings);
 		Graph map = new Graph();
 		
-		navi = new RoomNavigator(robot,map); 
+		ErrorInformation error = new ErrorInformation();
+		error.setError(false);
+		navi = new RoomNavigator(robot,map,error); 
 	}
 	public void start(){
+		
+		init();
+		
 		boolean running = true;
 		
 		BluetoothConnection conn = BTBrickFactory.createConnection();
 		
-		DataOutputStream dos = conn.getDataOutputStream();
-		DataInputStream dis = conn.getDataInputStream();
-		
-		int command = 0;
+		MessageType message;
+
 		while(running){
+			message = BluetoothCommunicator.receiveMessageType(conn);
 			
-			command = dis.readInt();
-			dos.writeInt(MessageType.ACK.toInt());
-			dos.flush();
 			
-			switch(command){
+			switch(message){
 			//terminate
-			case MessageType.TERMINATE.toInt():
+			case TERMINATE:
 				running = false;
-				Bluetooth.done(dos,dis);
+				BluetoothCommunicator.done(conn);
 				break;
 			//move
-			case MessageType.MOVE.toInt():
-				Pair pos = Bluetooth.receiveMove(conn);
+			case MOVE:
+				Pair pos = BluetoothCommunicator.receiveMove(conn);
 				navi.moveTo(pos);
-				Bluetooth.done(dos,dis);
+				BluetoothCommunicator.done(conn);
 				break;
 			//action
-			case MessageType.ACTION.toInt():
-				Action action = Bluetooth.receiveAction(conn);
+			case ACTION:
+				Action action = BluetoothCommunicator.receiveAction(conn);
 				
-				navi.turn(findDirection(navi.getPosition(),action.src));
+				navi.turn(Helper.findDirection(navi.getPosition(),action.getSrc()));
 				
 				prolog();
-				navi.moveStraightForward(abs(action.src.getX()-action.dest.getX())+abs(action.src.getY()-action.dest.getY())-1);
+				navi.moveStraightForward(Math.abs(action.getSrc().getX()-action.getDest().getX())+Math.abs(action.getSrc().getY()-action.getDest().getY())-1);
 				epilog();
 				
-				Bluetooth.done(conn);
+				BluetoothCommunicator.done(conn);
 				
 				break;
 				
-			case MessageType.MAP.toInt():
-				Graph graph = Bluetooth.receiveMap(conn);
+			case MAP:
+				Graph graph = BluetoothCommunicator.receiveMap(conn);
 				navi.setGraph(graph,getType());
-				Bluetooth.done(conn);
+				BluetoothCommunicator.done(conn);
 				break;
 			}
+			
 		}
 	}
 	
 	public abstract RobotType getType();
 	public abstract void prolog();
 	public abstract void epilog();
+	public abstract void init();
 }

@@ -75,7 +75,6 @@ public class CheckRoom implements Behavior {
 		// active is set false when the color of the room is set -> if still active the room was
 		// not found
 		if(active){
-			//throw new DrivingException("Error while trying to find room");
 			Color missColor = RoomMissed.action(robot, 6, information);
 			if(missColor != null){
 				active = false;
