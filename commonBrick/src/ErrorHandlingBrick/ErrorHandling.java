@@ -60,7 +60,7 @@ public class ErrorHandling {
 						navi.updateHeading(Direction.WEST);
 						break;
 					}
-					result += " ->Choose x-coordinate";
+					result += " " + navi.getHeading().toString() + " ->Choose x-coordinate";
 					Helper.drawText(result);
 				} else if (x == true) {
 					x = false;
@@ -73,7 +73,7 @@ public class ErrorHandling {
 						Thread.sleep(5000);
 					} catch (InterruptedException e) {
 					}
-					Helper.drawText(" " + navi.getPosition().toString());
+					Helper.drawText(navi.getHeading().toString() + " " + navi.getPosition().toString());
 					active = false;
 
 				}
@@ -126,7 +126,7 @@ public class ErrorHandling {
 			@Override
 			public void buttonPressed(Button arg0) {
 				if (heading == true) {
-					dirCount = dirCount + -1;
+					dirCount = dirCount -1;
 					if (dirCount == -1) {
 						dirCount = 3;
 					}
