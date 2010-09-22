@@ -257,7 +257,7 @@ public class RoomNavigator {
 		pilot.rotate(180, true);					// guckt nach Linie, nach der er sich, nach seiner theoretischen 180 Grad Drehung dann richten kann
 		while(!leftLightSettings.groundChange())
 		{ Thread.yield(); }
-		while(rightLightSettings.groundChange())
+		while(leftLightSettings.groundChange())
 		{ Thread.yield(); }
 		pilot.stop();
 		
