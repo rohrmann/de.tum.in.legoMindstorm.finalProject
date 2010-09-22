@@ -12,6 +12,7 @@ import Light.LightSettings;
 import misc.Direction;
 import misc.Helper;
 import misc.Robot;
+import ErrorHandling.ErrorInformation;
 
 public class RoomNavigator {
 	private RoomPilot pilot;
@@ -20,15 +21,17 @@ public class RoomNavigator {
 	private Pair currentPosition;
 	private LightSettings leftLightSettings;
 	private LightSettings rightLightSettings;
+	private ErrorInformation errorinfo;
 	
-	public RoomNavigator(Robot robot,Graph map){
+	public RoomNavigator(Robot robot,Graph map, ErrorInformation errorinfo){
 		leftLightSettings = robot.getLeftLight();
 		rightLightSettings = robot.getRightLight();
-		this.pilot = new RoomPilot(robot);
+		this.pilot = new RoomPilot(robot, this);
 		this.heading = Direction.NORTH;
 		this.map = new Graph();
 		currentPosition = new Pair(0,0);
 		this.map = map;
+		this.errorinfo = errorinfo;
 	}
 	
 	public Color goToNextRoom(){
@@ -301,5 +304,13 @@ public class RoomNavigator {
 			pos = nextPos;
 		}
 		
+	}
+
+	public Graph getGraph(){
+		return map;
+	}
+
+	public ErrorInformation getErrorInformation(){
+		return errorinfo;
 	}
 }
