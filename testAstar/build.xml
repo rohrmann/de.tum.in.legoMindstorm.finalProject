@@ -1,4 +1,4 @@
-<project name="sample" default="uploadandrun">
+<project name="testAstar" default="uploadandrun">
     <description>
     	Sample build file
     </description>

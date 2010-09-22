@@ -7,15 +7,17 @@ public class HeapNode {
 	int estimatedScore;
 	Node graphNode;
 	HeapNode predecessor;
+	Direction heading;
 	
 
 
-	public HeapNode(Node graphNode, int currentScore, int estimatedScore, HeapNode predecessor)
+	public HeapNode(Node graphNode, int currentScore, int estimatedScore, HeapNode predecessor, Direction heading)
 	{
 		this.graphNode = graphNode;
 		this.currentScore = currentScore;
 		this.estimatedScore = estimatedScore;
 		this.predecessor = predecessor;
+		this.heading = heading;
 	}
 	
 	public int getCurrentScore() {
@@ -48,6 +50,14 @@ public class HeapNode {
 
 	public void setPredecessor(HeapNode predecessor) {
 		this.predecessor = predecessor;
+	}
+	
+	public Direction getHeading() {
+		return heading;
+	}
+
+	public void setHeading(Direction heading) {
+		this.heading = heading;
 	}
 	
 }

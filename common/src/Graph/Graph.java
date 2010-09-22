@@ -1,6 +1,8 @@
 package Graph;
+import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Hashtable;
+import java.util.List;
 
 
 public class Graph {
@@ -54,5 +56,37 @@ public class Graph {
 	
 	public Hashtable getHashtable(){
 		return nodes;
+	}
+	
+	public Pair find(Type field){
+		Enumeration keys = nodes.keys();
+		
+		while(keys.hasMoreElements()){
+			Pair key = (Pair)keys.nextElement();
+			
+			Node node = (Node)nodes.get(key);
+			
+			if(node.getType()==field){
+				return key;
+			}
+		}
+		
+		return null;
+	}
+	
+	public List<Node> getNodes(){
+		List<Node> result = new ArrayList<Node>();
+		
+		Enumeration keys = nodes.keys();
+		
+		while(keys.hasMoreElements()){
+			Pair key = (Pair)keys.nextElement();
+			
+			Node node = (Node)nodes.get(key);
+			
+			result.add(node);
+		}
+		
+		return result;
 	}
 }

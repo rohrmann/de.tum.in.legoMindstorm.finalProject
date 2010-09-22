@@ -1,5 +1,7 @@
 package Graph;
 
+import misc.Direction;
+
 public class Pair {
 	private final int x;
 	private final int y;
@@ -36,6 +38,19 @@ public class Pair {
 		Pair p = (Pair)(obj);
 		
 		return p.getX() == getX() && p.getY() == getY();
+	}
+	
+	public Pair getNeighbour(Direction dir){
+		switch(dir){
+		case NORTH:
+			return new Pair(x,y+1);
+		case SOUTH:
+			return new Pair(x,y-1);
+		case WEST:
+			return new Pair(x-1,y);
+		default:
+			return new Pair(x+1,y);
+		}
 	}
 	
 }
