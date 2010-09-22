@@ -42,7 +42,7 @@ public class TestBTPC {
 				System.out.println("Sending " + (i));
 				dos.writeInt((i));
 				dos.flush();	
-				dos.wr
+				
 				
 			} catch (IOException ioe) {
 				System.out.println("IO Exception writing bytes:");
