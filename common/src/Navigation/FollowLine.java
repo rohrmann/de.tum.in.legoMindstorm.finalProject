@@ -18,7 +18,7 @@ public class FollowLine implements Behavior {
 		active = false;
 		terminated = true;
 	}
-	@Override
+	//@Override
 	public void action() {
 		
 		if(robot.getLeftLight().groundChange()){
@@ -38,7 +38,7 @@ public class FollowLine implements Behavior {
 		terminated = true;
 	}
 
-	@Override
+	//@Override
 	public void suppress() {
 		active = false;
 		robot.getPilot().stop();	
@@ -47,7 +47,7 @@ public class FollowLine implements Behavior {
 			Thread.yield();
 	}
 
-	@Override
+	//@Override
 	public boolean takeControl() {
 		
 		if(!information.roomFound()){

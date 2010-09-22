@@ -1,4 +1,4 @@
-package Pusher;
+
 import lejos.nxt.Button;
 import lejos.nxt.Motor;
 import lejos.robotics.navigation.TachoPilot;

@@ -1,4 +1,5 @@
-package Pusher;
+package Navigation;
+
 import lejos.robotics.subsumption.Behavior;
 import misc.Robot;
 

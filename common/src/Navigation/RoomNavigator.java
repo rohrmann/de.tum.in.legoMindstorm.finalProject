@@ -9,9 +9,13 @@ import Graph.Node;
 import Graph.Pair;
 import Light.LightSettings;
 //import misc.AStar;
+import lejos.robotics.subsumption.Arbitrator;
+import lejos.robotics.subsumption.Behavior;
+import misc.Config;
 import misc.Direction;
 import misc.Helper;
 import misc.Robot;
+import misc.RoomInformation;
 
 public class RoomNavigator {
 	private RoomPilot pilot;
@@ -20,6 +24,7 @@ public class RoomNavigator {
 	private Pair currentPosition;
 	private LightSettings leftLightSettings;
 	private LightSettings rightLightSettings;
+	private Robot robot;
 	
 	public RoomNavigator(Robot robot,Graph map){
 		leftLightSettings = robot.getLeftLight();
@@ -29,6 +34,7 @@ public class RoomNavigator {
 		this.map = new Graph();
 		currentPosition = new Pair(0,0);
 		this.map = map;
+		this.robot = robot;
 	}
 	
 	public Color goToNextRoom(){
@@ -228,6 +234,47 @@ public class RoomNavigator {
 		}
 	}
 	
+	public void turnOnLine()
+	{
+		pilot.rotate(90);
+		pilot.rotate(180, true);					// guckt nach Linie, nach der er sich, nach seiner theoretischen 180 Grad Drehung dann richten kann
+		while(!leftLightSettings.groundChange())
+		{ Thread.yield(); }
+		while(rightLightSettings.groundChange())
+		{ Thread.yield(); }
+		pilot.stop();
+		
+		updateHeading(180);
+	}
+	
+	public void driveForward(float distance)
+	{
+		DriveDistanceForward driveDistanceForward = new DriveDistanceForward(robot, distance);
+		FollowLine followLine = new FollowLine(robot, new RoomInformation());
+
+		Behavior[] driveForwardAndFollow = new Behavior[]{driveDistanceForward, followLine};
+		Arbitrator a = new Arbitrator(driveForwardAndFollow, true);
+		a.start();
+	}
+	
+	public void driveBackward(float distance)
+	{
+		robot.getPilot().travel(-distance);
+	}
+	
+	public void findRoom(float distanceToRoom)
+	{
+		RoomInformation roomInfo = new RoomInformation();
+		
+		DriveForward driveForward = new DriveForward(robot, roomInfo);
+		FollowLine followLine = new FollowLine(robot, roomInfo);
+		CheckRoom checkRoom = new CheckRoom(robot, (int)(distanceToRoom-Config.checkRoomTolerance), Config.checkRoomTolerance, roomInfo);
+		
+		Behavior[] returnToRoom = new Behavior[]{driveForward, followLine, checkRoom};
+		Arbitrator a = new Arbitrator(returnToRoom, true);
+		a.start();
+	}
+	
 	public Pair getPosition(){
 		return currentPosition;
 	}
@@ -275,7 +322,7 @@ public class RoomNavigator {
 	
 	public void moveTo(Pair from, Pair to)
 	{
-		ArrayList<Pair> path = misc.AStar.findPath(map, from, to);
+		ArrayList<Pair> path = misc.AStar.findPath(map, from, heading, to);
 		
 		ListIterator<Pair> iterator = path.listIterator();
 		

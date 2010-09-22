@@ -1,4 +1,4 @@
-package Pusher;
+
 
 public class MapInformation {
 	public static float lineLength = 17.5f;//16.10f; Laenge der schwarzen Linie

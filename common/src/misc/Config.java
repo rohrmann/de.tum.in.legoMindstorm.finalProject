@@ -14,6 +14,7 @@ public class Config {
 	public static float wheelToWheel = 10.35f;
 	public static int lightTolerance = 5;
 	public static int colorScanTimes = 5;	
+	public static int checkRoomTolerance = 4;
 	
 	// Pusher
 	public static float pusherBackOffDistance = 6f; // Stecke die zurueckgesetzt werden soll
