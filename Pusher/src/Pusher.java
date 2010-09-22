@@ -1,5 +1,6 @@
 import Color.Color;
 import ColorBrick.ColorSettings;
+import ErrorHandlingBrick.ErrorInformation;
 import LightBrick.LightSettings;
 import lejos.nxt.Button;
 import lejos.nxt.LightSensor;
@@ -35,8 +36,8 @@ public class Pusher {
 		
 		robot.getPilot().setMoveSpeed(Config.pusherMoveSpeed);
 		robot.getPilot().setTurnSpeed(Config.pusherTurnSpeed);
-
-		PusherFunctions pusher = new PusherFunctions(robot, GraphExample.getGraph());
+		ErrorInformation errorinfo = new ErrorInformation();
+		PusherFunctions pusher = new PusherFunctions(robot, GraphExample.getGraph(), errorinfo);
 
 		System.out.println("press button to start test!");
 		Button.waitForPress();
