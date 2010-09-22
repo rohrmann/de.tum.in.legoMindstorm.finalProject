@@ -23,6 +23,7 @@ import Graph.Pair;
 import Graph.Type;
 import LightBrick.LightSettings;
 import NavigationBrick.RoomNavigator;
+import ErrorHandlingBrick.ErrorInformation;
 
 
 public class Mapper {
@@ -31,6 +32,7 @@ public class Mapper {
 	private AnalyseCrossing analyser;
 	private static Graph map;
 	private final Direction[] searchDirections = {Direction.NORTH,Direction.WEST,Direction.SOUTH,Direction.EAST};
+	private ErrorInformation errorinfo;
 	
 	public static void main(String[] args) throws IOException, InterruptedException{
 		BTBrick.connectToPC();
@@ -61,8 +63,8 @@ public class Mapper {
 		
 		Robot robot = new Robot(pilot,color,leftLightSettings, rightLightSettings);
 		map = new Graph();
-		
-		nav = new RoomNavigator(robot,map); 
+		errorinfo = new ErrorInformation();
+		nav = new RoomNavigator(robot,map, errorinfo); 
 		
 		analyser = new AnalyseCrossing(robot);
 	}

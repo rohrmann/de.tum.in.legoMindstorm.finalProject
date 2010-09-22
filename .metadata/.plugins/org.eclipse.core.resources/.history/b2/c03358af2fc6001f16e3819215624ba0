@@ -1,16 +1,19 @@
-package Navigation;
+package NavigationBrick;
 import Color.Color;
-import ErrorHandling.ErrorHandling;
-import ErrorHandling.RoomMissed;
+import ErrorHandlingBrick.ErrorHandling;
+import ErrorHandlingBrick.RoomMissed;
 import lejos.nxt.Sound;
 import lejos.robotics.subsumption.Behavior;
-import misc.Config;
-import misc.Helper;
-import misc.Robot;
-import misc.RoomInformation;
-import Navigation.RoomNavigator;
+import miscBrick.Config;
+import miscBrick.Helper;
+import miscBrick.Robot;
+import miscBrick.RoomInformation;
 
-
+/**
+ * 
+ * @author rohrmann
+ *
+ */
 public class CheckRoom implements Behavior {
 	
 	private Robot robot;
@@ -20,11 +23,11 @@ public class CheckRoom implements Behavior {
 	private int distanceUntilActivation;
 	private int tolerance;
 	private RoomInformation information;
-	private RoomNavigation navi;
+	private RoomNavigator navi;
 
 
-	public CheckRoom(Robot robot,int distanceUntilActivation,int tolerance,RoomInformation information, 
-			RoomNavigator navi){
+	public CheckRoom(Robot robot,int distanceUntilActivation,int tolerance,
+			RoomInformation information, RoomNavigator navi){
 		this.robot = robot;
 		this.distanceUntilActivation = distanceUntilActivation;
 		this.tolerance = tolerance;
@@ -58,7 +61,7 @@ public class CheckRoom implements Behavior {
 			else if(color== lastColor && color.isRoomColor() && System.currentTimeMillis()-startColor > Config.acceptionPeriodForColor){
 				active = false;
 				information.setRoomColor(color);
-				navi.getErrorInformation.setError(false);
+				navi.getErrorInformation().setError(false);
 			}
 			
 			try{
@@ -77,11 +80,15 @@ public class CheckRoom implements Behavior {
 			if(missColor != null){
 				active = false;
 				information.setRoomColor(missColor);
-				navi.getErrorInformation.setError(false);
+				navi.getErrorInformation().setError(false);
 			}else{
 				robot.getPilot().stop();
+<<<<<<< HEAD
+			//	ErrorHandling.resolvebyHand(robot);
+=======
 				ErrorHandling.resolvebyHand(robot, navi);
-				navi.getErrorInformation.setError(true);
+				navi.getErrorInformation().setError(true);
+>>>>>>> 1554344406d67a735687e136f834790df0fdd8bf
 			}
 			
 		}
