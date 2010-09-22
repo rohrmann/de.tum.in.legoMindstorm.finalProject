@@ -5,8 +5,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.Enumeration;
 
-import lejos.nxt.LCD;
-import lejos.nxt.Sound;
+
 
 import Graph.Graph;
 import Graph.GraphTools;

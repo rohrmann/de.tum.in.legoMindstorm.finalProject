@@ -1,0 +1,37 @@
+package Bluetooth;
+
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+
+import Memory.Action;
+import Memory.Map;
+import Memory.Move;
+
+public class BTReceiveMessage {
+	public static MessageType receiveType(int type){
+		switch(type){
+		case 1:
+			return MessageType.MOVE;
+		case 2:
+			return MessageType.ACTION;
+		case 3:
+			return MessageType.MAP;
+		}
+		return null;
+	}
+	
+	public static void receiveMessage(MessageType type, DataOutputStream dataOut,
+			DataInputStream dataIn) throws IOException, InterruptedException{
+			dataOut.writeInt(BTSendMessage.sendType(type));
+			dataOut.flush();
+			switch(type){
+			case MOVE:
+				BTSendAnything.sendMove(Move.getMove(), dataOut, dataIn);
+			case ACTION:
+				BTSendAnything.sendAction(Action.getAction(), dataOut, dataIn);
+			case MAP:
+				BTSendAnything.sendNodes(Map.getMap(),dataOut,dataIn);
+			}
+		}
+}

@@ -10,7 +10,7 @@ private static Pair boxDestination;
 		return new Pair[]{boxIs, boxDestination};
 	}
 	
-	public static void setMove(Pair is, Pair dest){
+	public static void setAction(Pair is, Pair dest){
 		boxIs = is;
 		boxDestination = dest;
 	}
