@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-1.40.10 (MiKTeX 2.8) (preloaded format=pdflatex 2010.9.1)  22 SEP 2010 16:14
+This is pdfTeX, Version 3.1415926-1.40.10 (MiKTeX 2.8) (preloaded format=pdflatex 2010.9.1)  22 SEP 2010 17:04
 entering extended mode
 **C:/Users/Butterfly/Documents/Uni/2.*Semester/Lego/de.tum.in.legoMindstorm.fin
 alProject/Spezifikation/Lego.tex
@@ -228,27 +228,28 @@ ftex.map}
 alProject/Spezifikation/soko.png>] <sol.jpg, id=13, 602.25pt x 200.75pt>
 File: sol.jpg Graphic file (type jpg)
  <use sol.jpg> [2 <C:/Users/Butterfly/Documents/Uni/2. Semester/Lego/de.tum.in.
-legoMindstorm.finalProject/Spezifikation/sol.jpg>]
+legoMindstorm.finalProject/Spezifikation/sol.jpg>] [3]
 ("C:\Users\Butterfly\Documents\Uni\2. Semester\Lego\de.tum.in.legoMindstorm.fin
 alProject\Spezifikation\Lego.aux") ) 
 Here is how much of TeX's memory you used:
- 2603 strings out of 495285
- 31427 string characters out of 3180383
+ 2605 strings out of 495285
+ 31450 string characters out of 3180383
  83809 words of memory out of 3000000
- 5783 multiletter control sequences out of 15000+200000
- 9005 words of font info for 21 fonts, out of 3000000 for 9000
+ 5784 multiletter control sequences out of 15000+200000
+ 9821 words of font info for 22 fonts, out of 3000000 for 9000
  14 hyphenation exceptions out of 8191
- 27i,10n,43p,433b,210s stack positions out of 5000i,500n,10000p,200000b,50000s
+ 27i,10n,43p,695b,210s stack positions out of 5000i,500n,10000p,200000b,50000s
  <C:\Users\Butterfly\AppData\Local\MiKTeX\2
-.8\fonts\pk\ljfour\jknappen\ec\dpi600\ecrm1000.pk> <C:\Users\Butterfly\AppData\
-Local\MiKTeX\2.8\fonts\pk\ljfour\jknappen\ec\dpi600\ecsx1000.pk> <C:\Users\Butt
-erfly\AppData\Local\MiKTeX\2.8\fonts\pk\ljfour\jknappen\ec\dpi600\ecsx1200.pk> 
+.8\fonts\pk\ljfour\jknappen\ec\dpi600\ecsi1000.pk> <C:\Users\Butterfly\AppData\
+Local\MiKTeX\2.8\fonts\pk\ljfour\jknappen\ec\dpi600\ecrm1000.pk> <C:\Users\Butt
+erfly\AppData\Local\MiKTeX\2.8\fonts\pk\ljfour\jknappen\ec\dpi600\ecsx1000.pk> 
 <C:\Users\Butterfly\AppData\Local\MiKTeX\2.8\fonts\pk\ljfour\jknappen\ec\dpi600
-\ecsx1440.pk> <C:\Users\Butterfly\AppData\Local\MiKTeX\2.8\fonts\pk\ljfour\jkna
-ppen\ec\dpi600\ecss1000.pk>
-Output written on Lego.pdf (2 pages, 59812 bytes).
+\ecsx1200.pk> <C:\Users\Butterfly\AppData\Local\MiKTeX\2.8\fonts\pk\ljfour\jkna
+ppen\ec\dpi600\ecsx1440.pk> <C:\Users\Butterfly\AppData\Local\MiKTeX\2.8\fonts\
+pk\ljfour\jknappen\ec\dpi600\ecss1000.pk>
+Output written on Lego.pdf (3 pages, 72052 bytes).
 PDF statistics:
- 160 PDF objects out of 1000 (max. 8388607)
+ 197 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
  11 words of extra memory for PDF output out of 10000 (max. 10000000)
 
