@@ -64,12 +64,21 @@ Andreas Bigontina, Anastasia Panteloglou \\
 Wiebke Köpp	
 \subsection{Lösungsansatz}
 	\includegraphics[width=13cm]{sol.jpg} \\
-	\textbf{Kartierer:}
-	\\
+	\textbf{Navigation:} \\
+	Alle drei Roboter sollen eine gemeinsame Navigation verwenden. Die Roboter sollen mit dieser durch einfache Befehle wie \emph{'Bewege dich nach Norden'} oder \emph{'Bewege dich zum nächsten Raum'} gesteuert werden. Außerdem sollen auch Koordinaten angegeben werden können zu denen sich ein Roboter bewegen soll. \\
+	Die Navigation wird mithilfe eines Pilot realisiert, der über verschiedene Behaviors sicherstellt, dass die Roboter der Linie folgen und von ihr nicht abweichen und das Räume erkannt werden.
+	
+	\textbf{Kartierer:} \\
+Der Kartierer beginnt an seinem Startpunkt das Feld einzulesen. Er speichert das Feld in einem Graphen, in dessen Knoten Informationen über den Typ des jeweiligen Knotens (definiert durch die Farbe) und dessen Nachbarn (im Norden, Osten, Süden und Wesen) gespeichert sind. Der Startpunkt ist hierbei als Punkt (0,0) definiert. Die Ausrichtung zu Beginn wird als Norden definiert. Bewegt sich der Roboter nun nach Norden wird die y--Koordinate inkrementiert, bei Osten wird die x--Koordinate inkrementiert und bei Süden und Westen werden x- und y--Koordinate dekrementiert. \\
+Der Kartierer führt nun eine Tiefensuche auf dem Feld aus und analysiert jede Kreuzung, die er zuvor noch nicht analysiert hat, indem er sich auf ihr dreht und die Richtungen speichert, die dieser Knoten besitzt. \\
+Nach dem kartieren schickt der Roboter den gesamten Graphen per Bluetooth an den Computer, der dann die Berechnung der Lösung durchführt.
+	
 	\textbf{Planer:} 
-	\\
+Da die Leistung eines Bricks vorraussichtlich nicht für die Berechnung der Lösung ausreicht, wird die Berechnung auf einem Computer durchgeführt. 
+
 	\textbf{Schieber:}
-	\\
+
+
 	\textbf{Zieher:}
 
 
