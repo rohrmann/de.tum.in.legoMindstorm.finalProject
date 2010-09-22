@@ -2,7 +2,6 @@ import miscBrick.Config;
 import misc.Direction;
 import miscBrick.Robot;
 import miscBrick.RoomInformation;
-import ErrorHandlingBrick.ErrorInformation;
 import Graph.Graph;
 import NavigationBrick.CheckRoom;
 import NavigationBrick.DriveForward;
@@ -16,10 +15,10 @@ public class PusherFunctions {
 	Robot robot;
 	RoomNavigator navigator;
 	
-	public PusherFunctions(Robot robot, Graph map, ErrorInformation errorinfo)			//Konstruktor
+	public PusherFunctions(Robot robot, Graph map)			//Konstruktor
 	{
 		this.robot = robot;
-		navigator = new RoomNavigator(robot, map, errorinfo);
+		navigator = new RoomNavigator(robot, map);
 	}
 	
 	//Bestimmt aus dem fuenfstelligen Array Richtungsangaben fuer die Movebewegung
@@ -54,7 +53,7 @@ public class PusherFunctions {
 		DriveDistanceForward driveDistanceForward = new DriveDistanceForward(robot, travelDistance);
 		FollowLine followLine = new FollowLine(robot, roomInfo);
 		DriveForward driveForward = new DriveForward(robot, roomInfo);
-		CheckRoom checkRoom = new CheckRoom(robot, (int)(travelDistance - Config.pusherBackOffDistance )-Config.pusherCheckRoomTolerance, Config.pusherCheckRoomTolerance, roomInfo, navigator);
+		CheckRoom checkRoom = new CheckRoom(robot, (int)(travelDistance - Config.pusherBackOffDistance )-Config.pusherCheckRoomTolerance, Config.pusherCheckRoomTolerance, roomInfo);
 
 		// Vorwaerts fahren bis die Kiste auf der naechsten Kreuzung liegt
 		System.out.println("Follow line for "+travelDistance+"cm ...");

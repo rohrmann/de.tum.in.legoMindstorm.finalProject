@@ -22,13 +22,13 @@ public enum Direction {
 	public String toString(){
 		switch(this){
 		case NORTH:
-			return "SOUTH";
-		case SOUTH:
 			return "NORTH";
+		case SOUTH:
+			return "SOUTH";
 		case EAST:
-			return "WEST";
-		case WEST:
 			return "EAST";
+		case WEST:
+			return "WEST";
 		default:
 			return "UNDEFINED";
 		}

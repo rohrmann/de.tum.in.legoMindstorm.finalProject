@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.ListIterator;
 
 import Color.Color;
-import ErrorHandlingBrick.ErrorInformation;
+import ErrorHandlingBrick.ErrorHandling;
 import Graph.Graph;
 import Graph.Node;
 import Graph.Pair;
@@ -26,22 +26,27 @@ public class RoomNavigator {
 	private Pair currentPosition;
 	private LightSettings leftLightSettings;
 	private LightSettings rightLightSettings;
-	private ErrorInformation errinfo;
+	private Robot robot;
 	
-	public RoomNavigator(Robot robot,Graph map, ErrorInformation errorinfo){
+	public RoomNavigator(Robot robot,Graph map){
+		this.robot = robot;
 		leftLightSettings = robot.getLeftLight();
 		rightLightSettings = robot.getRightLight();
-		this.pilot = new RoomPilot(robot, this);
+		this.pilot = new RoomPilot(robot);
 		this.heading = Direction.NORTH;
 		this.map = new Graph();
 		currentPosition = new Pair(0,0);
 		this.map = map;
-		this.errinfo = errorinfo;
 	}
 	
 	public Color goToNextRoom(){
 		advanceRoom();
-		return pilot.goToNextRoom();
+		Color color = pilot.goToNextRoom();
+		if(color == null){
+			ErrorHandling.resolvebyHand(robot, this);
+			color = goToNextRoom();
+		}
+		return color;
 	}
 	
 	private void advanceRoom(){
@@ -315,7 +320,4 @@ public class RoomNavigator {
 		return map;
 	}
 	
-	public ErrorInformation getErrorInformation(){
-		return errinfo;
-	}
 }
