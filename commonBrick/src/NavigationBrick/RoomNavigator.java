@@ -6,19 +6,22 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.Queue;
 import java.util.Stack;
-
 import Color.Color;
-import ErrorHandlingBrick.ErrorInformation;
+import ErrorHandlingBrick.ErrorHandling;
 import Graph.Graph;
 import Graph.Node;
 import Graph.Pair;
 import Graph.Type;
 import LightBrick.LightSettings;
 //import misc.AStar;
+import lejos.robotics.subsumption.Arbitrator;
+import lejos.robotics.subsumption.Behavior;
+import miscBrick.Config;
 import misc.Direction;
-import misc.RobotType;
 import miscBrick.Helper;
 import miscBrick.Robot;
+import miscBrick.RoomInformation;
+import misc.RobotType;
 
 /**
  * 
@@ -32,22 +35,33 @@ public class RoomNavigator {
 	private Pair currentPosition;
 	private LightSettings leftLightSettings;
 	private LightSettings rightLightSettings;
-	private ErrorInformation errinfo;
+	private Robot robot;
+	private boolean roomMissedActive;
 	
-	public RoomNavigator(Robot robot,Graph map, ErrorInformation errorinfo){
+	public RoomNavigator(Robot robot,Graph map){
+		this.robot = robot;
 		leftLightSettings = robot.getLeftLight();
 		rightLightSettings = robot.getRightLight();
-		this.pilot = new RoomPilot(robot, this);
+		this.pilot = new RoomPilot(robot, roomMissedActive);
 		this.heading = Direction.NORTH;
 		this.map = new Graph();
 		currentPosition = new Pair(0,0);
 		this.map = map;
-		this.errinfo = errorinfo;
+		roomMissedActive = false;
 	}
 	
 	public Color goToNextRoom(){
 		advanceRoom();
-		return pilot.goToNextRoom();
+		Color color = pilot.goToNextRoom();
+		if(color == null){
+			ErrorHandling.resolvebyHand(robot, this);
+			color = goToNextRoom();
+		}
+		return color;
+	}
+	
+	public void setRoomMissedActive(boolean roomMissedActive){
+		pilot.setRoomMissedActive(roomMissedActive);
 	}
 	
 	private void advanceRoom(){
@@ -242,6 +256,47 @@ public class RoomNavigator {
 		}
 	}
 	
+	public void turnOnLine()
+	{
+		pilot.rotate(90);
+		pilot.rotate(180, true);					// guckt nach Linie, nach der er sich, nach seiner theoretischen 180 Grad Drehung dann richten kann
+		while(!leftLightSettings.groundChange())
+		{ Thread.yield(); }
+		while(leftLightSettings.groundChange())
+		{ Thread.yield(); }
+		pilot.stop();
+		
+		updateHeading(180);
+	}
+	
+	public void driveForward(float distance)
+	{
+		DriveDistanceForward driveDistanceForward = new DriveDistanceForward(robot, distance);
+		FollowLine followLine = new FollowLine(robot, new RoomInformation());
+
+		Behavior[] driveForwardAndFollow = new Behavior[]{driveDistanceForward, followLine};
+		Arbitrator a = new Arbitrator(driveForwardAndFollow, true);
+		a.start();
+	}
+	
+	public void driveBackward(float distance)
+	{
+		robot.getPilot().travel(-distance);
+	}
+	
+	public void findRoom(float distanceToRoom)
+	{
+		RoomInformation roomInfo = new RoomInformation();
+		
+		DriveForward driveForward = new DriveForward(robot, roomInfo);
+		FollowLine followLine = new FollowLine(robot, roomInfo);
+		CheckRoom checkRoom = new CheckRoom(robot, (int)(distanceToRoom-Config.checkRoomTolerance), Config.checkRoomTolerance, roomInfo, roomMissedActive);
+		
+		Behavior[] returnToRoom = new Behavior[]{driveForward, followLine, checkRoom};
+		Arbitrator a = new Arbitrator(returnToRoom, true);
+		a.start();
+	}
+	
 	public Pair getPosition(){
 		return currentPosition;
 	}
@@ -376,7 +431,7 @@ public class RoomNavigator {
 			}
 			
 			for(Direction dir : dirs){
-				if(node.has(dir) && visited.get(node.get(dir)) == null){
+				if(node.has(dir) && visited.get(node.get(dir)) == null ){
 					queue.push(node.get(dir));
 					visited.put(node.get(dir), true);
 					prev.put(node.get(dir),node);
@@ -409,7 +464,7 @@ public class RoomNavigator {
 	
 	public void moveTo(Pair from, Pair to)
 	{
-		ArrayList<Pair> path = misc.AStar.findPath(map, from, to);
+		ArrayList<Pair> path = misc.AStar.findPath(map, from, heading, to);
 		
 		ListIterator<Pair> iterator = path.listIterator();
 		
@@ -441,7 +496,4 @@ public class RoomNavigator {
 		return map;
 	}
 	
-	public ErrorInformation getErrorInformation(){
-		return errinfo;
-	}
 }

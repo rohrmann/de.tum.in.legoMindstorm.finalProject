@@ -14,7 +14,6 @@ import miscBrick.Robot;
 import AnalysisBrick.AnalyseCrossing;
 import Color.Color;
 import ColorBrick.ColorSettings;
-import ErrorHandlingBrick.ErrorInformation;
 import Graph.Graph;
 import Graph.Node;
 import Graph.Pair;
@@ -33,7 +32,6 @@ public class Mapper {
 	private AnalyseCrossing analyser;
 	private Graph map;
 	private final Direction[] searchDirections = {Direction.NORTH,Direction.WEST,Direction.SOUTH,Direction.EAST};
-	private ErrorInformation errorinfo;
 	
 	public static void main(String[] args){
 		Mapper mapper = new Mapper();
@@ -60,8 +58,7 @@ public class Mapper {
 		
 		Robot robot = new Robot(pilot,color,leftLightSettings, rightLightSettings);
 		map = new Graph();
-		errorinfo = new ErrorInformation();
-		nav = new RoomNavigator(robot,map, errorinfo); 
+		nav = new RoomNavigator(robot,map); 
 		
 		analyser = new AnalyseCrossing(robot);
 	}
@@ -84,10 +81,6 @@ public class Mapper {
 			if(map.getType(Helper.calcPos(nav.getPosition(), searchDirections[i]))==Type.UNKNOWN){
 				Helper.drawText(searchDirections[i].toString());
 				Color color = nav.move(searchDirections[i]);
-				while(color == null || errorinfo.isError()){
-					color = nav.move(searchDirections[i]);
-				}
-				//Helper.drawText("Nextdfsstep");
 				Node node = startNode.get(searchDirections[i]);
 				node.setType(color);
 				dfs(node,searchDirections[i].opposite());
@@ -95,9 +88,6 @@ public class Mapper {
 		}
 		//Helper.drawText("Backtracking");
 		nav.move(sourceDirection);
-		while(errorinfo.isError()){
-			nav.move(sourceDirection);
-		}
 	}
 	
 	private List<Node> addNodes(List<Direction> streets, Node node){

@@ -1,6 +1,5 @@
 package NavigationBrick;
 import Color.Color;
-import ErrorHandlingBrick.ErrorHandling;
 import ErrorHandlingBrick.RoomMissed;
 import lejos.nxt.Sound;
 import lejos.robotics.subsumption.Behavior;
@@ -23,11 +22,11 @@ public class CheckRoom implements Behavior {
 	private int distanceUntilActivation;
 	private int tolerance;
 	private RoomInformation information;
-	private RoomNavigator navi;
+	private boolean roomMissedActive;
 
 
 	public CheckRoom(Robot robot,int distanceUntilActivation,int tolerance,
-			RoomInformation information, RoomNavigator navi){
+			RoomInformation information, boolean roomMissedActive){
 		this.robot = robot;
 		this.distanceUntilActivation = distanceUntilActivation;
 		this.tolerance = tolerance;
@@ -35,7 +34,7 @@ public class CheckRoom implements Behavior {
 		terminated = true;
 		tachoReseted = false;
 		this.information = information;
-		this.navi = navi;
+		this.roomMissedActive = roomMissedActive;
 	}
 
 	//@Override
@@ -61,7 +60,6 @@ public class CheckRoom implements Behavior {
 			else if(color== lastColor && color.isRoomColor() && System.currentTimeMillis()-startColor > Config.acceptionPeriodForColor){
 				active = false;
 				information.setRoomColor(color);
-				navi.getErrorInformation().setError(false);
 			}
 			
 			try{
@@ -75,22 +73,15 @@ public class CheckRoom implements Behavior {
 		// active is set false when the color of the room is set -> if still active the room was
 		// not found
 		if(active){
-			//throw new DrivingException("Error while trying to find room");
-			Color missColor = RoomMissed.action(robot, 6, information);
-			if(missColor != null){
-				active = false;
-				information.setRoomColor(missColor);
-				navi.getErrorInformation().setError(false);
-			}else{
-				robot.getPilot().stop();
-				ErrorHandling.resolvebyHand(robot, navi);
-				navi.getErrorInformation().setError(true);
+			Color missColor = null; 
+				if(roomMissedActive){
+					missColor = RoomMissed.action(robot, 6, information);
+				}
+			information.setRoomColor(missColor);
 			}
-			
-		}
 		
 		robot.getPilot().reset();
-		robot.getPilot().setMoveSpeed(15);
+		robot.getPilot().setMoveSpeed(10);
 		
 		active = false;
 		terminated = true;

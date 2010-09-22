@@ -10,7 +10,7 @@ public class Node {
 	private Node west;
 	private Node south;
 	private Node east;
-	
+
 	public Node(Type type, Pair id){
 		this.type = type;
 		this.id = id;
@@ -19,7 +19,7 @@ public class Node {
 		south = null;
 		east = null;
 	}
-	
+
 	public Type getType(){
 		return type;
 	}
@@ -194,7 +194,7 @@ public class Node {
 	}
 
 	public boolean isFree() {
-		return type != Type.BOX;
+		return type.isAccessible();
 	}
 	
 }

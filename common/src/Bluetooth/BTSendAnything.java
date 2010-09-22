@@ -8,41 +8,16 @@ import java.util.Enumeration;
 
 
 import Graph.Graph;
-import Graph.GraphTools;
 import Graph.Node;
 import Graph.Pair;
 import Graph.Type;
 import Memory.Update;
 
 public class BTSendAnything {
-
-	private static DataOutputStream dos;
-	private static DataInputStream dis;
-	private static Graph graph;
 	
-	public static void sendAction(Pair[] action, DataOutputStream dataOut,
-			DataInputStream dataIn) throws IOException{
+	public static void sendMove(Pair move, DataOutputStream dos,
+			DataInputStream dis) throws IOException{
 		int control = (int) (Math.random() * 255);
-		for(int i=0;i<=1;i++){
-			dos.writeInt(action[i].getX());	
-			dos.flush();
-			dos.writeInt(action[i].getY());
-			dos.flush();
-		}
-		dos.writeInt(control);
-		dos.flush();
-		if (dis.read() == control) {
-			System.out.println("Control OK");
-		} else {
-			System.out.println("Control FAIL");
-		}
-	}
-	
-	public static void sendMove(Pair move, DataOutputStream dataOut,
-			DataInputStream dataIn) throws IOException{
-		int control = (int) (Math.random() * 255);
-		dos = dataOut;
-		dis = dataIn;
 		dos.writeInt(move.getX());
 		dos.flush();
 		dos.writeInt(move.getY());
@@ -56,20 +31,19 @@ public class BTSendAnything {
 		}
 	}
 	
-	public static void sendNodes(Graph graph1, DataOutputStream dataOut,
-			DataInputStream dataIn) throws IOException,
+	public static void sendNodes(Graph graph, DataOutputStream dos,
+			DataInputStream dis) throws IOException,
 			InterruptedException {
-		dos = dataOut;
-		dis = dataIn;
-		graph = graph1;
 		dos.flush();
-		sendSize();
+		
+		dos.writeInt(graph.size());
+		dos.flush();
 		Enumeration enumeration = graph.getHashtable().keys();
 		int control;
 		while (enumeration.hasMoreElements()) {
 			Pair pair = (Pair) enumeration.nextElement();
 			Node node = graph.getNode(pair);
-			int type = typeToInt(node);
+			int type = Type.typeToInt(node);
 			control = (int) (Math.random() * 255);
 			dos.writeInt(pair.getX());
 			dos.flush();
@@ -87,6 +61,7 @@ public class BTSendAnything {
 		}
 	}
 	
+<<<<<<< HEAD
 	public static void sendUpdate(DataOutputStream dataOut,
 			DataInputStream dataIn) throws IOException {
 		dos = dataOut;
@@ -141,6 +116,8 @@ public class BTSendAnything {
 		}
 		return 6;
 	}
+=======
+>>>>>>> 353c2b03d4e058e93c069f402f265c58f89d3408
 
 	
 

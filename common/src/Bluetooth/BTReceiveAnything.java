@@ -9,9 +9,6 @@ import Graph.GraphTools;
 import Graph.Node;
 import Graph.Pair;
 import Graph.Type;
-import Memory.Action;
-import Memory.Map;
-import Memory.Move;
 
 
 public class BTReceiveAnything {
@@ -52,12 +49,6 @@ public static void makeNode(int x, int y, int a) {
 		case 6:
 			graph.addNode(new Node(Type.UNDEFINED, new Pair(x, y)));
 			break;
-		case 7:
-			graph.addNode(new Node(Type.PULLER, new Pair(x, y)));
-			break;
-		case 8:
-			graph.addNode(new Node(Type.PUSHER, new Pair(x, y)));
-			break;
 		}
 		
 	}
@@ -66,23 +57,10 @@ public static void makeNode(int x, int y, int a) {
 		numberOfNodes = dis.readInt();
 	}
 
-	public static void receiveMove(DataOutputStream dataOut,
+	public static Graph receiveNodes(DataOutputStream dataOut,
 			DataInputStream dataIn) throws IOException {
-		Move.setMove(dis.readInt(), dis.readInt());
-		dos.write(dis.readInt());
-		dos.flush();
 		
-	}
-
-	public static void receiveAction(DataOutputStream dataOut,
-			DataInputStream dataIn) throws IOException {
-		Action.setAction(new Pair(dis.readInt(), dis.readInt()), new Pair(dis.readInt(), dis.readInt()));
-		dos.write(dis.readInt());
-		dos.flush();
-	}
-
-	public static void receiveNodes(DataOutputStream dataOut,
-			DataInputStream dataIn) throws IOException {
+		Graph graph = new Graph();
 		dis = dataIn;
 		dos = dataOut;
 		receiveSize();
@@ -96,7 +74,7 @@ public static void makeNode(int x, int y, int a) {
 		}
 		GraphTools.addConnections(graph);
 		
-		Map.setMap(graph);
+		return graph;
 		
 	}
 
