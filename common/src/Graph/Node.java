@@ -196,5 +196,5 @@ public class Node {
 	public boolean isFree() {
 		return type.isAccessible();
 	}
-	
+
 }

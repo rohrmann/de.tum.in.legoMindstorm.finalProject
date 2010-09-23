@@ -96,7 +96,8 @@ public class Graph {
 		List<Pair> result = new ArrayList<Pair>();
 		
 		for(Node node : nodes){
-			result.add(node.getID());
+			if(node.getType() == Type.BOX)
+				result.add(node.getID());
 		}
 		
 		return result;

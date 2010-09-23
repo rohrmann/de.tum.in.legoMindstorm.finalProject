@@ -47,6 +47,22 @@ public class BTCommunicator {
 		return false;
 	}
 	
+	public static boolean receiveDone(BTStreams connection){
+		try{
+			int result = connection.getDataInputStream().readInt();
+			
+			if(MessageType.int2M(result) != MessageType.DONE){
+				return false;
+			}
+			
+			return true;
+		}catch(IOException e){
+			
+		}
+		
+		return false;
+	}
+	
 	public static boolean ack(BTStreams connection){
 		try{
 			connection.getDataOutputStream().writeInt(MessageType.ACK.toInt());
@@ -185,7 +201,7 @@ public class BTCommunicator {
 		for(int i=0;i< numNodes;i++){
 			Node node = receiveNode(connection);
 			
-			
+						
 			if(node == null){
 				return null;
 			}

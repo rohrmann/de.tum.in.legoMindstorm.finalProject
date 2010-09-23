@@ -20,14 +20,15 @@ public class Puller extends Actor
 
 	@Override
 	public void init() {
-		liftArm(160);
+		Motor.C.resetTachoCount();
+		liftArm(162);
 	}
 	
 	@Override
 	public void prolog() {
 		navi.driveForward(6.0f);
 		navi.turnOnLine();
-		Puller.liftArm(2);
+		Puller.liftArm(-160);
 
 		robot.getPilot().forward();
 		while(!robot.getColor().getColorName().isRoomColor()){};		
@@ -73,7 +74,7 @@ public class Puller extends Actor
 	
 	public static void liftArm(int angle){
 		Motor.C.setSpeed(60);
-		Motor.C.rotateTo(-angle, false);
+		Motor.C.rotate(-angle,false);
 		Motor.C.lock(100);
 	}		
 }

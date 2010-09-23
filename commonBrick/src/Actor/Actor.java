@@ -3,6 +3,7 @@ package Actor;
 
 import java.util.List;
 
+import lejos.nxt.Button;
 import lejos.nxt.LightSensor;
 import lejos.nxt.Motor;
 import lejos.nxt.SensorPort;
@@ -13,12 +14,14 @@ import misc.RobotType;
 import misc.Update;
 import misc.Direction;
 import miscBrick.Config;
+import miscBrick.Helper;
 import miscBrick.Robot;
 
 import Bluetooth.MessageType;
 import BluetoothBrick.BTBrickFactory;
 import BluetoothBrick.BTConnectionBrick;
 import Graph.Graph;
+import Graph.Node;
 import Graph.Pair;
 import Graph.Type;
 import LightBrick.LightSettings;
@@ -75,8 +78,11 @@ abstract public class Actor {
 				break;
 			//move
 			case MOVE:
+		
 				Pair pos = BTCommunicator.receiveMove(conn);
 				navi.moveTo(pos);
+				//System.out.println("Move to" + pos);
+				//Button.waitForPress();
 				BTCommunicator.done(conn);
 				
 				break;
@@ -95,6 +101,8 @@ abstract public class Actor {
 			case MAP:
 				Graph graph = BTCommunicator.receiveGraph(conn);
 				navi.setGraph(graph,getType());
+				//System.out.println("Pos:" + navi.getPosition());
+				//Button.waitForPress();
 				BTCommunicator.done(conn);
 				break;
 				

@@ -24,9 +24,6 @@ public class Commander {
 	}
 	
 	public void start(String filename){
-		BTConnectionPC pusher = BTPCFactory.createConnectionInd(PCConfig.getPusher(),PCConfig.getPusherAddr());
-		BTConnectionPC puller = BTPCFactory.createConnectionInd(PCConfig.getPuller(),PCConfig.getPullerAddr());
-		
 		
 		BufferedReader input = null;
 		
@@ -45,13 +42,17 @@ public class Commander {
 		} catch (IOException e) {
 		}
 		
+		System.out.println(graph);
+		
+		BTConnectionPC pusher = BTPCFactory.createConnectionInd(PCConfig.getPusher(),PCConfig.getPusherAddr());
+		BTConnectionPC puller = BTPCFactory.createConnectionInd(PCConfig.getPuller(),PCConfig.getPullerAddr());
+		
 		MessageComm.sendMap(graph, pusher);
 		MessageComm.sendMap(graph,puller);
 		
 		String line = "";
 		try{
 			while(( line = input.readLine()) != null){
-				System.out.println(graph);
 				String[] parts = line.split(" ");
 				
 				if(parts[0].equals("pusher")){

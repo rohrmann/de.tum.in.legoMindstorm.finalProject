@@ -20,11 +20,11 @@ public class Config {
 	public static float pusherBackOffDistance = 6f; // Stecke die zurueckgesetzt werden soll
 	public static int pusherCheckRoomTolerance = 4; 
 	public static int pusherMoveSpeed = 10;
-	public static int pusherTurnSpeed = 50;
+	public static int pusherTurnSpeed = 25;
 
 	// Puller
 	public static int pullerMoveSpeed = 10;
-	public static int pullerTurnSpeed = 50;
+	public static int pullerTurnSpeed = 25;
 	public static int pullerArmSpeed = 60;
 	public static int pullerAngleUp = 160;
 	public static int pullerAngleDown = 2;

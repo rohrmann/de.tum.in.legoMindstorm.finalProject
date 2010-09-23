@@ -16,7 +16,7 @@ public class MessageComm {
 		if(!BTCommunicator.sendUpdate(graph, streams))
 			return false;
 		
-		if(BTCommunicator.receiveMessageType(streams) != MessageType.DONE)
+		if(!BTCommunicator.receiveDone(streams))
 			return false;
 		
 		return true;
@@ -33,7 +33,7 @@ public class MessageComm {
 		if(!BTCommunicator.sendMove(pair, streams))
 			return false;
 		
-		if(BTCommunicator.receiveMessageType(streams) != MessageType.DONE)
+		if(!BTCommunicator.receiveDone(streams))
 			return false;
 		
 		return true;
@@ -49,7 +49,7 @@ public class MessageComm {
 		if(!BTCommunicator.sendAction(action, streams))
 			return false;
 		
-		if(BTCommunicator.receiveMessageType(streams) != MessageType.DONE)
+		if(!BTCommunicator.receiveDone(streams))
 			return false;
 		
 		return true;
@@ -65,7 +65,7 @@ public class MessageComm {
 		if(!BTCommunicator.sendGraph(graph, streams))
 			return false;
 		
-		if(BTCommunicator.receiveMessageType(streams) != MessageType.DONE)
+		if(!BTCommunicator.receiveDone(streams))
 			return false;
 		
 		return true;
