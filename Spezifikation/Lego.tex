@@ -65,7 +65,7 @@ Wiebke Köpp
 	Die Navigation wird mithilfe eines Pilot realisiert, der über verschiedene Behaviors sicherstellt, dass die Roboter der Linie folgen, von ihr nicht abweichen und das die farbigen Räume erkannt werden.
 
 	\textbf{Aufbau der Roboter:} \\
-Alle drei Roboter besitzen drei Sensoren. Zwei Lichtsensoren werden zum Erkennen der Linie verwendet, sie sind am Roboter vorne knapp über dem Boden montiert. Zwischen ihnen ist ein Abstand, der in etwa der Breite der Linie entspricht, so dass die Sensoren im Fahren rechts und links der Linie messen  und erkennen wenn der Roboter sich in die Linie dreht und somit korrigiert werden muss. Zwischen den Lichtsensoren, etwas nach hinten versetzt, wird ein Farbsensor montiert. Die Roboter haben außerdem
+Alle drei Roboter besitzen drei Sensoren. Zwei Lichtsensoren werden zum Erkennen der Linie verwendet, sie sind am Roboter vorne knapp über dem Boden montiert. Zwischen ihnen ist ein Abstand, der in etwa der Breite der Linie entspricht, so dass die Sensoren im Fahren rechts und links der Linie messen  und erkennen, wenn der Roboter sich in die Linie dreht und somit korrigiert werden muss. Zwischen den Lichtsensoren, etwas nach hinten versetzt, wird ein Farbsensor montiert. Die Roboter haben außerdem
 \vspace{-0.67cm}
 \begin{figure}[htbp]
 \begin{minipage}[h]{0.4\linewidth}
@@ -77,17 +77,16 @@ die Verwendung eines Bricks, zwei Motoren mit größeren Rädern zur Bewegung und z
 \end{figure}
 
 	\textbf{Kartierer:} \\
-Der Kartierer beginnt an seinem Startpunkt das Feld einzulesen. Er speichert das Feld in einem Graphen, in dessen Knoten Informationen über den Typ des jeweiligen Knotens (definiert durch die Farbe) und dessen Nachbarn (im Norden, Osten, Süden und Wesen) gespeichert sind. Der Startpunkt ist hierbei als Punkt (0,0) definiert. Die Ausrichtung zu Beginn wird als Norden definiert. Bewegt sich der Roboter nun nach Norden wird die y--Koordinate inkrementiert, bei Osten wird die x--Koordinate inkrementiert und bei Süden und Westen werden x- und y--Koordinate entsprechend dekrementiert. \\
+Der Kartierer beginnt an seinem Startpunkt das Feld einzulesen. Er speichert das Feld in einem Graphen, in dessen Knoten Informationen über den Typ des jeweiligen Knotens (definiert durch die Farbe) und dessen Nachbarn (im Norden, Osten, Süden und Westen) gespeichert sind. Der Startpunkt ist hierbei als Punkt (0,0) definiert. Die Ausrichtung zu Beginn wird als Norden definiert. Bewegt sich der Roboter nun nach Norden wird die y--Koordinate inkrementiert, bei Osten wird die x--Koordinate inkrementiert und bei Süden und Westen werden x- und y--Koordinate entsprechend dekrementiert. \\
 Der Kartierer führt nun eine Tiefensuche auf dem Feld aus und analysiert jede Kreuzung, die er zuvor noch nicht analysiert hat, indem er sich auf ihr dreht und die Richtungen speichert, die dieser Knoten besitzt. Die auf dem Feld erkannte Farbe wird gleichzeitig gespeichert.\\
 Nach dem kartieren schickt der Roboter den gesamten Graphen per Bluetooth an den Computer, der dann die Berechnung der Lösung durchführt.
 \begin{center}
 \includegraphics[width = 6.5cm]{mapper.jpg}
-\end{center}	
-	
+\end{center}
 	\textbf{Solver:} \\
 Da die Leistung eines Bricks voraussichtlich nicht für die Berechnung der Lösung ausreicht, wird die Berechnung auf einem Computer durchgeführt. 
 Der Computer empfängt zunächst die Daten vom Mapper und schreibt sie in ein Format, mit dem der Solver arbeiten kann.
-Der Solver berechnet dann über mögliche Zustände und errechnet mit Hilfe eines A*-ähnlichen Algorithmus welche Zustandsübergänge insgesamt zur Lösung führen. Eine Kombination von Kistenpositionen entspricht hierbei einem Zustand. Eine Kistenbewegung entspricht einem Zustandsübergang. Bei der Prüfung, ob zwei Zustände gleich sind, wird außerdem auch noch die Roboterposition mit einbezogen.    
+Der Solver berechnet dann mögliche Zustände und errechnet mit Hilfe eines A*-ähnlichen Algorithmus welche Zustandsübergänge insgesamt zur Lösung führen. Eine Kombination von Kistenpositionen entspricht hierbei einem Zustand. Eine Kistenbewegung entspricht einem Zustandsübergang. Bei der Prüfung, ob zwei Zustände gleich sind, wird außerdem auch noch die Roboterposition mit einbezogen.    
 \begin{center}
 \includegraphics[width = 13cm]{robot.jpg}
 \end{center}
