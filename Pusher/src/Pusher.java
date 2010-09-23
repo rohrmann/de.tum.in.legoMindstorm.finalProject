@@ -15,6 +15,8 @@ public class Pusher extends Actor {
 	public Pusher()
 	{
 		super();
+		robot.getPilot().setMoveSpeed(Config.pusherMoveSpeed);
+		robot.getPilot().setTurnSpeed(Config.pusherTurnSpeed);
 	}
 	
 	public RoomNavigator getNavigator()
@@ -44,7 +46,7 @@ public class Pusher extends Actor {
 
 	@Override
 	public void epilog() {
-		push();		
+		push();	
 	}
 
 	@Override
@@ -55,7 +57,6 @@ public class Pusher extends Actor {
 	@Override
 	public void prolog() {
 		getNavigator().goToNextRoom();
-		
 	}
 
 	@Override
