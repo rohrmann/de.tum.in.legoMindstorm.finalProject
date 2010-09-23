@@ -8,6 +8,7 @@ import Graph.Node;
 import Graph.Pair;
 import Graph.Type;
 import Graph.Graph;
+import Memory.Move;
 
 public class TxtToGraph {
 
@@ -55,27 +56,57 @@ public class TxtToGraph {
 		String a = eingabe.readLine();
 		while(a != null){
 			if (a.startsWith("puller")){
-				String b = (String) a.subSequence(7, a.length()-1);
-				System.out.println(b);
+				String b = (String) a.subSequence(8, a.length()-1);
+				String[] c = b.split(",");
+				int x = Integer.parseInt(c[0]);
+				int y = Integer.parseInt(c[1]);
+				Move.setMove(x, y);
+				System.out.println(x);
+				System.out.println(y);
 			}else if (a.startsWith("pusher")){
-				String b = (String) a.subSequence(7, a.length()-1);
-				System.out.println(b);
+				String b = (String) a.subSequence(8, a.length()-1);
+				String[] c = b.split(",");
+				int x = Integer.parseInt(c[0]);
+				int y = Integer.parseInt(c[1]);
+				System.out.println(x);
+				System.out.println(y);
 			}else if (a.startsWith("push")){
-				String b = (String) a.subSequence(5, a.length()-1);
-				System.out.println(b);
+				String b = (String) a.subSequence(6, a.length()-1);
+				String[] c = b.split(" ");
+				String dest = c[0].substring(0, c[0].length()-1);
+				String[] destArray = dest.split(",");
+				int x = Integer.parseInt(destArray[0]);
+				int y = Integer.parseInt(destArray[1]);
+				
+				
+				String destbox = c[1].substring(1, c[1].length());
+				String[] destboxArray = destbox.split(",");
+				int xdest = Integer.parseInt(destboxArray[0]);
+				int ydest = Integer.parseInt(destboxArray[1]);
+				System.out.println(x);
+				System.out.println(y);
+				System.out.println(xdest);
+				System.out.println(ydest);
 			}else if (a.startsWith("pull")){
+				String b = (String) a.subSequence(6, a.length()-1);
+				String[] c = b.split(" ");
+				String dest = c[0].substring(0, c[0].length()-1);
+				String[] destArray = dest.split(",");
+				int x = Integer.parseInt(destArray[0]);
+				int y = Integer.parseInt(destArray[1]);
 				
-			}else {
 				
+				String destbox = c[1].substring(1, c[1].length());
+				String[] destboxArray = destbox.split(",");
+				int xdest = Integer.parseInt(destboxArray[0]);
+				int ydest = Integer.parseInt(destboxArray[1]);
+				System.out.println(x);
+				System.out.println(y);
+				System.out.println(xdest);
+				System.out.println(ydest);
 			}
-			
-			String[] b = a.split("(");
-			
-			if(b[0].equalsIgnoreCase("puller")){
-				String[] c = b[1].split(",");
-				for(int i=0; i<c.length;i++){
-					System.out.println(c[i]);
-				}
+			else {
+				
 			}
 			
 			a = eingabe.readLine();
