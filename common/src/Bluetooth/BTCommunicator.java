@@ -33,7 +33,7 @@ public class BTCommunicator {
 		}catch(IOException e){
 		}
 		
-		return 0;
+		return -1;
 	}
 	
 	public static boolean done(BTStreams connection){
@@ -77,6 +77,8 @@ public class BTCommunicator {
 	public static boolean receiveAck(BTStreams connection){
 		try{
 			int result = connection.getDataInputStream().readInt();
+			
+			System.out.println("Ack:" + result);
 			
 			if(MessageType.int2M(result) == MessageType.ACK){
 				return true;
@@ -158,7 +160,9 @@ public class BTCommunicator {
 			connection.getDataOutputStream().writeInt(type.toInt());
 			connection.getDataOutputStream().flush();
 			
-			return receiveAck(connection);
+			boolean result = receiveAck(connection);
+			
+			return result;
 		}catch(IOException e){
 		}
 		

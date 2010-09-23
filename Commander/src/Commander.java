@@ -46,7 +46,9 @@ public class Commander {
 		BTConnectionPC pusher = new BTConnectionPC(PCConfig.getPusher(),PCConfig.getPusherAddr());
 		BTConnectionPC puller = new BTConnectionPC(PCConfig.getPuller(),PCConfig.getPullerAddr());
 		
+		System.out.println("send map to pusher");
 		MessageComm.sendMap(graph, pusher);
+		System.out.println("send map to puller");
 		MessageComm.sendMap(graph,puller);
 		
 		String line = "";
@@ -55,18 +57,24 @@ public class Commander {
 				String[] parts = line.split(" ");
 				
 				if(parts[0].equals("pusher")){
+					System.out.println("send update to pusher");
 					MessageComm.sendUpdate(graph, pusher);
 					
 					Pair pair = Pair.parsePair(parts[1]);
+					
+					System.out.println("move pusher to " + pair);
 					
 					MessageComm.sendMove(pair, pusher);
 			
 					graph.setPusher(pair);
 				}
 				else if(parts[0].equals("puller")){
+					System.out.println("send update to puller");
 					MessageComm.sendUpdate(graph, puller);
 					
 					Pair pair = Pair.parsePair(parts[1]);
+					
+					System.out.println("move puller to " + pair);
 					
 					MessageComm.sendMove(pair, puller);
 			
@@ -74,10 +82,14 @@ public class Commander {
 					
 				}
 				else if(parts[0].equals("pull")){
+					System.out.println("send update to puller");
+
 					MessageComm.sendUpdate(graph,puller);
 					
 					Pair src = Pair.parsePair(parts[1]);
 					Pair dest = Pair.parsePair(parts[2]);
+					
+					System.out.println("pull from " + src + " to " + dest);
 					
 					MessageComm.sendAction(new Action(src,dest),puller);
 					
@@ -87,11 +99,14 @@ public class Commander {
 					
 				}
 				else if(parts[0].equals("push")){
+					System.out.println("send update to pusher");
 					MessageComm.sendUpdate(graph,pusher);
 					Pair src = Pair.parsePair(parts[1]);
 					Pair dest = Pair.parsePair(parts[2]);
 					
 					MessageComm.sendAction(new Action(src,dest),pusher);
+					
+					System.out.println("push from " + src + " to " + dest);
 					
 					graph.updateBox(src,dest);
 					
@@ -99,6 +114,7 @@ public class Commander {
 				}
 			}
 		}catch(IOException e){
+			e.printStackTrace();
 		}
 		
 		try{

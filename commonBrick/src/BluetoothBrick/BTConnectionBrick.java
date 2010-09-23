@@ -8,6 +8,7 @@ import Bluetooth.BTStreams;
 
 import lejos.nxt.comm.BTConnection;
 import lejos.nxt.comm.Bluetooth;
+import miscBrick.Helper;
 
 public class BTConnectionBrick implements BTStreams {
 
@@ -20,6 +21,8 @@ public class BTConnectionBrick implements BTStreams {
 		connection = null;
 		dos = null;
 		dis = null;
+		
+		openConnection();
 	}
 	
 	public void close(){
@@ -29,21 +32,9 @@ public class BTConnectionBrick implements BTStreams {
 
 	@Override
 	public void closeStreams() {
-		if(dos != null){
-			try {
-				dos.close();
-				dos = null;
-			} catch (IOException e) {
-			}
-		}
-		
-		if(dis != null){
-			try{
-				dis.close();
-				dis = null;
-			}catch(IOException e){
-			}
-		}
+		connection.closeStream();
+		dis = null;
+		dos = null;
 	}
 
 	@Override
@@ -51,6 +42,7 @@ public class BTConnectionBrick implements BTStreams {
 		if(connection == null){
 			openConnection();
 		}
+		
 		
 		if(dis == null){
 			dis = connection.openDataInputStream();
@@ -67,7 +59,9 @@ public class BTConnectionBrick implements BTStreams {
 	}
 	
 	public void openConnection(){
+		System.out.println("Waiting for BT-Connection");
 		connection = Bluetooth.waitForConnection();
+		System.out.println("Connection established");
 	}
 	
 	public void closeConnection(){

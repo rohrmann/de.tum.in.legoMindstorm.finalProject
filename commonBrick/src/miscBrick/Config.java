@@ -15,6 +15,7 @@ public class Config {
 	public static int lightTolerance = 5;
 	public static int colorScanTimes = 5;	
 	public static int checkRoomTolerance = 4;
+	public static int checkRoomSpeed = 5;
 	
 	// Pusher
 	public static float pusherBackOffDistance = 6f; // Stecke die zurueckgesetzt werden soll

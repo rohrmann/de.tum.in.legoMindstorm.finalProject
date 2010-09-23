@@ -23,13 +23,16 @@ public class BTConnectionPC implements BTStreams {
 	public BTConnectionPC(String name, String addr){
 		this.name = name;
 		this.addr = addr;
-		connector = new NXTConnector();
+		connector = null;
 		dos = null;
 		dis = null;
 		open = false;
+		
+		openConnection();
 	}
 	
 	public void openConnection(){
+		connector = new NXTConnector();
 		while(!connector.connectTo(name, addr, NXTCommFactory.BLUETOOTH, NXTComm.PACKET)){
 			;
 		}
@@ -53,12 +56,14 @@ public class BTConnectionPC implements BTStreams {
 	public void closeStreams(){
 		try{
 			dos.close();
+			dos = null;
 		}catch(IOException e){
 			
 		}
 		
 		try{
 			dis.close();
+			dis = null;
 		}catch(IOException e){
 			
 		}

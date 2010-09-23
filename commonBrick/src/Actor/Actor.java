@@ -62,28 +62,29 @@ abstract public class Actor {
 		MessageType message;
 
 		while(running){
-			message = BTCommunicator.receiveMessageType(conn);
-			BTCommunicator.ack(conn);
-			
+			message = BTCommunicator.receiveMessageType(conn);			
 			
 			switch(message){
 			//terminate
 			case TERMINATE:
 				running = false;
 				BTCommunicator.done(conn);
-				conn.closeStreams();
+			//	conn.close();
 				break;
 			//move
 			case MOVE:
 		
 				Pair pos = BTCommunicator.receiveMove(conn);
+				System.out.println("Move to " + pos);
 				navi.moveTo(pos);
 				BTCommunicator.done(conn);
-				conn.closeStreams();
+			//	conn.close();
+				System.out.println("Moved");
 				break;
 			//action
 			case ACTION:
 				Action action = BTCommunicator.receiveAction(conn);
+				System.out.println("Action " + action);
 				navi.turn(Direction.findDirection(navi.getPosition(),action.getSrc()));
 				
 				prolog();
@@ -91,15 +92,19 @@ abstract public class Actor {
 				epilog();
 				
 				BTCommunicator.done(conn);
-				conn.closeStreams();
+			//	conn.close();
+				
+				System.out.println("Action done");
 				break;
 			case MAP:
 				Graph graph = BTCommunicator.receiveGraph(conn);
+			
 				navi.setGraph(graph,getType());
 				//System.out.println("Pos:" + navi.getPosition());
 				//Button.waitForPress();
 				BTCommunicator.done(conn);
-				conn.closeStreams();
+				//conn.closeStreams();
+				System.out.println("Map received");
 				break;
 				
 			case UPDATE:
@@ -137,7 +142,9 @@ abstract public class Actor {
 				}
 				
 				BTCommunicator.done(conn);
-				conn.closeStreams();
+				//conn.close();
+				
+				System.out.println("Update received");
 			}
 		}
 		

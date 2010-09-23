@@ -8,11 +8,13 @@ public class MessageComm {
 	
 	public static boolean sendUpdate(Graph graph, BTStreams streams){
 		
-		boolean result = BTCommunicator.sendMessageType(MessageType.UPDATE,streams) &&
-		BTCommunicator.receiveAck(streams) && BTCommunicator.sendUpdate(graph, streams) &&
-		BTCommunicator.receiveDone(streams);
+		boolean result = BTCommunicator.sendMessageType(MessageType.UPDATE,streams);
+				
+		result = result && BTCommunicator.sendUpdate(graph, streams);
 		
-		streams.closeStreams();
+		result = result &&	BTCommunicator.receiveDone(streams);
+		
+		//streams.close();
 		
 		return result;
 				
@@ -20,31 +22,37 @@ public class MessageComm {
 	
 	public static boolean sendMove(Pair pair, BTStreams streams){
 		
-		boolean result = BTCommunicator.sendMessageType(MessageType.MOVE,streams) && 
-		BTCommunicator.receiveAck(streams) && BTCommunicator.sendMove(pair, streams) &&
-		BTCommunicator.receiveDone(streams);
+		boolean result = BTCommunicator.sendMessageType(MessageType.MOVE,streams);
+
+		result = result && BTCommunicator.sendMove(pair, streams);
 		
-		streams.closeStreams();
+		result = result && BTCommunicator.receiveDone(streams);
+		
+		//streams.close();
 		
 		return result;
 	}
 	
 	public static boolean sendAction(Action action, BTStreams streams){
-		boolean result = BTCommunicator.sendMessageType(MessageType.ACTION,streams) &&
-		BTCommunicator.receiveAck(streams) && BTCommunicator.sendAction(action, streams) &&
-		BTCommunicator.sendAction(action, streams);
+		boolean result = BTCommunicator.sendMessageType(MessageType.ACTION,streams);
 		
-		streams.closeStreams();
+		result = result && BTCommunicator.sendAction(action, streams);
+		
+		result = result && BTCommunicator.receiveDone( streams);
+		
+		//streams.close();
 		
 		return result;
 	}
 	
 	public static boolean sendMap(Graph graph, BTStreams streams){
-		boolean result = BTCommunicator.sendMessageType(MessageType.MAP,streams) &&
-		BTCommunicator.receiveAck(streams) && BTCommunicator.sendGraph(graph, streams) &&
-		BTCommunicator.receiveDone(streams);
+		boolean result = BTCommunicator.sendMessageType(MessageType.MAP,streams);
+		
+		result = result && BTCommunicator.sendGraph(graph, streams);
+		
+		result = result &&	BTCommunicator.receiveDone(streams);
 	
-		streams.closeStreams();
+		//streams.close();
 		
 		return result;
 	}

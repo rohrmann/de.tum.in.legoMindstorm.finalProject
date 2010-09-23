@@ -20,8 +20,6 @@ public class Puller extends Actor
 
 	@Override
 	public void init() {
-		Motor.C.resetTachoCount();
-		liftArm(162);
 	}
 	
 	@Override
