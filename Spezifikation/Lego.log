@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-1.40.10 (MiKTeX 2.8) (preloaded format=pdflatex 2010.9.1)  22 SEP 2010 17:04
+This is pdfTeX, Version 3.1415926-1.40.10 (MiKTeX 2.8) (preloaded format=pdflatex 2010.9.1)  23 SEP 2010 12:20
 entering extended mode
 **C:/Users/Butterfly/Documents/Uni/2.*Semester/Lego/de.tum.in.legoMindstorm.fin
 alProject/Spezifikation/Lego.tex
@@ -219,37 +219,67 @@ File: t1cmss.fd 1999/05/25 v2.5h Standard LaTeX font definitions
 \MPscratchDim=\dimen116
 \MPnumerator=\count105
 \everyMPtoPDFconversion=\toks29
-) <soko.png, id=1, 189.70876pt x 178.41656pt>
+)
+Underfull \hbox (badness 10000) in paragraph at lines 25--27
+
+ []
+
+<soko.png, id=1, 189.70876pt x 178.41656pt>
 File: soko.png Graphic file (type png)
  <use soko.png> [1{C:/Users/Butterfly/AppData/Local/MiKTeX/2.8/pdftex/config/pd
 ftex.map}
 
  <C:/Users/Butterfly/Documents/Uni/2. Semester/Lego/de.tum.in.legoMindstorm.fin
-alProject/Spezifikation/soko.png>] <sol.jpg, id=13, 602.25pt x 200.75pt>
+alProject/Spezifikation/soko.png>] <sol.jpg, id=13, 425.33907pt x 124.96687pt>
 File: sol.jpg Graphic file (type jpg)
- <use sol.jpg> [2 <C:/Users/Butterfly/Documents/Uni/2. Semester/Lego/de.tum.in.
-legoMindstorm.finalProject/Spezifikation/sol.jpg>] [3]
+ <use sol.jpg>
+<sensoren.jpg, id=14, 599.99156pt x 238.64156pt>
+File: sensoren.jpg Graphic file (type jpg)
+ <use sensoren.jpg>
+LaTeX Font Info:    Try loading font information for U+msa on input line 73.
+
+("C:\Program Files\MiKTeX 2.8\tex\latex\amsfonts\umsa.fd"
+File: umsa.fd 2009/06/22 v3.00 AMS symbols A
+)
+LaTeX Font Info:    Try loading font information for U+msb on input line 73.
+
+("C:\Program Files\MiKTeX 2.8\tex\latex\amsfonts\umsb.fd"
+File: umsb.fd 2009/06/22 v3.00 AMS symbols B
+)
+LaTeX Font Info:    Try loading font information for U+lasy on input line 73.
+
+("C:\Program Files\MiKTeX 2.8\tex\latex\base\ulasy.fd"
+File: ulasy.fd 1998/08/17 v2.2e LaTeX symbol font definitions
+)
+Overfull \hbox (2.22166pt too wide) in paragraph at lines 71--77
+[]$[]$ $[]$ 
+ []
+
+[2 <C:/Users/Butterfly/Documents/Uni/2. Semester/Lego/de.tum.in.legoMindstorm.f
+inalProject/Spezifikation/sol.jpg> <C:/Users/Butterfly/Documents/Uni/2. Semeste
+r/Lego/de.tum.in.legoMindstorm.finalProject/Spezifikation/sensoren.jpg>]
+[3]
 ("C:\Users\Butterfly\Documents\Uni\2. Semester\Lego\de.tum.in.legoMindstorm.fin
 alProject\Spezifikation\Lego.aux") ) 
 Here is how much of TeX's memory you used:
- 2605 strings out of 495285
- 31450 string characters out of 3180383
- 83809 words of memory out of 3000000
- 5784 multiletter control sequences out of 15000+200000
- 9821 words of font info for 22 fonts, out of 3000000 for 9000
+ 2648 strings out of 495285
+ 32273 string characters out of 3180383
+ 85809 words of memory out of 3000000
+ 5808 multiletter control sequences out of 15000+200000
+ 11071 words of font info for 32 fonts, out of 3000000 for 9000
  14 hyphenation exceptions out of 8191
- 27i,10n,43p,695b,210s stack positions out of 5000i,500n,10000p,200000b,50000s
+ 27i,10n,43p,708b,266s stack positions out of 5000i,500n,10000p,200000b,50000s
  <C:\Users\Butterfly\AppData\Local\MiKTeX\2
 .8\fonts\pk\ljfour\jknappen\ec\dpi600\ecsi1000.pk> <C:\Users\Butterfly\AppData\
 Local\MiKTeX\2.8\fonts\pk\ljfour\jknappen\ec\dpi600\ecrm1000.pk> <C:\Users\Butt
 erfly\AppData\Local\MiKTeX\2.8\fonts\pk\ljfour\jknappen\ec\dpi600\ecsx1000.pk> 
 <C:\Users\Butterfly\AppData\Local\MiKTeX\2.8\fonts\pk\ljfour\jknappen\ec\dpi600
-\ecsx1200.pk> <C:\Users\Butterfly\AppData\Local\MiKTeX\2.8\fonts\pk\ljfour\jkna
-ppen\ec\dpi600\ecsx1440.pk> <C:\Users\Butterfly\AppData\Local\MiKTeX\2.8\fonts\
+\ecsx1440.pk> <C:\Users\Butterfly\AppData\Local\MiKTeX\2.8\fonts\pk\ljfour\jkna
+ppen\ec\dpi600\ecsx2074.pk> <C:\Users\Butterfly\AppData\Local\MiKTeX\2.8\fonts\
 pk\ljfour\jknappen\ec\dpi600\ecss1000.pk>
-Output written on Lego.pdf (3 pages, 72052 bytes).
+Output written on Lego.pdf (3 pages, 125438 bytes).
 PDF statistics:
- 197 PDF objects out of 1000 (max. 8388607)
+ 196 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
- 11 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 16 words of extra memory for PDF output out of 10000 (max. 10000000)
 
