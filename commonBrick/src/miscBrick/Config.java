@@ -15,12 +15,13 @@ public class Config {
 	public static int lightTolerance = 5;
 	public static int colorScanTimes = 5;	
 	public static int checkRoomTolerance = 4;
+	public static int checkRoomSpeed = 5;
 	
 	// Pusher
 	public static float pusherBackOffDistance = 6f; // Stecke die zurueckgesetzt werden soll
 	public static int pusherCheckRoomTolerance = 4; 
-	public static int pusherMoveSpeed = 10;
-	public static int pusherTurnSpeed = 50;
+	public static int pusherMoveSpeed = 5;
+	public static int pusherTurnSpeed = 10;
 
 	// Puller
 	public static int pullerMoveSpeed = 10;
