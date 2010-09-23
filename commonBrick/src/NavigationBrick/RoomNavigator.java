@@ -36,6 +36,7 @@ public class RoomNavigator {
 	private LightSettings leftLightSettings;
 	private LightSettings rightLightSettings;
 	private Robot robot;
+
 	private boolean roomMissedActive;
 	
 	public RoomNavigator(Robot robot,Graph map){
@@ -273,7 +274,7 @@ public class RoomNavigator {
 	{
 		DriveDistanceForward driveDistanceForward = new DriveDistanceForward(robot, distance);
 		FollowLine followLine = new FollowLine(robot, new RoomInformation());
-
+		
 		Behavior[] driveForwardAndFollow = new Behavior[]{driveDistanceForward, followLine};
 		Arbitrator a = new Arbitrator(driveForwardAndFollow, true);
 		a.start();
@@ -462,9 +463,9 @@ public class RoomNavigator {
 	}
 	
 	
-	public void moveTo(Pair from, Pair to)
+	public void moveToAstar(Pair to)
 	{
-		ArrayList<Pair> path = misc.AStar.findPath(map, from, heading, to);
+		ArrayList<Pair> path = misc.AStar.findPath(map, getPosition(), heading, to);
 		
 		ListIterator<Pair> iterator = path.listIterator();
 		
