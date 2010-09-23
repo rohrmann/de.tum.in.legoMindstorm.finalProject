@@ -24,8 +24,8 @@ public class Commander {
 	}
 	
 	public void start(String filename){
-		BTConnectionPC pusher = BTPCFactory.createConnectionInd("asd","0016530A73F6");
-		BTConnectionPC puller = BTPCFactory.createConnectionInd("keen","00165308B785");
+		BTConnectionPC pusher = BTPCFactory.createConnectionInd(PCConfig.getPusher(),PCConfig.getPusherAddr());
+		BTConnectionPC puller = BTPCFactory.createConnectionInd(PCConfig.getPuller(),PCConfig.getPullerAddr());
 		
 		
 		BufferedReader input = null;
