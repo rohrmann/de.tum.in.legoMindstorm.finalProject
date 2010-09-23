@@ -3,6 +3,7 @@ import Graph.*;
 import lejos.nxt.*;
 import misc.Direction;
 import misc.RobotType;
+import miscBrick.Config;
 
 public class Puller extends Actor
 {
@@ -17,17 +18,23 @@ public class Puller extends Actor
 		Puller puller = new Puller();
 		puller.start();
 		}
+	
+	public Puller(){
+		super();
+		robot.getPilot().setMoveSpeed(Config.pullerMoveSpeed);
+		robot.getPilot().setTurnSpeed(Config.pullerTurnSpeed);
+	}
 
 	@Override
 	public void init() {
-		liftArm(160);
+	
 	}
 	
 	@Override
 	public void prolog() {
 		navi.driveForward(6.0f);
 		navi.turnOnLine();
-		Puller.liftArm(2);
+		Puller.liftArm(-Config.pullerArmAngle);
 
 		robot.getPilot().forward();
 		while(!robot.getColor().getColorName().isRoomColor()){};		
@@ -41,7 +48,7 @@ public class Puller extends Actor
 	@Override
 	public void epilog() {		
 		navi.driveForward(14.5f);	
-		Puller.liftArm(160);
+		Puller.liftArm(Config.pullerArmAngle);
 
 		robot.getPilot().forward();
 		while(!robot.getColor().getColorName().isRoomColor()) {}
@@ -73,7 +80,7 @@ public class Puller extends Actor
 	
 	public static void liftArm(int angle){
 		Motor.C.setSpeed(60);
-		Motor.C.rotateTo(-angle, false);
+		Motor.C.rotate(-angle,false);
 		Motor.C.lock(100);
 	}		
 }

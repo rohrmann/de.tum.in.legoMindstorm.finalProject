@@ -33,7 +33,7 @@ public class BTCommunicator {
 		}catch(IOException e){
 		}
 		
-		return 0;
+		return -1;
 	}
 	
 	public static boolean done(BTStreams connection){
@@ -42,6 +42,22 @@ public class BTCommunicator {
 			connection.getDataOutputStream().flush();
 			return true;
 		} catch (IOException e) {
+		}
+		
+		return false;
+	}
+	
+	public static boolean receiveDone(BTStreams connection){
+		try{
+			int result = connection.getDataInputStream().readInt();
+			
+			if(MessageType.int2M(result) != MessageType.DONE){
+				return false;
+			}
+			
+			return true;
+		}catch(IOException e){
+			
 		}
 		
 		return false;
@@ -61,6 +77,8 @@ public class BTCommunicator {
 	public static boolean receiveAck(BTStreams connection){
 		try{
 			int result = connection.getDataInputStream().readInt();
+			
+			System.out.println("Ack:" + result);
 			
 			if(MessageType.int2M(result) == MessageType.ACK){
 				return true;
@@ -142,7 +160,9 @@ public class BTCommunicator {
 			connection.getDataOutputStream().writeInt(type.toInt());
 			connection.getDataOutputStream().flush();
 			
-			return receiveAck(connection);
+			boolean result = receiveAck(connection);
+			
+			return result;
 		}catch(IOException e){
 		}
 		
@@ -185,7 +205,7 @@ public class BTCommunicator {
 		for(int i=0;i< numNodes;i++){
 			Node node = receiveNode(connection);
 			
-			
+						
 			if(node == null){
 				return null;
 			}

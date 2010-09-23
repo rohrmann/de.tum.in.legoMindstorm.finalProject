@@ -15,8 +15,7 @@ public class MapRetriever {
 	}
 	
 	public void start(){
-		String keen ="keen";
-		BTConnectionPC connection = BTPCFactory.createConnectionInd(keen);
+		BTConnectionPC connection = BTPCFactory.createConnectionInd(PCConfig.getMapper(),PCConfig.getMapperAddr());
 		
 		Graph graph = BTCommunicator.receiveGraph(connection);
 		

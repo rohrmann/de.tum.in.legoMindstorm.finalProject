@@ -8,7 +8,6 @@ import misc.Direction;
 
 import Bluetooth.MessageComm;
 import BluetoothPC.BTConnectionPC;
-import BluetoothPC.BTPCFactory;
 import Graph.Graph;
 import Graph.Pair;
 import PCConfig.PCConfig;
@@ -24,9 +23,6 @@ public class Commander {
 	}
 	
 	public void start(String filename){
-		BTConnectionPC pusher = BTPCFactory.createConnectionInd("asd","0016530A73F6");
-		BTConnectionPC puller = BTPCFactory.createConnectionInd("keen","00165308B785");
-		
 		
 		BufferedReader input = null;
 		
@@ -45,28 +41,40 @@ public class Commander {
 		} catch (IOException e) {
 		}
 		
+		System.out.println(graph);
+		
+		BTConnectionPC pusher = new BTConnectionPC(PCConfig.getPusher(),PCConfig.getPusherAddr());
+		BTConnectionPC puller = new BTConnectionPC(PCConfig.getKeen(),PCConfig.getKeenAddr());
+		
+		System.out.println("send map to pusher");
 		MessageComm.sendMap(graph, pusher);
+		System.out.println("send map to puller");
 		MessageComm.sendMap(graph,puller);
 		
 		String line = "";
 		try{
 			while(( line = input.readLine()) != null){
-				System.out.println(graph);
 				String[] parts = line.split(" ");
 				
 				if(parts[0].equals("pusher")){
+					System.out.println("send update to pusher");
 					MessageComm.sendUpdate(graph, pusher);
 					
 					Pair pair = Pair.parsePair(parts[1]);
+					
+					System.out.println("move pusher to " + pair);
 					
 					MessageComm.sendMove(pair, pusher);
 			
 					graph.setPusher(pair);
 				}
 				else if(parts[0].equals("puller")){
+					System.out.println("send update to puller");
 					MessageComm.sendUpdate(graph, puller);
 					
 					Pair pair = Pair.parsePair(parts[1]);
+					
+					System.out.println("move puller to " + pair);
 					
 					MessageComm.sendMove(pair, puller);
 			
@@ -74,10 +82,14 @@ public class Commander {
 					
 				}
 				else if(parts[0].equals("pull")){
+					System.out.println("send update to puller");
+
 					MessageComm.sendUpdate(graph,puller);
 					
 					Pair src = Pair.parsePair(parts[1]);
 					Pair dest = Pair.parsePair(parts[2]);
+					
+					System.out.println("pull from " + src + " to " + dest);
 					
 					MessageComm.sendAction(new Action(src,dest),puller);
 					
@@ -87,11 +99,16 @@ public class Commander {
 					
 				}
 				else if(parts[0].equals("push")){
+					System.out.println("send update to pusher");
 					MessageComm.sendUpdate(graph,pusher);
 					Pair src = Pair.parsePair(parts[1]);
 					Pair dest = Pair.parsePair(parts[2]);
 					
+					System.out.println("push from " + src + " to " + dest);
+					
 					MessageComm.sendAction(new Action(src,dest),pusher);
+					
+					
 					
 					graph.updateBox(src,dest);
 					
@@ -99,6 +116,7 @@ public class Commander {
 				}
 			}
 		}catch(IOException e){
+			e.printStackTrace();
 		}
 		
 		try{

@@ -16,7 +16,6 @@ import miscBrick.Config;
 import miscBrick.Robot;
 
 import Bluetooth.MessageType;
-import BluetoothBrick.BTBrickFactory;
 import BluetoothBrick.BTConnectionBrick;
 import Graph.Graph;
 import Graph.Pair;
@@ -33,7 +32,8 @@ abstract public class Actor {
 	
 	public Actor(){
 		TachoPilot pilot = new TachoPilot(Config.wheelHeight,Config.wheelToWheel,Motor.A,Motor.B);
-		pilot.setMoveSpeed(Config.mapperMoveSpeed);
+		pilot.setMoveSpeed(Config.defaultMoveSpeed);
+		pilot.setTurnSpeed(Config.defaultTurnSpeed);
 		ColorSensor colorSensor = new ColorSensor(SensorPort.S3);
 		LightSensor leftLightSensor = new LightSensor(SensorPort.S1);
 		LightSensor rightLightSensor = new LightSensor(SensorPort.S2);		
@@ -42,9 +42,8 @@ abstract public class Actor {
 		color.init(colors,Config.colorScanTimes,Config.mapperPollingInterval);
 		LightSettings leftLightSettings = new LightSettings(leftLightSensor);
 		LightSettings rightLightSettings = new LightSettings(rightLightSensor);
-		int tolerance =5;
-		leftLightSettings.init(tolerance);
-		rightLightSettings.init(tolerance);
+		leftLightSettings.init(Config.lightTolerance);
+		rightLightSettings.init(Config.lightTolerance);
 		
 		robot = new Robot(pilot,color,leftLightSettings, rightLightSettings);
 		Graph map = new Graph();
@@ -58,44 +57,52 @@ abstract public class Actor {
 		
 		boolean running = true;
 		
-		BTConnectionBrick conn = BTBrickFactory.createConnection();
+		BTConnectionBrick conn = new BTConnectionBrick();
 		
 		MessageType message;
 
 		while(running){
-			message = BTCommunicator.receiveMessageType(conn);
-			BTCommunicator.ack(conn);
-			
+			message = BTCommunicator.receiveMessageType(conn);			
 			
 			switch(message){
 			//terminate
 			case TERMINATE:
 				running = false;
 				BTCommunicator.done(conn);
+			//	conn.close();
 				break;
 			//move
 			case MOVE:
+		
 				Pair pos = BTCommunicator.receiveMove(conn);
+				System.out.println("Move to " + pos);
 				navi.moveTo(pos);
 				BTCommunicator.done(conn);
-				
+			//	conn.close();
+				System.out.println("Moved");
 				break;
 			//action
 			case ACTION:
 				Action action = BTCommunicator.receiveAction(conn);
-				
+				System.out.println("Action " + action);
 				navi.turn(Direction.findDirection(navi.getPosition(),action.getSrc()));
-				
 				prolog();
 				navi.moveStraightForward(Math.abs(action.getSrc().getX()-action.getDest().getX())+Math.abs(action.getSrc().getY()-action.getDest().getY())-1);
 				epilog();
-				
 				BTCommunicator.done(conn);
+			//	conn.close();
+				
+				System.out.println("Action done");
 				break;
 			case MAP:
 				Graph graph = BTCommunicator.receiveGraph(conn);
+			
 				navi.setGraph(graph,getType());
+				//System.out.println("Pos:" + navi.getPosition());
+				//Button.waitForPress();
 				BTCommunicator.done(conn);
+				//conn.closeStreams();
+				System.out.println("Map received");
 				break;
 				
 			case UPDATE:
@@ -133,6 +140,9 @@ abstract public class Actor {
 				}
 				
 				BTCommunicator.done(conn);
+				//conn.close();
+				
+				System.out.println("Update received");
 			}
 		}
 		

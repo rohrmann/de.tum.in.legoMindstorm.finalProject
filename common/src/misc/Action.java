@@ -18,4 +18,9 @@ public class Action {
 	public Pair getDest(){
 		return dest;
 	}
+	
+	@Override
+	public String toString(){
+		return "Src:" + src + " Dest:" + dest;
+	}
 }

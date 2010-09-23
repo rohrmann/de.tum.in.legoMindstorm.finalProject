@@ -3,8 +3,14 @@ package PCConfig;
 public class PCConfig {
 
 	private static String mapper = "explorer";
+	private static String mapperAddr = "0016530A73F1";
 	private static String pusher = "Rightoo";
+	private static String pusherAddr = "0016530A2DF5";
 	private static String puller = "Winch";
+	private static String pullerAddr = "00165307944F";
+	
+	private static String keen = "keen";
+	private static String keenAddr = "00165308B785";
 	
 	private static String textFile = "map.xsb";
 	
@@ -22,6 +28,26 @@ public class PCConfig {
 	
 	public static String getTextFile(){
 		return textFile;
+	}
+	
+	public static String getMapperAddr(){
+		return mapperAddr;
+	}
+	
+	public static String getPusherAddr(){
+		return pusherAddr;
+	}
+	
+	public static String getPullerAddr(){
+		return pullerAddr;
+	}
+	
+	public static String getKeen(){
+		return keen;
+	}
+	
+	public static String getKeenAddr(){
+		return keenAddr;
 	}
 	
 }

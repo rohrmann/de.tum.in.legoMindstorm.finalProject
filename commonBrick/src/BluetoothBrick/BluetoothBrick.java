@@ -1,6 +1,7 @@
 package BluetoothBrick;
 import lejos.nxt.*;
 import lejos.nxt.comm.*;
+import miscBrick.Config;
 import miscBrick.Helper;
 
 import java.io.*;
@@ -8,12 +9,15 @@ import java.util.Enumeration;
 
 import Graph.*;
 
+/**
+ * 
+ * @author rohrmann
+ *
+ */
 public class BluetoothBrick {
 
-	private static int arrayLength = 6;
-
 	public static int getArrayLength() {
-		return arrayLength;
+		return Config.arrayLength;
 	}
 
 	private static BTConnection btc;
@@ -80,7 +84,7 @@ public class BluetoothBrick {
 			InterruptedException {
 		sendSize();
 		Enumeration enumeration = graph.getHashtable().keys();
-		byte[] send = new byte[arrayLength];
+		byte[] send = new byte[Config.arrayLength];
 		int control;
 		while (enumeration.hasMoreElements()) {
 			Pair pair = (Pair) enumeration.nextElement();
