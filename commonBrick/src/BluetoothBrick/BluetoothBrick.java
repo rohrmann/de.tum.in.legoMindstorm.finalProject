@@ -8,6 +8,11 @@ import java.util.Enumeration;
 
 import Graph.*;
 
+/**
+ * 
+ * @author rohrmann
+ *
+ */
 public class BluetoothBrick {
 
 	private static int arrayLength = 6;
