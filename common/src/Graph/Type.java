@@ -1,7 +1,7 @@
 package Graph;
 
 public enum Type {
-EMPTY, UNKNOWN,PUSHSTART,PULLSTART,BOX,DEST,UNDEFINED;
+EMPTY,UNKNOWN,PUSHSTART,PULLSTART,BOX,DEST,UNDEFINED;
 
 	public boolean isAccessible(){
 		if(this == BOX || this==UNDEFINED || this==PULLSTART || this ==PUSHSTART)
@@ -10,9 +10,8 @@ EMPTY, UNKNOWN,PUSHSTART,PULLSTART,BOX,DEST,UNDEFINED;
 		return true;
 	}
 	
-	public static int typeToInt(Node node) {
-		Type a = node.getType();
-		switch (a) {
+	public int toInt() {
+		switch(this){
 		case EMPTY:
 			return 0;
 		case UNKNOWN:
@@ -25,10 +24,29 @@ EMPTY, UNKNOWN,PUSHSTART,PULLSTART,BOX,DEST,UNDEFINED;
 			return 4;
 		case DEST:
 			return 5;
-		case UNDEFINED:
+		default:
 			return 6;
 		}
-		return 6;
+	}
+	
+	
+	public static Type toType(int i){
+		switch(i){
+		case 0:
+			return EMPTY;
+		case 1:
+			return UNKNOWN;
+		case 2:
+			return PUSHSTART;
+		case 3:
+			return PULLSTART;
+		case 4:
+			return BOX;
+		case 5:
+			return DEST;
+		default:
+			return UNDEFINED;
+		}
 	}
 
 }

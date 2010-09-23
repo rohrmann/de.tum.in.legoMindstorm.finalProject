@@ -144,13 +144,12 @@ void Solver::solve(){
 				currentState = currentState->prev;
 			}
 
+			MapUtils::printMap(*solution.top(),std::cout);
 			while(!solution.empty()){
 				currentState = solution.top();
 				solution.pop();
 
-
 				currentState->printConvertedMovements(std::cout);
-				MapUtils::printMap(*currentState,std::cout);
 			}
 
 			exit(0);

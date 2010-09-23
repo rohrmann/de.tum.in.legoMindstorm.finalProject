@@ -53,4 +53,17 @@ public class Pair {
 		}
 	}
 	
+	public static Pair parsePair(String str){
+		String temp = str.substring(1, str.length()-1);
+		int comma = temp.indexOf(',');
+		
+		if(comma == -1)
+			return null;
+		
+		String n1 = temp.substring(0, comma);
+		String n2 = temp.substring(comma+1,temp.length());
+		
+		return new Pair(Integer.parseInt(n1),Integer.parseInt(n2));
+	}
+	
 }

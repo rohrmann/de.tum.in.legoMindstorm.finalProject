@@ -2,7 +2,9 @@ package Text;
 
 
 import java.io.*;
+import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.List;
 
 import Graph.Node;
 import Graph.Pair;
@@ -18,37 +20,35 @@ public class TxtToGraph {
 	private static Graph graph = new Graph();
 
 
-	public static void readtxt(String source) throws IOException {
-		FileReader datenstrom;
-		datenstrom = new FileReader(source);
-		BufferedReader eingabe = new BufferedReader(datenstrom);
-		String a = eingabe.readLine();
+	public static Graph readGraph(BufferedReader input) throws IOException {
+		
+		String line = "";
+		List<String> map = new ArrayList<String>();
 		int maxX = 0;
 		int maxY = 0;
-		while (a != null && a.charAt(0) == '#'){
+		while (true){
+			line = input.readLine();
+			
+			if(line == null || !line.startsWith("#"))
+				break;
+			
 			maxY++;
-			if (a.length() > maxX) {
-				maxX = a.length();
+			if (line.length() > maxX) {
+				maxX = line.length();
 			}
-			a = eingabe.readLine();
+			map.add(line);
 		}
-		eingabe.close();
-		FileReader datenstrom2;
-		datenstrom2 = new FileReader(source);
-		BufferedReader eingabe2 = new BufferedReader(datenstrom2);
-		System.out.println("maxLength: " + maxX);
-		System.out.println("maxHeigth: " + maxY);
-		for (int y = maxY; y >= 0; y--) {
-			a = eingabe2.readLine();
-			for (int x = 0; x < a.length(); x++) {
-				System.out.print(a.charAt(x));
-				newNode(a.charAt(x), x, y);
+
+		
+		for (int y = maxY-1; y >= 0; y--) {
+			line = map.get(maxY-1-y);
+			for (int x = 0; x < line.length(); x++) {
+				newNode(line.charAt(x), x, y);
 			}
-			System.out.println();
 		}
 		addConnections(graph);
-		Memory.Map.setMap(graph);
-		parseCommands(eingabe);
+				
+		return graph;
 	}
 	
 	public static void parseCommands(BufferedReader eingabe) throws IOException{

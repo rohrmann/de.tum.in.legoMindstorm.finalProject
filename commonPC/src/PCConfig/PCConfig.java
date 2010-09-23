@@ -1,4 +1,4 @@
-package ConfigPC;
+package PCConfig;
 
 public class PCConfig {
 
@@ -6,7 +6,7 @@ public class PCConfig {
 	private static String pusher = "Rightoo";
 	private static String puller = "Winch";
 	
-	private static String textFile = "C:/Users/Sebastian/de.tum.in.legoMindstorm.finalProject/resources/map_reverse.txt";
+	private static String textFile = "map.xsb";
 	
 	public static String getMapper(){
 		return mapper;

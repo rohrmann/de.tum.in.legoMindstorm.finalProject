@@ -81,7 +81,7 @@ std::string BoxMovement::toString(){
 std::string BoxMovement::toConvertedString(int dim){
 	std::stringstream ss;
 
-	ss << (bot == RPUSHER? "push ": "pull ") << Helper::pair2Str(std::make_pair<int,int>(this->src().second,dim-this->src().first)) << " " << Helper::pair2Str(std::make_pair<int,int>(this->dest().second,dim-this->dest().first));
+	ss << (bot == RPUSHER? "push ": "pull ") << Helper::pair2Str(std::make_pair<int,int>(this->src().second,dim-1-this->src().first)) << " " << Helper::pair2Str(std::make_pair<int,int>(this->dest().second,dim-1-this->dest().first));
 
 	return ss.str();
 }

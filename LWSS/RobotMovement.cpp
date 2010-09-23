@@ -25,7 +25,7 @@ std::string RobotMovement::toString(){
 std::string RobotMovement::toConvertedString(int dim){
 	std::stringstream ss;
 
-	ss << (type == RPUSHER? "pusher " : "puller ") << Helper::pair2Str(std::make_pair<int,int>(dest.second,dim-dest.first));
+	ss << (type == RPUSHER? "pusher " : "puller ") << Helper::pair2Str(std::make_pair<int,int>(dest.second,dim-1-dest.first));
 
 	if(next != NULL){
 		ss << std::endl << next->toConvertedString(dim);

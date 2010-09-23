@@ -1,5 +1,8 @@
 package Actor;
 
+
+import java.util.List;
+
 import lejos.nxt.LightSensor;
 import lejos.nxt.Motor;
 import lejos.nxt.SensorPort;
@@ -7,21 +10,22 @@ import lejos.nxt.addon.ColorSensor;
 import lejos.robotics.navigation.TachoPilot;
 import misc.Action;
 import misc.RobotType;
+import misc.Update;
+import misc.Direction;
 import miscBrick.Config;
-import miscBrick.Helper;
 import miscBrick.Robot;
 
-import Bluetooth.BluetoothCommunicator;
-import Bluetooth.BluetoothConnection;
 import Bluetooth.MessageType;
 import BluetoothBrick.BTBrickFactory;
-import Color.Color;
-import ColorBrick.ColorSettings;
-import ErrorHandlingBrick.ErrorInformation;
+import BluetoothBrick.BTConnectionBrick;
 import Graph.Graph;
 import Graph.Pair;
+import Graph.Type;
 import LightBrick.LightSettings;
 import NavigationBrick.RoomNavigator;
+import Bluetooth.BTCommunicator;
+import Color.Color;
+import ColorBrick.ColorSettings;
 
 abstract public class Actor {	
 	protected RoomNavigator navi;
@@ -45,58 +49,94 @@ abstract public class Actor {
 		robot = new Robot(pilot,color,leftLightSettings, rightLightSettings);
 		Graph map = new Graph();
 		
-		ErrorInformation error = new ErrorInformation();
-		error.setError(false);
-		navi = new RoomNavigator(robot,map,error); 
+		navi = new RoomNavigator(robot,map); 
 	}
+	
 	public void start(){
 		
 		init();
 		
 		boolean running = true;
 		
-		BluetoothConnection conn = BTBrickFactory.createConnection();
+		BTConnectionBrick conn = BTBrickFactory.createConnection();
 		
 		MessageType message;
 
 		while(running){
-			message = BluetoothCommunicator.receiveMessageType(conn);
+			message = BTCommunicator.receiveMessageType(conn);
+			BTCommunicator.ack(conn);
 			
 			
 			switch(message){
 			//terminate
 			case TERMINATE:
 				running = false;
-				BluetoothCommunicator.done(conn);
+				BTCommunicator.done(conn);
 				break;
 			//move
 			case MOVE:
-				Pair pos = BluetoothCommunicator.receiveMove(conn);
+				Pair pos = BTCommunicator.receiveMove(conn);
 				navi.moveTo(pos);
-				BluetoothCommunicator.done(conn);
+				BTCommunicator.done(conn);
+				
 				break;
 			//action
 			case ACTION:
-				Action action = BluetoothCommunicator.receiveAction(conn);
+				Action action = BTCommunicator.receiveAction(conn);
 				
-				navi.turn(Helper.findDirection(navi.getPosition(),action.getSrc()));
+				navi.turn(Direction.findDirection(navi.getPosition(),action.getSrc()));
 				
 				prolog();
 				navi.moveStraightForward(Math.abs(action.getSrc().getX()-action.getDest().getX())+Math.abs(action.getSrc().getY()-action.getDest().getY())-1);
 				epilog();
 				
-				BluetoothCommunicator.done(conn);
-				
+				BTCommunicator.done(conn);
 				break;
-				
 			case MAP:
-				Graph graph = BluetoothCommunicator.receiveMap(conn);
+				Graph graph = BTCommunicator.receiveGraph(conn);
 				navi.setGraph(graph,getType());
-				BluetoothCommunicator.done(conn);
+				BTCommunicator.done(conn);
 				break;
-			}
+				
+			case UPDATE:
+				Update update = BTCommunicator.receiveUpdate(conn);
+				
+				List<Pair> boxes = navi.getGraph().getBoxes();
 			
+				Graph map = navi.getGraph();
+				
+				for(Pair box: boxes){
+					map.setNode(box, Type.EMPTY);
+				}
+				
+				for(Pair box: update.boxes){
+					map.setNode(box, Type.BOX);
+				}
+				
+				if(getType() == RobotType.PULLER){
+					Pair rPos = map.getPusher();
+					
+					if(rPos != null){
+						map.setNode(rPos, Type.EMPTY);
+					}
+					
+					map.setNode(update.pusher,Type.PUSHSTART);
+				}
+				else if(getType() == RobotType.PUSHER){
+					Pair rPos = map.getPuller();
+					
+					if(rPos != null){
+						map.setNode(rPos, Type.EMPTY);
+					}
+					
+					map.setNode(update.puller,Type.PULLSTART);
+				}
+				
+				BTCommunicator.done(conn);
+			}
 		}
+		
+		conn.close();
 	}
 	
 	public abstract RobotType getType();

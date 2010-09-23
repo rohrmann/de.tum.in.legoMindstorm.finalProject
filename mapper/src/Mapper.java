@@ -5,6 +5,7 @@ import lejos.nxt.Button;
 import lejos.nxt.LightSensor;
 import lejos.nxt.Motor;
 import lejos.nxt.SensorPort;
+import lejos.nxt.Sound;
 import lejos.nxt.addon.ColorSensor;
 import lejos.robotics.navigation.TachoPilot;
 import miscBrick.Config;
@@ -12,6 +13,9 @@ import misc.Direction;
 import miscBrick.Helper;
 import miscBrick.Robot;
 import AnalysisBrick.AnalyseCrossing;
+import Bluetooth.BluetoothCommunicator;
+import Bluetooth.BluetoothConnection;
+import BluetoothBrick.BTBrickFactory;
 import Color.Color;
 import ColorBrick.ColorSettings;
 import Graph.Graph;
@@ -34,10 +38,22 @@ public class Mapper {
 	private final Direction[] searchDirections = {Direction.NORTH,Direction.WEST,Direction.SOUTH,Direction.EAST};
 	
 	public static void main(String[] args){
+		BluetoothConnection connection = BTBrickFactory.createConnection();
 		Mapper mapper = new Mapper();
 		Helper.drawText("Press Button for mapping");
 		Button.waitForPress();
+		
 		mapper.map();
+		
+		BluetoothCommunicator.sendGraph(mapper.map, connection);
+		
+		Sound.beepSequence();
+		
+		BluetoothCommunicator.receiveAck(connection);
+		
+		connection.close();
+		
+		Sound.beepSequenceUp();
 	}
 	
 	public Mapper(){

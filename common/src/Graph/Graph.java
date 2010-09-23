@@ -89,4 +89,61 @@ public class Graph {
 		
 		return result;
 	}
+	
+	public List<Pair> getBoxes(){
+		List<Node> nodes = getNodes();
+		
+		List<Pair> result = new ArrayList<Pair>();
+		
+		for(Node node : nodes){
+			result.add(node.getID());
+		}
+		
+		return result;
+	}
+	
+	public Pair getPuller(){
+		return find(Type.PULLSTART);
+	}
+	
+	public Pair getPusher(){
+		return find(Type.PUSHSTART);
+	}
+	
+	public void setNode(Pair id, Type value){
+		if(hasNode(id)){
+			((Node)nodes.get(id)).setType(value);
+		}
+	}
+	
+	public void updateBox(Pair src, Pair dest){
+		((Node)nodes.get(src)).setType(Type.EMPTY);
+		((Node)nodes.get(dest)).setType(Type.BOX);
+	}
+	
+	public void setPuller(Pair dest){
+		if(find(Type.PULLSTART) != null){
+			((Node)nodes.get(find(Type.PULLSTART))).setType(Type.EMPTY);
+		}
+		
+		((Node)nodes.get(dest)).setType(Type.PULLSTART);
+	}
+	
+	public void setPusher(Pair dest){
+		if(find(Type.PUSHSTART) != null){
+			((Node)nodes.get(find(Type.PUSHSTART))).setType(Type.EMPTY);
+		}
+		
+		((Node)nodes.get(dest)).setType(Type.PUSHSTART);
+	}
+	
+	public  String toString(){
+		String result = "";
+		
+		for(Node node: getNodes()){
+			result += node + "\n";
+		}
+		
+		return result;
+	}
 }

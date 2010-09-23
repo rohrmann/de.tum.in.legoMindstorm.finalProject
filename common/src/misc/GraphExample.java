@@ -33,7 +33,7 @@ public class GraphExample {
 		Node node14 = new Node(Type.EMPTY,new Pair(3,3));
 		Node node15 = new Node(Type.EMPTY,new Pair(4,0));
 		Node node16 = new Node(Type.EMPTY,new Pair(4,1));
-		Node node17 = new Node(Type.EMPTY,new Pair(4,2));
+		Node node17 = new Node(Type.PULLSTART,new Pair(4,2));
 		Node node18 = new Node(Type.EMPTY,new Pair(4,3));
 		Node node19 = new Node(Type.EMPTY,new Pair(5,0));
 		Node node20 = new Node(Type.EMPTY,new Pair(5,1));
