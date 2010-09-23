@@ -2,7 +2,6 @@ package misc;
 
 import Graph.Pair;
 
-import java.util.ArrayList;
 import java.util.Vector;
 
 
@@ -37,6 +36,7 @@ public class HashMap<T> {
 		keys.removeElementAt(i);
 	}
 	
+	@SuppressWarnings("unchecked")
 	public T get(Pair p)
 	{
 		int i = keys.indexOf(p);

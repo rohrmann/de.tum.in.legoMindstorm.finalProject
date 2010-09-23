@@ -23,7 +23,7 @@ public class Config {
 	public static int pusherTurnSpeed = 50;
 
 	// Mapper
-	public static int mapperMoveSpeed = 10;
+	public static int mapperMoveSpeed = 15;
 	public static int mapperPollingInterval = 25;
 	public static int roomDistanceTolerance = 3;
 	public static int acceptionPeriodForColor = 150;

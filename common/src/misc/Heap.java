@@ -18,7 +18,6 @@ public class Heap {
 	{
 		nodes.addElement(node);
 		indices.put(node.getGraphNode().getID(), nodes.size()-1);
-		int pos = heapify(nodes.size()-1);
 	}	
 	
 	private int heapify(int index)
