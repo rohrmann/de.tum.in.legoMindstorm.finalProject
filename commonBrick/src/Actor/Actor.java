@@ -41,9 +41,8 @@ abstract public class Actor {
 		color.init(colors,Config.colorScanTimes,Config.mapperPollingInterval);
 		LightSettings leftLightSettings = new LightSettings(leftLightSensor);
 		LightSettings rightLightSettings = new LightSettings(rightLightSensor);
-		int tolerance =5;
-		leftLightSettings.init(tolerance);
-		rightLightSettings.init(tolerance);
+		leftLightSettings.init(Config.lightTolerance);
+		rightLightSettings.init(Config.lightTolerance);
 		
 		robot = new Robot(pilot,color,leftLightSettings, rightLightSettings);
 		Graph map = new Graph();

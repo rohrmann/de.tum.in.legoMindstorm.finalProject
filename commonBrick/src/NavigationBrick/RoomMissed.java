@@ -3,6 +3,7 @@ package NavigationBrick;
 import Color.Color;
 import lejos.nxt.Motor;
 import lejos.nxt.Sound;
+import miscBrick.Config;
 import miscBrick.Helper;
 import miscBrick.Robot;
 
@@ -12,11 +13,6 @@ import miscBrick.Robot;
  *
  */
 public class RoomMissed {
-
-	private static final int roomDistance = 20;
-	private static final int roomDistanceTolerance = 3;
-	private static final int pollingInterval = 10;
-	private static final int acceptionPeriodForColor = 150;
 
 	public static Color action(Robot robot, int interval) {
 		Sound.twoBeeps();
@@ -39,8 +35,8 @@ public class RoomMissed {
 			}
 
 			// find line again
-			while (robot.getPilot().getTravelDistance() < roomDistance
-					+ roomDistanceTolerance - 5) {
+			while (robot.getPilot().getTravelDistance() < Config.roomDistance
+					+ Config.roomDistanceTolerance - 5) {
 				if (robot.getLeftLight().groundChange()) {
 					Motor.B.forward();
 					Motor.A.stop();
@@ -57,8 +53,8 @@ public class RoomMissed {
 			lastColor = color;
 			color = robot.getColor().getColorName();
 
-			while (robot.getPilot().getTravelDistance() < roomDistance
-					+ roomDistanceTolerance) {
+			while (robot.getPilot().getTravelDistance() < Config.roomDistance
+					+ Config.roomDistanceTolerance) {
 				robot.getPilot().forward();
 
 				startTime = System.currentTimeMillis();
@@ -70,11 +66,11 @@ public class RoomMissed {
 					startColor = System.currentTimeMillis();
 				} else if (color == lastColor
 						&& color.isRoomColor()
-						&& System.currentTimeMillis() - startColor > acceptionPeriodForColor) {
+						&& System.currentTimeMillis() - startColor > Config.acceptionPeriodForColor) {
 					return color;
 				}
 				try {
-					Thread.sleep(pollingInterval
+					Thread.sleep(Config.roomMissedPollingInterval
 							- (System.currentTimeMillis() - startTime));
 				} catch (InterruptedException ex) {
 				}
