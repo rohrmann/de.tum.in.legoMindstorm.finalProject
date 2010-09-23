@@ -9,6 +9,9 @@ public class PCConfig {
 	private static String puller = "Winch";
 	private static String pullerAddr = "00165307944F";
 	
+	private static String keen = "keen";
+	private static String keenAddr = "00165308B785";
+	
 	private static String textFile = "map.xsb";
 	
 	public static String getMapper(){
@@ -37,6 +40,14 @@ public class PCConfig {
 	
 	public static String getPullerAddr(){
 		return pullerAddr;
+	}
+	
+	public static String getKeen(){
+		return keen;
+	}
+	
+	public static String getKeenAddr(){
+		return keenAddr;
 	}
 	
 }

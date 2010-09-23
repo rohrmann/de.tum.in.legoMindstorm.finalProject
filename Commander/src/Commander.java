@@ -44,7 +44,7 @@ public class Commander {
 		System.out.println(graph);
 		
 		BTConnectionPC pusher = new BTConnectionPC(PCConfig.getPusher(),PCConfig.getPusherAddr());
-		BTConnectionPC puller = new BTConnectionPC(PCConfig.getPuller(),PCConfig.getPullerAddr());
+		BTConnectionPC puller = new BTConnectionPC(PCConfig.getKeen(),PCConfig.getKeenAddr());
 		
 		System.out.println("send map to pusher");
 		MessageComm.sendMap(graph, pusher);
@@ -104,9 +104,11 @@ public class Commander {
 					Pair src = Pair.parsePair(parts[1]);
 					Pair dest = Pair.parsePair(parts[2]);
 					
+					System.out.println("push from " + src + " to " + dest);
+					
 					MessageComm.sendAction(new Action(src,dest),pusher);
 					
-					System.out.println("push from " + src + " to " + dest);
+					
 					
 					graph.updateBox(src,dest);
 					

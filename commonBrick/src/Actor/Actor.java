@@ -32,7 +32,8 @@ abstract public class Actor {
 	
 	public Actor(){
 		TachoPilot pilot = new TachoPilot(Config.wheelHeight,Config.wheelToWheel,Motor.A,Motor.B);
-		pilot.setMoveSpeed(Config.mapperMoveSpeed);
+		pilot.setMoveSpeed(Config.defaultMoveSpeed);
+		pilot.setTurnSpeed(Config.defaultTurnSpeed);
 		ColorSensor colorSensor = new ColorSensor(SensorPort.S3);
 		LightSensor leftLightSensor = new LightSensor(SensorPort.S1);
 		LightSensor rightLightSensor = new LightSensor(SensorPort.S2);		
@@ -85,11 +86,9 @@ abstract public class Actor {
 				Action action = BTCommunicator.receiveAction(conn);
 				System.out.println("Action " + action);
 				navi.turn(Direction.findDirection(navi.getPosition(),action.getSrc()));
-				
 				prolog();
 				navi.moveStraightForward(Math.abs(action.getSrc().getX()-action.getDest().getX())+Math.abs(action.getSrc().getY()-action.getDest().getY())-1);
 				epilog();
-				
 				BTCommunicator.done(conn);
 			//	conn.close();
 				

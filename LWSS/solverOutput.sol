@@ -6,8 +6,7 @@
 #...  !.#
 #########
 Commands
-pull (7,1) (6,1)
-puller (6,1)
+puller (4,1)
 pusher (5,3)
 push (4,3) (3,3)
 pusher (4,3)

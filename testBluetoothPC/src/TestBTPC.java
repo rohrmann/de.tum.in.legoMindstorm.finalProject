@@ -46,6 +46,8 @@ public class TestBTPC {
 					
 					NXTComm comm = NXTCommFactory.createNXTComm(NXTCommFactory.BLUETOOTH);
 					
+					comm.open(comm.search(name, protocol))
+					
 					System.out.println("closing connection");
 					try {
 						connector.close();
