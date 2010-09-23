@@ -40,7 +40,8 @@ public class CheckRoom implements Behavior {
 	//@Override
 	public void action(){
 		Sound.beep();
-		robot.getPilot().setMoveSpeed(5);
+		float oldSpeed = robot.getPilot().getMoveSpeed();
+		robot.getPilot().setMoveSpeed(Config.checkRoomSpeed);
 		robot.getPilot().forward();
 		long startTime;
 		Color color=Color.UNKNOWN;
@@ -81,7 +82,7 @@ public class CheckRoom implements Behavior {
 			}
 		
 		robot.getPilot().reset();
-		robot.getPilot().setMoveSpeed(Config.mapperMoveSpeed);
+		robot.getPilot().setMoveSpeed(oldSpeed);
 		
 		active = false;
 		terminated = true;
