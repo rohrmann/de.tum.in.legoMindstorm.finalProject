@@ -3,7 +3,6 @@ package Actor;
 
 import java.util.List;
 
-import lejos.nxt.Button;
 import lejos.nxt.LightSensor;
 import lejos.nxt.Motor;
 import lejos.nxt.SensorPort;
@@ -14,14 +13,11 @@ import misc.RobotType;
 import misc.Update;
 import misc.Direction;
 import miscBrick.Config;
-import miscBrick.Helper;
 import miscBrick.Robot;
 
 import Bluetooth.MessageType;
-import BluetoothBrick.BTBrickFactory;
 import BluetoothBrick.BTConnectionBrick;
 import Graph.Graph;
-import Graph.Node;
 import Graph.Pair;
 import Graph.Type;
 import LightBrick.LightSettings;
@@ -61,7 +57,7 @@ abstract public class Actor {
 		
 		boolean running = true;
 		
-		BTConnectionBrick conn = BTBrickFactory.createConnection();
+		BTConnectionBrick conn = new BTConnectionBrick();
 		
 		MessageType message;
 
@@ -75,21 +71,19 @@ abstract public class Actor {
 			case TERMINATE:
 				running = false;
 				BTCommunicator.done(conn);
+				conn.closeStreams();
 				break;
 			//move
 			case MOVE:
 		
 				Pair pos = BTCommunicator.receiveMove(conn);
 				navi.moveTo(pos);
-				//System.out.println("Move to" + pos);
-				//Button.waitForPress();
 				BTCommunicator.done(conn);
-				
+				conn.closeStreams();
 				break;
 			//action
 			case ACTION:
 				Action action = BTCommunicator.receiveAction(conn);
-				
 				navi.turn(Direction.findDirection(navi.getPosition(),action.getSrc()));
 				
 				prolog();
@@ -97,6 +91,7 @@ abstract public class Actor {
 				epilog();
 				
 				BTCommunicator.done(conn);
+				conn.closeStreams();
 				break;
 			case MAP:
 				Graph graph = BTCommunicator.receiveGraph(conn);
@@ -104,6 +99,7 @@ abstract public class Actor {
 				//System.out.println("Pos:" + navi.getPosition());
 				//Button.waitForPress();
 				BTCommunicator.done(conn);
+				conn.closeStreams();
 				break;
 				
 			case UPDATE:
@@ -141,6 +137,7 @@ abstract public class Actor {
 				}
 				
 				BTCommunicator.done(conn);
+				conn.closeStreams();
 			}
 		}
 		

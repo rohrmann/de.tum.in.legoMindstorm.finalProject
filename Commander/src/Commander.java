@@ -8,7 +8,6 @@ import misc.Direction;
 
 import Bluetooth.MessageComm;
 import BluetoothPC.BTConnectionPC;
-import BluetoothPC.BTPCFactory;
 import Graph.Graph;
 import Graph.Pair;
 import PCConfig.PCConfig;
@@ -44,8 +43,8 @@ public class Commander {
 		
 		System.out.println(graph);
 		
-		BTConnectionPC pusher = BTPCFactory.createConnectionInd(PCConfig.getPusher(),PCConfig.getPusherAddr());
-		BTConnectionPC puller = BTPCFactory.createConnectionInd(PCConfig.getPuller(),PCConfig.getPullerAddr());
+		BTConnectionPC pusher = new BTConnectionPC(PCConfig.getPusher(),PCConfig.getPusherAddr());
+		BTConnectionPC puller = new BTConnectionPC(PCConfig.getPuller(),PCConfig.getPullerAddr());
 		
 		MessageComm.sendMap(graph, pusher);
 		MessageComm.sendMap(graph,puller);

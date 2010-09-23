@@ -6,30 +6,98 @@ import java.io.IOException;
 
 import Bluetooth.BTStreams;
 
+import lejos.pc.comm.NXTComm;
+import lejos.pc.comm.NXTCommFactory;
 import lejos.pc.comm.NXTConnector;
 
-public class BTConnectionPC extends BTStreams {
+public class BTConnectionPC implements BTStreams {
 	
-	protected DataOutputStream dos;
-	protected DataInputStream dis;
-	protected NXTConnector connector;
-	protected String name;
+	private NXTConnector connector;
+	private String name;
+	private String addr;
+	private DataOutputStream dos;
+	private DataInputStream dis;
+	private boolean open;
 	
-	public BTConnectionPC(DataOutputStream dos, DataInputStream dis, NXTConnector connector,String name){
-		super(dos,dis);
-		this.connector = connector;
+	
+	public BTConnectionPC(String name, String addr){
 		this.name = name;
+		this.addr = addr;
+		connector = new NXTConnector();
+		dos = null;
+		dis = null;
+		open = false;
+	}
+	
+	public void openConnection(){
+		while(!connector.connectTo(name, addr, NXTCommFactory.BLUETOOTH, NXTComm.PACKET)){
+			;
+		}
+		
+		open = true;
+	}
+	
+	public void closeConnection(){
+		open = false;
+		try {
+			connector.close();
+		} catch (IOException e) {
+		}
 	}
 	
 	public void close(){
-		super.close();
+		closeStreams();
+		closeConnection();
+	}
+	
+	public void closeStreams(){
 		try{
-			connector.close();
+			dos.close();
+		}catch(IOException e){
+			
+		}
+		
+		try{
+			dis.close();
 		}catch(IOException e){
 			
 		}
 	}
 	
+	public DataInputStream getDataInputStream(){
+		if(!open){
+			openConnection();
+		}
+		
+		if(dis == null){
+			dis = connector.getDataIn();
+			
+			while(dis == null){
+				closeConnection();
+				openConnection();
+				dis = connector.getDataIn();
+			}
+		}
+		
+		return dis;
+	}
 	
-
+	public DataOutputStream getDataOutputStream(){
+		if(!open){
+			openConnection();
+		}
+		
+		if(dos == null){
+			dos = connector.getDataOut();
+			
+			while(dos == null){
+				closeConnection();
+				openConnection();
+				
+				dos = connector.getDataOut();
+			}
+		}
+		
+		return dos;
+	}
 }
