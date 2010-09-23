@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-1.40.10 (MiKTeX 2.8) (preloaded format=pdflatex 2010.9.1)  23 SEP 2010 12:20
+This is pdfTeX, Version 3.1415926-1.40.10 (MiKTeX 2.8) (preloaded format=pdflatex 2010.9.1)  23 SEP 2010 16:06
 entering extended mode
 **C:/Users/Butterfly/Documents/Uni/2.*Semester/Lego/de.tum.in.legoMindstorm.fin
 alProject/Spezifikation/Lego.tex
@@ -258,14 +258,22 @@ Overfull \hbox (2.22166pt too wide) in paragraph at lines 71--77
 [2 <C:/Users/Butterfly/Documents/Uni/2. Semester/Lego/de.tum.in.legoMindstorm.f
 inalProject/Spezifikation/sol.jpg> <C:/Users/Butterfly/Documents/Uni/2. Semeste
 r/Lego/de.tum.in.legoMindstorm.finalProject/Spezifikation/sensoren.jpg>]
-[3]
+<mapper.jpg, id=19, 536.0025pt x 499.8675pt>
+File: mapper.jpg Graphic file (type jpg)
+ <use mapper.jpg>
+<robot.jpg, id=20, 1714.90688pt x 674.52pt>
+File: robot.jpg Graphic file (type jpg)
+ <use robot.jpg> [3 <C:/Users/Butterfly/Documents/Uni/2. Semester/Lego/de.tum.i
+n.legoMindstorm.finalProject/Spezifikation/mapper.jpg> <C:/Users/Butterfly/Docu
+ments/Uni/2. Semester/Lego/de.tum.in.legoMindstorm.finalProject/Spezifikation/r
+obot.jpg>] [4]
 ("C:\Users\Butterfly\Documents\Uni\2. Semester\Lego\de.tum.in.legoMindstorm.fin
 alProject\Spezifikation\Lego.aux") ) 
 Here is how much of TeX's memory you used:
- 2648 strings out of 495285
- 32273 string characters out of 3180383
+ 2658 strings out of 495285
+ 32406 string characters out of 3180383
  85809 words of memory out of 3000000
- 5808 multiletter control sequences out of 15000+200000
+ 5816 multiletter control sequences out of 15000+200000
  11071 words of font info for 32 fonts, out of 3000000 for 9000
  14 hyphenation exceptions out of 8191
  27i,10n,43p,708b,266s stack positions out of 5000i,500n,10000p,200000b,50000s
@@ -277,9 +285,9 @@ erfly\AppData\Local\MiKTeX\2.8\fonts\pk\ljfour\jknappen\ec\dpi600\ecsx1000.pk>
 \ecsx1440.pk> <C:\Users\Butterfly\AppData\Local\MiKTeX\2.8\fonts\pk\ljfour\jkna
 ppen\ec\dpi600\ecsx2074.pk> <C:\Users\Butterfly\AppData\Local\MiKTeX\2.8\fonts\
 pk\ljfour\jknappen\ec\dpi600\ecss1000.pk>
-Output written on Lego.pdf (3 pages, 125438 bytes).
+Output written on Lego.pdf (4 pages, 291698 bytes).
 PDF statistics:
- 196 PDF objects out of 1000 (max. 8388607)
+ 202 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
- 16 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 26 words of extra memory for PDF output out of 10000 (max. 10000000)
 
