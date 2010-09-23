@@ -22,6 +22,15 @@ public class Config {
 	public static int pusherMoveSpeed = 10;
 	public static int pusherTurnSpeed = 50;
 
+	// Puller
+	public static int pullerMoveSpeed = 10;
+	public static int pullerTurnSpeed = 50;
+	public static int pullerArmSpeed = 60;
+	public static int pullerAngleUp = 160;
+	public static int pullerAngleDown = 2;
+	public static float pullerReleaseDistance = 14.5f;
+	public static float pullerTakeDistance = 6.0f;
+	
 	// Mapper
 	public static int mapperMoveSpeed = 15;
 	public static int mapperPollingInterval = 25;
