@@ -1,4 +1,6 @@
 import Actor.Actor;
+import Bluetooth.BTStreams;
+import BluetoothBrick.BTCReceiver;
 import Graph.*;
 import lejos.nxt.*;
 import misc.Direction;
@@ -27,7 +29,7 @@ public class Puller extends Actor
 
 	@Override
 	public void init() {
-	
+		hasToken = false;
 	}
 	
 	@Override
@@ -82,5 +84,10 @@ public class Puller extends Actor
 		Motor.C.setSpeed(60);
 		Motor.C.rotate(-angle,false);
 		Motor.C.lock(100);
+	}
+
+	@Override
+	public BTStreams getBrickConnection() {
+		return new BTCReceiver();
 	}		
 }

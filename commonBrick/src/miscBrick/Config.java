@@ -53,4 +53,7 @@ public class Config {
 
 	// BluetoothBrick
 	public static int arrayLength = 6;
+	
+	public static String rightoo = "Rightoo";
+	public static String s_brick = "s_brick";
 }

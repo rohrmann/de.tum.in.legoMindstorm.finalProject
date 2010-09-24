@@ -34,7 +34,12 @@ public class BTConnectionPC implements BTStreams {
 	public void openConnection(){
 		connector = new NXTConnector();
 		while(!connector.connectTo(name, addr, NXTCommFactory.BLUETOOTH, NXTComm.PACKET)){
-			;
+			try {
+				Thread.sleep(100);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		
 		open = true;

@@ -2,7 +2,7 @@ package Bluetooth;
 
 public enum MessageType {
 
-	MOVE(0),ACTION(1),TERMINATE(2),MAP(3),DONE(4),ACK(5),UPDATE(6),UNDEFINED(7);
+	MOVE(0),ACTION(1),TERMINATE(2),MAP(3),DONE(4),FINISH(5),UPDATE(6),UNDEFINED(7);
 	
 	int id;
 	
@@ -27,7 +27,7 @@ public enum MessageType {
 		case 4:
 			return DONE;
 		case 5:
-			return ACK;
+			return FINISH;
 		case 6:
 			return UPDATE;
 		default:

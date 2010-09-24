@@ -1,6 +1,8 @@
 import miscBrick.Config;
 import misc.RobotType;
 import Actor.Actor;
+import Bluetooth.BTStreams;
+import BluetoothBrick.BTCConnector;
 import NavigationBrick.RoomNavigator;
 
 
@@ -61,8 +63,12 @@ public class Pusher extends Actor {
 
 	@Override
 	public void init() {
-		// TODO Auto-generated method stub
-		
+		hasToken = true;
+	}
+
+	@Override
+	public BTStreams getBrickConnection() {
+		return new BTCConnector(Config.rightoo);
 	}
 
 	

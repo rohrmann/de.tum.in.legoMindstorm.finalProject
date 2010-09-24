@@ -1,25 +1,25 @@
 package Actor;
 
 
+import java.util.ArrayList;
 import java.util.List;
 
 import lejos.nxt.LightSensor;
 import lejos.nxt.Motor;
 import lejos.nxt.SensorPort;
+import lejos.nxt.Sound;
 import lejos.nxt.addon.ColorSensor;
 import lejos.robotics.navigation.TachoPilot;
 import misc.Action;
 import misc.RobotType;
-import misc.Update;
-import misc.Direction;
 import miscBrick.Config;
 import miscBrick.Robot;
 
+import Bluetooth.BTStreams;
 import Bluetooth.MessageType;
 import BluetoothBrick.BTConnectionBrick;
 import Graph.Graph;
 import Graph.Pair;
-import Graph.Type;
 import LightBrick.LightSettings;
 import NavigationBrick.RoomNavigator;
 import Bluetooth.BTCommunicator;
@@ -29,6 +29,8 @@ import ColorBrick.ColorSettings;
 abstract public class Actor {	
 	protected RoomNavigator navi;
 	protected Robot robot;
+	
+	protected boolean hasToken;
 	
 	public Actor(){
 		TachoPilot pilot = new TachoPilot(Config.wheelHeight,Config.wheelToWheel,Motor.A,Motor.B);
@@ -49,108 +51,104 @@ abstract public class Actor {
 		Graph map = new Graph();
 		
 		navi = new RoomNavigator(robot,map); 
+		
+		hasToken = false;
 	}
 	
 	public void start(){
 		
 		init();
 		
-		boolean running = true;
-		
 		BTConnectionBrick conn = new BTConnectionBrick();
 		
-		MessageType message;
-
+		List<Command> commands = recvCommands(conn);
+		
+		conn.close();
+		
+		System.out.println("Get Brick Connection");
+		BTStreams brick = getBrickConnection();
+		
+		System.out.println("Execute Commands");
+		for(Command command : commands){
+			System.out.println(command);
+			if(command.getType() == getType()){
+				
+				if(!hasToken){
+					acquireToken(brick);
+					hasToken = true;
+				}
+				command.execute(this);
+			}else if(hasToken){
+				releaseToken(brick);
+				hasToken = false;
+			}
+			
+			command.update(this);
+		}
+		
+	}
+	
+	public void acquireToken(BTStreams conn){
+		while(BTCommunicator.recvInt(conn) == -1){
+		}
+		
+		Sound.beep();
+	}
+	
+	public void releaseToken(BTStreams conn){
+		while(!BTCommunicator.sendInt(0, conn)){
+			
+		}
+		
+		Sound.buzz();
+	}
+	
+	public List<Command> recvCommands(BTStreams connection){
+		List<Command> result = new ArrayList<Command>();
+		
+		boolean running = true;
+		
 		while(running){
-			message = BTCommunicator.receiveMessageType(conn);			
+			MessageType message = BTCommunicator.recvMessageType(connection);
 			
 			switch(message){
-			//terminate
-			case TERMINATE:
+			case FINISH:
+				System.out.println("Finish");
 				running = false;
-				BTCommunicator.done(conn);
-			//	conn.close();
-				break;
-			//move
-			case MOVE:
-		
-				Pair pos = BTCommunicator.receiveMove(conn);
-				System.out.println("Move to " + pos);
-				navi.moveTo(pos);
-				BTCommunicator.done(conn);
-			//	conn.close();
-				System.out.println("Moved");
-				break;
-			//action
-			case ACTION:
-				Action action = BTCommunicator.receiveAction(conn);
-				System.out.println("Action " + action);
-				navi.turn(Direction.findDirection(navi.getPosition(),action.getSrc()));
-				prolog();
-				navi.moveStraightForward(Math.abs(action.getSrc().getX()-action.getDest().getX())+Math.abs(action.getSrc().getY()-action.getDest().getY())-1);
-				epilog();
-				BTCommunicator.done(conn);
-			//	conn.close();
-				
-				System.out.println("Action done");
+				BTCommunicator.done(connection);
 				break;
 			case MAP:
-				Graph graph = BTCommunicator.receiveGraph(conn);
-			
-				navi.setGraph(graph,getType());
-				//System.out.println("Pos:" + navi.getPosition());
-				//Button.waitForPress();
-				BTCommunicator.done(conn);
-				//conn.closeStreams();
-				System.out.println("Map received");
+				System.out.println("Received map");
+				Graph graph = BTCommunicator.recvGraph(connection);
+				navi.setGraph(graph, getType());
+				BTCommunicator.done(connection);
 				break;
-				
-			case UPDATE:
-				Update update = BTCommunicator.receiveUpdate(conn);
-				
-				List<Pair> boxes = navi.getGraph().getBoxes();
-			
-				Graph map = navi.getGraph();
-				
-				for(Pair box: boxes){
-					map.setNode(box, Type.EMPTY);
-				}
-				
-				for(Pair box: update.boxes){
-					map.setNode(box, Type.BOX);
-				}
-				
-				if(getType() == RobotType.PULLER){
-					Pair rPos = map.getPusher();
-					
-					if(rPos != null){
-						map.setNode(rPos, Type.EMPTY);
-					}
-					
-					map.setNode(update.pusher,Type.PUSHSTART);
-				}
-				else if(getType() == RobotType.PUSHER){
-					Pair rPos = map.getPuller();
-					
-					if(rPos != null){
-						map.setNode(rPos, Type.EMPTY);
-					}
-					
-					map.setNode(update.puller,Type.PULLSTART);
-				}
-				
-				BTCommunicator.done(conn);
-				//conn.close();
-				
-				System.out.println("Update received");
+			case ACTION:
+				RobotType type = BTCommunicator.recvRobotType(connection);
+				Action action = BTCommunicator.recvAction(connection);
+				Command command = new ActionCommand(action.getSrc(),action.getDest(),type);
+				result.add(command);
+				System.out.println(command);
+				BTCommunicator.done(connection);
+				break;
+			case MOVE:
+				type = BTCommunicator.recvRobotType(connection);
+				Pair pos = BTCommunicator.recvPair(connection);
+				command = new MoveCommand(pos,type);
+				result.add(command);
+				System.out.println(command);
+				BTCommunicator.done(connection);
+				break;
 			}
 		}
 		
-		conn.close();
+		
+		return result;
 	}
 	
 	public abstract RobotType getType();
 	public abstract void prolog();
 	public abstract void epilog();
 	public abstract void init();
+	public abstract BTStreams getBrickConnection();
 }
