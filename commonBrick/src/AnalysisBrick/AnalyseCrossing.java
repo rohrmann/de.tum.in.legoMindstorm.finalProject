@@ -36,9 +36,10 @@ public class AnalyseCrossing {
 			;
 		
 		pilot.stop();
+		
 		pilot.reset();
 		
-		pilot.rotate(360,true);
+		pilot.rotate(380,true);
 		
 		while(pilot.isMoving()){
 			if(!leftLightSettings.groundChange()){
@@ -47,6 +48,10 @@ public class AnalyseCrossing {
 				if(leftLine){
 					leftLine = false;
 					directionList.add(getDirection(heading,pilot.getAngle()));
+					
+					if(pilot.getAngle() > 350){
+						break;
+					}
 				}
 			}
 			
@@ -56,12 +61,9 @@ public class AnalyseCrossing {
 			}
 		}
 
-		pilot.rotate(360, true);
-
-		while (leftLightSettings.groundChange()) 
-			;
 
 		pilot.stop();
+		
 		pilot.reset();
 		
 		return directionList;

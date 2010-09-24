@@ -60,14 +60,16 @@ public class BTConnectionPC implements BTStreams {
 	
 	public void closeStreams(){
 		try{
-			dos.close();
+			if(dos!= null)
+				dos.close();
 			dos = null;
 		}catch(IOException e){
 			
 		}
 		
 		try{
-			dis.close();
+			if(dis!= null)
+				dis.close();
 			dis = null;
 		}catch(IOException e){
 			

@@ -33,7 +33,7 @@ abstract public class Actor {
 	protected boolean hasToken;
 	
 	public Actor(){
-		TachoPilot pilot = new TachoPilot(Config.wheelHeight,Config.wheelToWheel,Motor.A,Motor.B);
+		TachoPilot pilot = new TachoPilot(Config.wheelHeight,getWidth(),Motor.A,Motor.B);
 		pilot.setMoveSpeed(Config.defaultMoveSpeed);
 		pilot.setTurnSpeed(Config.defaultTurnSpeed);
 		ColorSensor colorSensor = new ColorSensor(SensorPort.S3);
@@ -151,4 +151,5 @@ abstract public class Actor {
 	public abstract void epilog();
 	public abstract void init();
 	public abstract BTStreams getBrickConnection();
+	public abstract float getWidth();
 }

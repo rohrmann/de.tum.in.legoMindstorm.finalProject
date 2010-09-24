@@ -90,4 +90,9 @@ public class Puller extends Actor
 	public BTStreams getBrickConnection() {
 		return new BTCReceiver();
 	}		
+	
+	@Override
+	public float getWidth(){
+		return Config.pullerWidth;
+	}
 }

@@ -70,6 +70,11 @@ public class Pusher extends Actor {
 	public BTStreams getBrickConnection() {
 		return new BTCConnector(Config.rightoo);
 	}
+	
+	@Override
+	public float getWidth(){
+		return Config.pusherWidth;
+	}
 
 	
 }
