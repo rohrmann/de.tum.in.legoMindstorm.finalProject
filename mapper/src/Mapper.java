@@ -13,9 +13,8 @@ import misc.Direction;
 import miscBrick.Helper;
 import miscBrick.Robot;
 import AnalysisBrick.AnalyseCrossing;
-import Bluetooth.BluetoothCommunicator;
-import Bluetooth.BluetoothConnection;
-import BluetoothBrick.BTBrickFactory;
+import Bluetooth.BTCommunicator;
+import BluetoothBrick.BTConnectionBrick;
 import Color.Color;
 import ColorBrick.ColorSettings;
 import Graph.Graph;
@@ -38,28 +37,28 @@ public class Mapper {
 	private final Direction[] searchDirections = {Direction.NORTH,Direction.WEST,Direction.SOUTH,Direction.EAST};
 	
 	public static void main(String[] args){
-		BluetoothConnection connection = BTBrickFactory.createConnection();
+
 		Mapper mapper = new Mapper();
 		Helper.drawText("Press Button for mapping");
 		Button.waitForPress();
 		
 		mapper.map();
 		
-		BluetoothCommunicator.sendGraph(mapper.map, connection);
+		BTConnectionBrick connection = new BTConnectionBrick();
 		
-		Sound.beepSequence();
-		
-		BluetoothCommunicator.receiveAck(connection);
-		
+		BTCommunicator.sendGraph(mapper.map, connection);
+						
 		connection.close();
 		
 		Sound.beepSequenceUp();
 	}
 	
 	public Mapper(){
+
 		TachoPilot pilot = new TachoPilot(Config.wheelHeight,Config.mapperWheelToWheel,Motor.A,Motor.B);
 		
 		pilot.setMoveSpeed(Config.mapperMoveSpeed);
+		pilot.setTurnSpeed(Config.mapperTurnSpeed);
 		ColorSensor colorSensor = new ColorSensor(SensorPort.S3);
 		LightSensor leftLightSensor = new LightSensor(SensorPort.S1);
 		LightSensor rightLightSensor = new LightSensor(SensorPort.S2);		

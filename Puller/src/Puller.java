@@ -91,7 +91,7 @@ public class Puller extends Actor
 		return new BTCReceiver();
 	}		
 	
-	@Override
+
 	public float getWheelToWheel() {
 		return Config.pullerWheelToWheel;
 	}

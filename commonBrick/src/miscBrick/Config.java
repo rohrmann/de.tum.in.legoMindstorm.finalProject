@@ -18,6 +18,7 @@ public class Config {
 	
 	// Pusher
 	public static float pusherBackOffDistance = 6f; // Stecke die zurueckgesetzt werden soll
+	public static int pusherCheckRoomTolerance = 4;
 	public static int pusherMoveSpeed = 10;
 	public static int pusherTurnSpeed = 20;
 	public static float pusherWheelToWheel = 10.35f;
@@ -35,6 +36,7 @@ public class Config {
 	
 	// Mapper
 	public static int mapperMoveSpeed = 15;
+	public static int mapperTurnSpeed = 150;
 	public static int mapperPollingInterval = 25;
 	public static int acceptionPeriodForColor = 150;
 	public static float mapperWheelToWheel = 10.28f;

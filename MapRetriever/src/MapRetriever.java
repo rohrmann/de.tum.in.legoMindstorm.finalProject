@@ -1,6 +1,5 @@
 import Bluetooth.BTCommunicator;
 import BluetoothPC.BTConnectionPC;
-import BluetoothPC.BTPCFactory;
 import Graph.Graph;
 import PCConfig.PCConfig;
 import Text.GraphToTxt;
@@ -15,16 +14,15 @@ public class MapRetriever {
 	}
 	
 	public void start(){
-		BTConnectionPC connection = BTPCFactory.createConnectionInd(PCConfig.getMapper(),PCConfig.getMapperAddr());
+		BTConnectionPC connection = new BTConnectionPC(PCConfig.getMapper(), PCConfig.getMapperAddr());
 		
-		Graph graph = BTCommunicator.receiveGraph(connection);
+		Graph graph = BTCommunicator.recvGraph(connection);
 		
 		if(graph == null){
 			System.out.println("error receiving map");
 			System.exit(1);
 		}
 		
-		BTCommunicator.ack(connection);
 		
 		GraphToTxt.writeTxt(graph, PCConfig.getTextFile());
 		

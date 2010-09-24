@@ -14,7 +14,6 @@ import Graph.Pair;
 import Graph.Type;
 import LightBrick.LightSettings;
 //import misc.AStar;
-import lejos.nxt.Button;
 import lejos.robotics.subsumption.Arbitrator;
 import lejos.robotics.subsumption.Behavior;
 import miscBrick.Config;
