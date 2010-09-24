@@ -1,0 +1,102 @@
+<project name="test" default="uploadandrun">
+    <description>
+    	test build file
+    </description>
+
+  <!-- set properties for this build -->
+  <property environment = "env"/>
+  <property file="build.properties"/>
+  <property name="src" location="src"/>
+  <property name="build" location="build"/>
+  <property name="main.class" value="TestBFS"/>
+  <property name="binary" value="${build}/${main.class}.nxj" />
+  <property name="srcCommon" location="../common/src"/>
+  <property name="srcBrick" location="../commonBrick/src"/>
+	
+  <!-- deletes generated files -->
+  <target name="clean" description="clean up all generated files">
+  	<delete dir="build"/>
+  </target>
+
+  <target name="compile" depends="clean"
+        description="compile the source " >
+    <!-- Compile the java code from ${src} to ${build}  -->
+  	<mkdir dir="${build}"/>
+    <javac srcdir="${src};${srcCommon};${srcBrick}" destdir="${build}">
+      <bootclasspath>
+        <pathelement location="${nxj.classes.home}/lib/classes.jar"/>
+      </bootclasspath>
+    </javac>
+  </target>
+
+  <target name="link" depends="compile"
+        description="link the binary " >
+    <!-- Link the binary and create a signature file -->
+    <java classname="js.tinyvm.TinyVM">
+      <arg value="--bootclasspath"/>
+      <arg path="${nxj.classes.jar}" />
+      <arg value="--classpath"/>
+      <arg path="${build}" />
+      <arg value="--writeorder" />
+      <arg value="LE" />
+      <arg value="${main.class}"/>
+      <arg value="-o"/>
+      <arg value="${binary}"/>
+      <arg value="-v"/>
+      <classpath>
+        <pathelement location="${nxj.jtools.jar}"/>
+  		<pathelement location="${nxj.commons.jar}"/>
+  		<pathelement location="${nxj.bcel.jar}"/>
+      </classpath>
+    </java>
+  </target>
+	
+  <target name="upload" depends="link"
+        description="upload the binary" >
+    <java classname="lejos.pc.tools.NXJUpload" fork="true">
+      <jvmarg value="-Djava.library.path=${nxj.library.path}"/>
+      <jvmarg value="-Dnxj.home=${nxj.home}"/>
+      <arg value="${binary}"/>
+      <classpath>
+        <pathelement location="${nxj.jtools.jar}"/>
+        <pathelement location="${nxj.pctools.jar}"/>
+      	<pathelement location="${nxj.pccomm.jar}"/>
+  		<pathelement location="${nxj.commons.jar}"/>
+  		<pathelement location="${nxj.bcel.jar}"/>
+      	<pathelement location="${nxj.bluecove.jar}"/>
+      	<pathelement location="${nxj.bluecove-gpl.jar}"/>
+      </classpath>
+    </java>
+  </target>
+	
+  <target name="uploadandrun" depends="link"
+        description="upload and run the binary" >
+    <java classname="lejos.pc.tools.NXJUpload" fork="true">
+      <jvmarg value="-Djava.library.path=${nxj.library.path}"/>
+      <jvmarg value="-Dnxj.home=${nxj.home}"/>
+      <arg value="${binary}"/>
+      <arg value="-r"/>
+      <classpath>
+        <pathelement location="${nxj.jtools.jar}"/>
+        <pathelement location="${nxj.pctools.jar}"/>
+      	<pathelement location="${nxj.pccomm.jar}"/>
+  		<pathelement location="${nxj.commons.jar}"/>
+  		<pathelement location="${nxj.bcel.jar}"/>
+      	<pathelement location="${nxj.bluecove.jar}"/>
+      	<pathelement location="${nxj.bluecove-gpl.jar}"/>
+      </classpath>
+    </java>
+  </target>
+
+  <!--  used only for modifying the Netbeans NXJPlugin -->
+    <target name="Zip for Netbeans" description="Zip the application to the sample project">
+        <property name="build.classes.dir" location="/build"/>
+        <property name="plugin" location="../NXJPlugin/src/nxjplugin/"/>
+        <zip basedir="." destfile="${plugin}/NXJSampleProject.zip">
+            <exclude name="**/build/"/>
+            <exclude name="**/bin/"/>
+            <exclude name="**/dist/"/>
+            <exclude name="**/nbproject/private/"/>
+        </zip>
+    </target>
+</project>

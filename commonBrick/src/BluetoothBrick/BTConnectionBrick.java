@@ -3,22 +3,91 @@ package BluetoothBrick;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 
+
 import Bluetooth.BTStreams;
 
 import lejos.nxt.comm.BTConnection;
+import lejos.nxt.comm.Bluetooth;
 
-public class BTConnectionBrick extends BTStreams{
+public class BTConnectionBrick implements BTStreams {
 
-	protected BTConnection connection;
+	private BTConnection connection;
+	private DataOutputStream dos;
+	private DataInputStream dis;
 	
-	public BTConnectionBrick(DataOutputStream dos, DataInputStream dis, BTConnection connection){
-		super(dos,dis);
-		this.connection = connection;
+	
+	public BTConnectionBrick(){
+		connection = null;
+		dos = null;
+		dis = null;
+		
+		openConnection();
 	}
 	
 	public void close(){
-		super.close();
+		closeStreams();
+		closeConnection();
+	}
+
+	@Override
+	public void closeStreams() {
+		connection.closeStream();
+		dis = null;
+		dos = null;
+	}
+
+	@Override
+	public DataInputStream getDataInputStream() {
+		if(connection == null){
+			openConnection();
+		}
 		
-		connection.close();
+		
+		if(dis == null){
+			dis = connection.openDataInputStream();
+			
+			while(dis == null){
+				closeConnection();
+				openConnection();
+				dis = connection.openDataInputStream();
+			}
+		}
+		
+		return dis;
+		
+	}
+	
+	public void openConnection(){
+		System.out.println("Waiting for BT-Connection");
+		connection = Bluetooth.waitForConnection();
+		System.out.println("Connection established");
+	}
+	
+	public void closeConnection(){
+		
+		if(connection != null)
+			connection.close();
+		
+		connection = null;
+	}
+
+	@Override
+	public DataOutputStream getDataOutputStream() {
+		if(connection == null){
+			openConnection();
+		}
+		
+		if(dos == null){
+			dos = connection.openDataOutputStream();
+			
+			while(dos == null){
+				closeConnection();
+				openConnection();
+				
+				dos = connection.openDataOutputStream();
+			}
+		}
+		
+		return dos;
 	}
 }

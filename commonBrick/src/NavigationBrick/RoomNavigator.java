@@ -14,6 +14,7 @@ import Graph.Pair;
 import Graph.Type;
 import LightBrick.LightSettings;
 //import misc.AStar;
+import lejos.nxt.Button;
 import lejos.robotics.subsumption.Arbitrator;
 import lejos.robotics.subsumption.Behavior;
 import miscBrick.Config;
@@ -36,7 +37,6 @@ public class RoomNavigator {
 	private LightSettings leftLightSettings;
 	private LightSettings rightLightSettings;
 	private Robot robot;
-
 	private boolean roomMissedActive;
 	
 	public RoomNavigator(Robot robot,Graph map){
@@ -274,7 +274,7 @@ public class RoomNavigator {
 	{
 		DriveDistanceForward driveDistanceForward = new DriveDistanceForward(robot, distance);
 		FollowLine followLine = new FollowLine(robot, new RoomInformation());
-		
+
 		Behavior[] driveForwardAndFollow = new Behavior[]{driveDistanceForward, followLine};
 		Arbitrator a = new Arbitrator(driveForwardAndFollow, true);
 		a.start();
@@ -414,48 +414,66 @@ public class RoomNavigator {
 	}
 	
 	public List<Pair> bfs(Pair to){
+		
+		//System.out.println("Start bfs");
+		//Button.waitForPress();
 		Hashtable visited = new Hashtable();
 		Hashtable prev = new Hashtable();
 		
 		Direction[] dirs= {Direction.NORTH,Direction.WEST,Direction.SOUTH,Direction.EAST};
 		
 		Queue queue = new Queue();
-		Node node = map.getNode(to);
-		queue.push(node);
-		visited.put(node, true);
+		Pair pos = getPosition();
+		queue.push(pos);
+		visited.put(pos, true);
 		
 		while(!queue.empty()){
-			node =(Node)queue.pop();
+			pos =(Pair)queue.pop();
 			
-			if(node.getID() == to){
+		//	System.out.println("CN:" + pos + " TO:" + to);
+		//	Button.waitForPress();
+			
+			if(pos.equals(to)){
 				break;
 			}
 			
 			for(Direction dir : dirs){
-				if(node.has(dir) && visited.get(node.get(dir)) == null ){
-					queue.push(node.get(dir));
-					visited.put(node.get(dir), true);
-					prev.put(node.get(dir),node);
+				/*System.out.println("Check:" + pos.getNeighbour(dir));
+				if(map.hasNode(pos.getNeighbour(dir))){
+					System.out.println("Node:" + map.getNode(pos.getNeighbour(dir)));
 				}
+				Button.waitForPress();*/
+				if(map.hasNode(pos.getNeighbour(dir)) && visited.get(pos.getNeighbour(dir)) == null && map.getType(pos.getNeighbour(dir)).isAccessible()){
+					//System.out.println("RN:" + pos.getNeighbour(dir));
+					//Button.waitForPress();
+					queue.push(pos.getNeighbour(dir));
+					visited.put(pos.getNeighbour(dir), true);
+					prev.put(pos.getNeighbour(dir),pos);
+				}
+				
+			/*	if(!map.getType(pos.getNeighbour(dir)).isAccessible())
+				{
+					System.out.println("NA:" + pos.getNeighbour(dir));
+				}*/
 			}
 		}
 		
-		if(node.getID() != to)
+		if(!pos.equals(to))
 			return null;
 		else{
 			Stack stack = new Stack();
 			
-			while(node.getID() != getPosition()){
-				stack.push(node.getID());
-				node = (Node)prev.get(node);
+			while(!pos.equals(getPosition())){
+				stack.push(pos);
+				pos = (Pair)prev.get(pos);
 			}
 			
 			List<Pair> result = new ArrayList<Pair>();
 			
 			while(!stack.empty()){
-				node = (Node)stack.pop();
+				pos = (Pair)stack.pop();
 				
-				result.add(node.getID());
+				result.add(pos);
 			}
 			
 			return result;
@@ -463,7 +481,7 @@ public class RoomNavigator {
 	}
 	
 	
-	public void moveToAstar(Pair to)
+	public void moveToAStar( Pair to)
 	{
 		ArrayList<Pair> path = misc.AStar.findPath(map, getPosition(), heading, to);
 		

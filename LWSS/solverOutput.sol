@@ -5,7 +5,7 @@
 # ###$  #
 #...  !.#
 #########
-puller (6,1)
+Commands
 pusher (5,3)
 push (4,3) (3,3)
 pusher (4,3)

@@ -1,74 +1,51 @@
 package Bluetooth;
 
 import misc.Action;
+import misc.RobotType;
 import Graph.Graph;
 import Graph.Pair;
 
 public class MessageComm {
 	
-	public static boolean sendUpdate(Graph graph, BTStreams streams){
-		if(!BTCommunicator.sendMessageType(MessageType.UPDATE,streams))
-			return false;
+	public static boolean sendMove(RobotType robotType,Pair pair, BTStreams streams){
+		boolean result = BTCommunicator.sendMessageType(MessageType.MOVE,streams);
+
+		result = result && BTCommunicator.sendRobotType(robotType,streams);
 		
-		if(!BTCommunicator.receiveAck(streams))
-			return false;
+		result = result && BTCommunicator.sendMove(pair, streams);
 		
-		if(!BTCommunicator.sendUpdate(graph, streams))
-			return false;
+		result = result && BTCommunicator.recvDone(streams);
 		
-		if(BTCommunicator.receiveMessageType(streams) != MessageType.DONE)
-			return false;
-		
-		return true;
-				
+		return result;
 	}
 	
-	public static boolean sendMove(Pair pair, BTStreams streams){
-		if(!BTCommunicator.sendMessageType(MessageType.MOVE,streams))
-			return false;
+	public static boolean sendAction(RobotType robotType, Action action, BTStreams streams){
+		boolean result = BTCommunicator.sendMessageType(MessageType.ACTION,streams);
 		
-		if(!BTCommunicator.receiveAck(streams))
-			return false;
+		result = result && BTCommunicator.sendRobotType(robotType,streams);
 		
-		if(!BTCommunicator.sendMove(pair, streams))
-			return false;
+		result = result && BTCommunicator.sendAction(action, streams);
 		
-		if(BTCommunicator.receiveMessageType(streams) != MessageType.DONE)
-			return false;
-		
-		return true;
-	}
-	
-	public static boolean sendAction(Action action, BTStreams streams){
-		if(!BTCommunicator.sendMessageType(MessageType.ACTION,streams))
-			return false;
-		
-		if(!BTCommunicator.receiveAck(streams))
-			return false;
-		
-		if(!BTCommunicator.sendAction(action, streams))
-			return false;
-		
-		if(BTCommunicator.receiveMessageType(streams) != MessageType.DONE)
-			return false;
-		
-		return true;
+		result = result && BTCommunicator.recvDone( streams);
+			
+		return result;
 	}
 	
 	public static boolean sendMap(Graph graph, BTStreams streams){
-		if(!BTCommunicator.sendMessageType(MessageType.MAP,streams))
-			return false;
+		boolean result = BTCommunicator.sendMessageType(MessageType.MAP,streams);
+				
+		result = result && BTCommunicator.sendGraph(graph, streams);
 		
-		if(!BTCommunicator.receiveAck(streams))
-			return false;
+		result = result &&	BTCommunicator.recvDone(streams);
 		
-		if(!BTCommunicator.sendGraph(graph, streams))
-			return false;
+		return result;
+	}
+	
+	public static boolean sendFinish(BTStreams streams){
+		boolean result = BTCommunicator.sendMessageType(MessageType.FINISH, streams);
+		result = result && BTCommunicator.recvDone(streams);
 		
-		if(BTCommunicator.receiveMessageType(streams) != MessageType.DONE)
-			return false;
-		
-		return true;
+		return result;
 	}
 
 }

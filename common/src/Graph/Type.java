@@ -17,9 +17,9 @@ EMPTY,UNKNOWN,PUSHSTART,PULLSTART,BOX,DEST,UNDEFINED;
 		case UNKNOWN:
 			return 1;
 		case PUSHSTART:
-			return 3;
-		case PULLSTART:
 			return 2;
+		case PULLSTART:
+			return 3;
 		case BOX:
 			return 4;
 		case DEST:

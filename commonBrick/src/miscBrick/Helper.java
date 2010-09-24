@@ -11,8 +11,6 @@ import misc.Direction;
  *
  */
 public class Helper {
-	private static final int columnLength = 16;
-	private static final int numRows = 8;
 	
 	public static void drawString(String text, int column, int row){
 		LCD.drawString(text+getWhitespaces(text.length(),16),column,row);
@@ -30,9 +28,9 @@ public class Helper {
 	
 	public static void drawText(String text, int column, int row){
 		LCD.clearDisplay();
-		int charInLine = columnLength - column;
+		int charInLine = Config.columnLength - column;
 		int charWritten = 0;
-		while(charWritten < text.length() || row > numRows){
+		while(charWritten < text.length() || row > Config.numRows){
 			if(charWritten+charInLine > text.length()){
 				LCD.drawString(text.substring(charWritten)+getWhitespaces(text.length()-charWritten,charInLine),column,row);
 				charWritten = text.length();
@@ -42,7 +40,7 @@ public class Helper {
 				charWritten += charInLine;
 			}
 			
-			charInLine=columnLength;
+			charInLine=Config.columnLength;
 			column = 0;
 			row++;
 		}

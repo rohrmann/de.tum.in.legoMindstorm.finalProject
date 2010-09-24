@@ -145,6 +145,7 @@ void Solver::solve(){
 			}
 
 			MapUtils::printMap(*solution.top(),std::cout);
+			std::cout << "Commands:" << std::endl;
 			while(!solution.empty()){
 				currentState = solution.top();
 				solution.pop();

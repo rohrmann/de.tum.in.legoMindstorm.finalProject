@@ -20,15 +20,14 @@ public class Config {
 	// Pusher
 	public static float pusherBackOffDistance = 6f; // Stecke die zurueckgesetzt werden soll
 	public static int pusherCheckRoomTolerance = 4; 
-	public static int pusherMoveSpeed = 5;
-	public static int pusherTurnSpeed = 10;
+	public static int pusherMoveSpeed = 15;
+	public static int pusherTurnSpeed = 40;
 
 	// Puller
-	public static int pullerMoveSpeed = 10;
-	public static int pullerTurnSpeed = 50;
+	public static int pullerMoveSpeed = 15;
+	public static int pullerTurnSpeed = 40;
 	public static int pullerArmSpeed = 60;
-	public static int pullerAngleUp = 160;
-	public static int pullerAngleDown = 2;
+	public static int pullerArmAngle = 163;
 	public static float pullerReleaseDistance = 14.5f;
 	public static float pullerTakeDistance = 6.0f;
 	
@@ -37,9 +36,24 @@ public class Config {
 	public static int mapperPollingInterval = 25;
 	public static int roomDistanceTolerance = 3;
 	public static int acceptionPeriodForColor = 150;
-
 	
+	//default
+	public static int defaultMoveSpeed = 15;
+	public static int defaultTurnSpeed = 40;
+
 	// Check Room
 	public static int checkRoomPollingInterval = 10;
+	
+	// RoomMissed
+	public static final int roomMissedPollingInterval = 10;
+	
+	// Helper
+	public static final int columnLength = 16;
+	public static final int numRows = 8;
 
+	// BluetoothBrick
+	public static int arrayLength = 6;
+	
+	public static String rightoo = "Rightoo";
+	public static String s_brick = "s_brick";
 }

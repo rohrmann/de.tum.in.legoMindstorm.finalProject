@@ -1,11 +1,9 @@
 package Bluetooth;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 import misc.Action;
-import misc.Update;
+import misc.RobotType;
 
 import Graph.Graph;
 import Graph.GraphTools;
@@ -20,20 +18,23 @@ public class BTCommunicator {
 			connection.getDataOutputStream().writeInt(i);
 			connection.getDataOutputStream().flush();
 			return true;
+			
 		}catch(IOException e){
+			System.out.println("BTCommunicator.sendInt IOException");
 		}
 		
 		return false;
 	}
 	
-	public static int receiveInt(BTStreams connection){
+	public static int recvInt(BTStreams connection){
 		try{
 			int result = connection.getDataInputStream().readInt();
 			return result;
 		}catch(IOException e){
+			System.out.println("BTCommunicator.receiveInt IOException");
 		}
 		
-		return 0;
+		return -1;
 	}
 	
 	public static boolean done(BTStreams connection){
@@ -42,32 +43,23 @@ public class BTCommunicator {
 			connection.getDataOutputStream().flush();
 			return true;
 		} catch (IOException e) {
+			System.out.println("BTCommunicator.done IOException");
 		}
 		
 		return false;
 	}
 	
-	public static boolean ack(BTStreams connection){
-		try{
-			connection.getDataOutputStream().writeInt(MessageType.ACK.toInt());
-			connection.getDataOutputStream().flush();
-			return true;
-		}catch(IOException e){
-		}
-		
-		return false;
-	}
-	
-	public static boolean receiveAck(BTStreams connection){
+	public static boolean recvDone(BTStreams connection){
 		try{
 			int result = connection.getDataInputStream().readInt();
 			
-			if(MessageType.int2M(result) == MessageType.ACK){
-				return true;
+			if(MessageType.int2M(result) != MessageType.DONE){
+				return false;
 			}
 			
-			return false;
+			return true;
 		}catch(IOException e){
+			System.out.println("BTCommunicator.recvDone IOException");
 		}
 		
 		return false;
@@ -78,8 +70,8 @@ public class BTCommunicator {
 		
 	}
 	
-	public static Pair receiveMove(BTStreams connection){
-		return receivePair(connection);
+	public static Pair recvMove(BTStreams connection){
+		return recvPair(connection);
 	}
 	
 	public static boolean sendPair(Pair pair, BTStreams connection){
@@ -90,19 +82,20 @@ public class BTCommunicator {
 			
 			return true;
 		}catch(IOException e){
-			
+			System.out.println("BTCommunicator.sendPair IOException");
 		}
 		
 		return false;
 	}
 	
-	public static Pair receivePair(BTStreams connection){
+	public static Pair recvPair(BTStreams connection){
 		try{
 			int x = connection.getDataInputStream().readInt();
 			int y = connection.getDataInputStream().readInt();
 			
 			return new Pair(x,y);
 		}catch(IOException e){
+			System.out.println("BTCommunicator.recvPair IOException");
 		}
 
 		return null;
@@ -112,9 +105,9 @@ public class BTCommunicator {
 		return sendPair(action.getSrc(),connection) && sendPair(action.getDest(),connection);
 	}
 	
-	public static Action receiveAction(BTStreams connection){
-		Pair src = receivePair(connection);
-		Pair dest = receivePair(connection);
+	public static Action recvAction(BTStreams connection){
+		Pair src = recvPair(connection);
+		Pair dest = recvPair(connection);
 		
 		if(src == null || dest == null){
 			return null;
@@ -123,15 +116,40 @@ public class BTCommunicator {
 			return new Action(src,dest);
 	}
 	
-	public static MessageType receiveMessageType(BTStreams connection){
+	public static RobotType recvRobotType(BTStreams connection){
+		try{
+			int robotType = connection.getDataInputStream().readInt();
+			
+			return RobotType.int2RobotType(robotType);
+			
+		}catch(IOException ex){
+			System.out.println("BTCommunicator.recvRobotType IOException");
+		}
+		
+		return RobotType.UNDEFINED;
+	}
+	
+	public static boolean sendRobotType(RobotType type, BTStreams connection){
+		try{
+			connection.getDataOutputStream().writeInt(type.toInt());
+			connection.getDataOutputStream().flush();
+			
+			return true;
+		}catch(IOException e){
+			System.out.println("BTCommunicator.sendRobotType IOException");
+		}
+		
+		return false;
+	}
+	
+	public static MessageType recvMessageType(BTStreams connection){
 		try{
 			int message = connection.getDataInputStream().readInt();
-			
-			BTCommunicator.ack(connection);
-			
+					
 			return MessageType.int2M(message);
 			
 		}catch(IOException ex){
+			System.out.println("BTCommunicator.recvMessageType");
 		}
 		
 		return MessageType.UNDEFINED;
@@ -141,22 +159,23 @@ public class BTCommunicator {
 		try{
 			connection.getDataOutputStream().writeInt(type.toInt());
 			connection.getDataOutputStream().flush();
-			
-			return receiveAck(connection);
+						
+			return true;
 		}catch(IOException e){
+			System.out.println("BTCommunicator.sendMessageType IOException");
 		}
 		
 		return false;
 	}
 	
 	public static Node receiveNode(BTStreams connection){
-		Pair id = receivePair(connection);
+		Pair id = recvPair(connection);
 		
 		if(id == null){
 			return null;
 		}
 		
-		Type type = Type.toType(receiveInt(connection));
+		Type type = Type.toType(recvInt(connection));
 		
 		return new Node(type,id);
 	}
@@ -177,15 +196,15 @@ public class BTCommunicator {
 		return true;
 	}
 	
-	public static Graph receiveGraph(BTStreams connection){
-		int numNodes = receiveInt(connection);
+	public static Graph recvGraph(BTStreams connection){
+		int numNodes = recvInt(connection);
 		
 		Graph result = new Graph();
 		
 		for(int i=0;i< numNodes;i++){
 			Node node = receiveNode(connection);
 			
-			
+						
 			if(node == null){
 				return null;
 			}
@@ -197,54 +216,4 @@ public class BTCommunicator {
 		
 		return result;
 	}
-	
-	public static boolean sendUpdate(Graph graph, BTStreams connection){
-		List<Pair> boxes = graph.getBoxes();
-		
-		if(!sendInt(boxes.size(),connection)){
-			return false;
-		}
-		
-		for(Pair box:boxes){
-			if(!sendPair(box,connection))
-				return false;
-		}
-		
-		if(!sendPair(graph.getPusher(),connection)){
-			return false;
-		}
-		
-		if(!sendPair(graph.getPuller(),connection)){
-			return false;
-		}
-		
-		return true;
-	}
-	
-	public static Update receiveUpdate(BTStreams connection){
-		List<Pair> boxes = new ArrayList<Pair>();
-		
-		int numBoxes = receiveInt(connection);
-		
-		for(int i =0;i <numBoxes;i++){
-			Pair box = receivePair(connection);
-			
-			if(box == null){
-				return null;
-			}
-			
-			boxes.add(box);
-		}
-		
-		Pair pusher = receivePair(connection);
-		Pair puller = receivePair(connection);
-		
-		if(pusher == null || puller == null){
-			return null;
-		}
-		
-		return new Update(boxes,pusher,puller);
-	}
-	
-
 }

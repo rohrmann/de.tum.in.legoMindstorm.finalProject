@@ -25,7 +25,6 @@ public class DriveDistanceForward implements Behavior{
 	}
 	
 	public void action() {
-		terminated = false;
 		robot.getPilot().forward();
 		
 		while(active && distance > robot.getPilot().getTravelDistance())
@@ -50,6 +49,7 @@ public class DriveDistanceForward implements Behavior{
 		if(distance>0)
 		{
 			active = true;
+			terminated = false;
 			return true;
 		}
 		return false;
