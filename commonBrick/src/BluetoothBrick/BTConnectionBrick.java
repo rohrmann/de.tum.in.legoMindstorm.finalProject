@@ -4,6 +4,8 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
+import javax.bluetooth.RemoteDevice;
+
 import Bluetooth.BTStreams;
 
 import lejos.nxt.comm.BTConnection;
@@ -56,6 +58,12 @@ public class BTConnectionBrick implements BTStreams {
 		
 		return dis;
 		
+	}
+	
+	public void openConnectionTo(RemoteDevice rd){
+		System.out.println("Sending BT-Connection");
+		connection = Bluetooth.connect(rd);
+		System.out.println("Connection established");
 	}
 	
 	public void openConnection(){

@@ -10,7 +10,6 @@ import Graph.Node;
 import Graph.Pair;
 import Graph.Type;
 import Graph.Graph;
-import Memory.Move;
 
 public class TxtToGraph {
 
@@ -60,16 +59,13 @@ public class TxtToGraph {
 				String[] c = b.split(",");
 				int x = Integer.parseInt(c[0]);
 				int y = Integer.parseInt(c[1]);
-				Move.setMove(x, y);
-				System.out.println(x);
-				System.out.println(y);
+				
 			}else if (a.startsWith("pusher")){
 				String b = (String) a.subSequence(8, a.length()-1);
 				String[] c = b.split(",");
 				int x = Integer.parseInt(c[0]);
 				int y = Integer.parseInt(c[1]);
-				System.out.println(x);
-				System.out.println(y);
+				
 			}else if (a.startsWith("push")){
 				String b = (String) a.subSequence(6, a.length()-1);
 				String[] c = b.split(" ");
@@ -83,10 +79,7 @@ public class TxtToGraph {
 				String[] destboxArray = destbox.split(",");
 				int xdest = Integer.parseInt(destboxArray[0]);
 				int ydest = Integer.parseInt(destboxArray[1]);
-				System.out.println(x);
-				System.out.println(y);
-				System.out.println(xdest);
-				System.out.println(ydest);
+				
 			}else if (a.startsWith("pull")){
 				String b = (String) a.subSequence(6, a.length()-1);
 				String[] c = b.split(" ");
@@ -100,10 +93,7 @@ public class TxtToGraph {
 				String[] destboxArray = destbox.split(",");
 				int xdest = Integer.parseInt(destboxArray[0]);
 				int ydest = Integer.parseInt(destboxArray[1]);
-				System.out.println(x);
-				System.out.println(y);
-				System.out.println(xdest);
-				System.out.println(ydest);
+				
 			}
 			else {
 				

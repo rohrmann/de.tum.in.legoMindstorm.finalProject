@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import misc.Action;
+import misc.RobotType;
 import misc.Update;
 
 import Graph.Graph;
@@ -139,6 +140,34 @@ public class BTCommunicator {
 		}
 		else
 			return new Action(src,dest);
+	}
+	
+	public static RobotType receiveRobotType(BTStreams connection){
+		try{
+			int robotType = connection.getDataInputStream().readInt();
+			
+			BTCommunicator.ack(connection);
+			
+			return RobotType.int2M(robotType);
+			
+		}catch(IOException ex){
+		}
+		
+		return RobotType.PUSHER;
+	}
+	
+	public static boolean sendRobotType(RobotType type, BTStreams connection){
+		try{
+			connection.getDataOutputStream().writeInt(type.toInt());
+			connection.getDataOutputStream().flush();
+			
+			boolean result = receiveAck(connection);
+			
+			return result;
+		}catch(IOException e){
+		}
+		
+		return false;
 	}
 	
 	public static MessageType receiveMessageType(BTStreams connection){

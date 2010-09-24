@@ -1,14 +1,17 @@
 package Bluetooth;
 
 import misc.Action;
+import misc.RobotType;
 import Graph.Graph;
 import Graph.Pair;
 
 public class MessageComm {
 	
-	public static boolean sendUpdate(Graph graph, BTStreams streams){
+	public static boolean sendUpdate(RobotType robotType, Graph graph, BTStreams streams){
 		
-		boolean result = BTCommunicator.sendMessageType(MessageType.UPDATE,streams);
+		boolean result = BTCommunicator.sendRobotType(robotType, streams);
+		
+		result = BTCommunicator.sendMessageType(MessageType.UPDATE,streams);
 				
 		result = result && BTCommunicator.sendUpdate(graph, streams);
 		
@@ -33,8 +36,10 @@ public class MessageComm {
 		return result;
 	}
 	
-	public static boolean sendAction(Action action, BTStreams streams){
-		boolean result = BTCommunicator.sendMessageType(MessageType.ACTION,streams);
+	public static boolean sendAction(RobotType robotType, Action action, BTStreams streams){
+		boolean result = BTCommunicator.sendRobotType(robotType,streams);
+		
+		result = BTCommunicator.sendMessageType(MessageType.ACTION,streams);
 		
 		result = result && BTCommunicator.sendAction(action, streams);
 		
