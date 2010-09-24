@@ -29,14 +29,12 @@ public class BTConnectionBrick implements BTStreams {
 		closeConnection();
 	}
 
-	@Override
 	public void closeStreams() {
 		connection.closeStream();
 		dis = null;
 		dos = null;
 	}
 
-	@Override
 	public DataInputStream getDataInputStream() {
 		if(connection == null){
 			openConnection();
@@ -71,7 +69,6 @@ public class BTConnectionBrick implements BTStreams {
 		connection = null;
 	}
 
-	@Override
 	public DataOutputStream getDataOutputStream() {
 		if(connection == null){
 			openConnection();

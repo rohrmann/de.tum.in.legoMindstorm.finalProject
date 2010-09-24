@@ -11,7 +11,6 @@ public class Config {
 	
 	// Roboter allgemein
 	public static float wheelHeight = 5.6f;
-	public static float wheelToWheel = 10.35f;
 	public static int lightTolerance = 5;
 	public static int colorScanTimes = 5;	
 	public static int checkRoomTolerance = 4;
@@ -20,9 +19,10 @@ public class Config {
 	// Pusher
 	public static float pusherBackOffDistance = 6f; // Stecke die zurueckgesetzt werden soll
 	public static int pusherCheckRoomTolerance = 4; 
-	public static int pusherMoveSpeed = 15;
-	public static int pusherTurnSpeed = 40;
-	public static float pusherWidth = 10.35f;
+
+	public static int pusherMoveSpeed = 10;
+	public static int pusherTurnSpeed = 20;
+	public static float pusherWheelToWheel = 10.35f;
 
 	// Puller
 	public static int pullerMoveSpeed = 15;
@@ -31,7 +31,7 @@ public class Config {
 	public static int pullerArmAngle = 163;
 	public static float pullerReleaseDistance = 14.5f;
 	public static float pullerTakeDistance = 6.0f;
-	public static float pullerWidth = 10.7f;
+	public static float pullerWheelToWheel = 10.7f;
 	
 	// Mapper
 	public static int mapperMoveSpeed = 15;
@@ -39,11 +39,11 @@ public class Config {
 	public static int mapperPollingInterval = 25;
 	public static int roomDistanceTolerance = 3;
 	public static int acceptionPeriodForColor = 150;
-	public static float mapperWidth = 10.28f;
+	public static float mapperWheelToWheel = 10.28f;
 	
 	//default
-	public static int defaultMoveSpeed = 15;
-	public static int defaultTurnSpeed = 40;
+	public static int defaultMoveSpeed = 10;
+	public static int defaultTurnSpeed = 30;
 
 	// Check Room
 	public static int checkRoomPollingInterval = 10;

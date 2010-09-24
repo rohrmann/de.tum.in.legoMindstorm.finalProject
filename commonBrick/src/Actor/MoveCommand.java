@@ -12,18 +12,15 @@ public class MoveCommand implements Command {
 		this.dest = dest;
 	}
 
-	@Override
 	public void execute(Actor actor) {
 		actor.navi.moveTo(dest);
 		
 	}
 
-	@Override
 	public RobotType getType() {
 		return type;
 	}
 
-	@Override
 	public void update(Actor actor) {
 		switch(type){
 		case PULLER:
@@ -35,7 +32,6 @@ public class MoveCommand implements Command {
 		}
 	}
 	
-	@Override
 	public String toString(){
 		return "Move " + type + " to " + dest;
 	}

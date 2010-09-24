@@ -17,7 +17,7 @@ public class ActionCommand implements Command {
 		this.type = type;
 	}
 
-	@Override
+
 	public void execute(Actor actor) {
 		actor.navi.turn(Direction.findDirection(actor.navi.getPosition(),src));
 		actor.prolog();
@@ -27,12 +27,10 @@ public class ActionCommand implements Command {
 		actor.epilog();
 	}
 
-	@Override
 	public RobotType getType() {
 		return type;
 	}
 
-	@Override
 	public void update(Actor actor) {
 		actor.navi.getGraph().setNode(src, Type.EMPTY);
 		actor.navi.getGraph().setNode(dest, Type.BOX);
@@ -49,7 +47,6 @@ public class ActionCommand implements Command {
 		}
 	}
 	
-	@Override
 	public String toString(){
 		return "Action " + type + " from " + src + " to " + dest;
 	}

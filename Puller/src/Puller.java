@@ -81,7 +81,7 @@ public class Puller extends Actor
 	}
 	
 	public static void liftArm(int angle){
-		Motor.C.setSpeed(60);
+		Motor.C.setSpeed(Config.pullerArmSpeed);
 		Motor.C.rotate(-angle,false);
 		Motor.C.lock(100);
 	}
@@ -91,8 +91,8 @@ public class Puller extends Actor
 		return new BTCReceiver();
 	}		
 	
-	@Override
-	public float getWidth(){
-		return Config.pullerWidth;
+
+	public float getWheelToWheel() {
+		return Config.pullerWheelToWheel;
 	}
 }

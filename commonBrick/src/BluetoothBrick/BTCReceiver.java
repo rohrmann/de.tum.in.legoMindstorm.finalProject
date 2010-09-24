@@ -40,12 +40,10 @@ public class BTCReceiver implements BTStreams {
 		dis = connection.openDataInputStream();
 	}
 
-	@Override
 	public void close() {
 		connection.close();
 	}
 
-	@Override
 	public void closeStreams() {
 		if(dos != null){
 			try {
@@ -67,12 +65,10 @@ public class BTCReceiver implements BTStreams {
 		
 	}
 
-	@Override
 	public DataInputStream getDataInputStream() {
 		return dis;
 	}
 
-	@Override
 	public DataOutputStream getDataOutputStream() {
 		return dos;
 	}

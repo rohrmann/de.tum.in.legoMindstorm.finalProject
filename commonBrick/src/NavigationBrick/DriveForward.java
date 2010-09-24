@@ -22,7 +22,7 @@ public class DriveForward implements Behavior {
 		terminated = true;
 	}
 
-	@Override
+	//@Override
 	public void action() {
 		robot.getPilot().forward();
 		
@@ -33,7 +33,7 @@ public class DriveForward implements Behavior {
 		terminated = true;
 	}
 
-	@Override
+	//@Override
 	public void suppress() {
 		robot.getPilot().stop();
 		
@@ -45,7 +45,7 @@ public class DriveForward implements Behavior {
 		
 	}
 
-	@Override
+	//@Override
 	public boolean takeControl() {
 		if(!information.roomFound()){
 			active = true;

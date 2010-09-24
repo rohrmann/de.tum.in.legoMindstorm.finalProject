@@ -54,7 +54,8 @@ public class Mapper {
 	}
 	
 	public Mapper(){
-		TachoPilot pilot = new TachoPilot(Config.wheelHeight,Config.mapperWidth,Motor.A,Motor.B);
+
+		TachoPilot pilot = new TachoPilot(Config.wheelHeight,Config.mapperWheelToWheel,Motor.A,Motor.B);
 		
 		pilot.setMoveSpeed(Config.mapperMoveSpeed);
 		pilot.setTurnSpeed(Config.mapperTurnSpeed);
