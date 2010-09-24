@@ -109,14 +109,15 @@ public class RoomNavigator {
 				leftFree = true;
 			}
 			
-			if(leftFree && light.groundChange()){
+			if(curIntersections==intersections && leftFree){
+				pilot.stop();
+			}
+			else if(leftFree && light.groundChange()){
 				curIntersections++;
 				leftFree = false;
 			}
 			
-			if(curIntersections==intersections && leftFree){
-				pilot.stop();
-			}
+			
 		}
 		
 		updateHeading(pilot.getAngle());

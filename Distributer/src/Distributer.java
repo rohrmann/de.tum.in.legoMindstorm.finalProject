@@ -44,14 +44,6 @@ public class Distributer {
 		} catch (IOException e) {
 		}
 		
-		
-		BTConnectionPC pusher = new BTConnectionPC(PCConfig.s_brick,PCConfig.s_brickAddr);
-		BTConnectionPC puller = new BTConnectionPC(PCConfig.rightoo,PCConfig.rightooAddr);
-
-		System.out.println("send map to pusher");
-		MessageComm.sendMap(graph, pusher);
-		System.out.println("send map to puller");
-		MessageComm.sendMap(graph,puller);
 		String line = "";
 		
 		try {
@@ -63,6 +55,61 @@ public class Distributer {
 			e1.printStackTrace();
 		}
 		
+		try{
+			input.close();
+		}catch(IOException e){
+			
+		}
+		
+		System.out.println("Connect to " + PCConfig.rightoo);
+		BTConnectionPC puller = new BTConnectionPC(PCConfig.rightoo,PCConfig.rightooAddr);
+		
+		System.out.println("send map to puller");
+		MessageComm.sendMap(graph,puller);
+		
+		for(String command : commands){
+			
+			System.out.println(command);
+			String [] parts = command.split(" " );
+			
+			if(parts[0].equals("puller")){
+				Pair pos = Pair.parsePair(parts[1]);
+				System.out.println("Send pull " + pos + " to puller");
+				MessageComm.sendMove(RobotType.PULLER,pos,puller);
+			}
+			else if(parts[0].equals("pull")){
+				Pair src = Pair.parsePair(parts[1]);
+				Pair dest = Pair.parsePair(parts[2]);
+				Action action = new Action(src,dest);
+				System.out.println("Send pull" + action + " to puller");
+				MessageComm.sendAction(RobotType.PULLER, action, puller);
+			}
+			else if(parts[0].equals("pusher")){
+				Pair pos = Pair.parsePair(parts[1]);
+				System.out.println("Send pusher " + pos + " to puller");
+				MessageComm.sendMove(RobotType.PUSHER,pos,puller);
+
+			}
+			else if(parts[0].equals("push")){
+				Pair src = Pair.parsePair(parts[1]);
+				Pair dest = Pair.parsePair(parts[2]);
+				Action action = new Action(src,dest);
+				System.out.println("Send push" + action + " to puller");
+				MessageComm.sendAction(RobotType.PUSHER, new Action(src,dest), puller);
+			}
+		}
+		
+		MessageComm.sendFinish(puller);
+	
+		puller.close();
+		
+		System.out.println("Connect to " + PCConfig.s_brick);
+		BTConnectionPC pusher = new BTConnectionPC(PCConfig.s_brick,PCConfig.s_brickAddr);
+		
+
+		System.out.println("send map to pusher");
+		MessageComm.sendMap(graph, pusher);
+		
 		for(String command : commands){
 	
 			System.out.println(command);
@@ -72,8 +119,6 @@ public class Distributer {
 				Pair pos = Pair.parsePair(parts[1]);
 				System.out.println("Send pull " + pos + " to pusher");
 				MessageComm.sendMove(RobotType.PULLER,pos,pusher);
-				System.out.println("Send pull " + pos + " to puller");
-				MessageComm.sendMove(RobotType.PULLER,pos,puller);
 			}
 			else if(parts[0].equals("pull")){
 				Pair src = Pair.parsePair(parts[1]);
@@ -81,15 +126,11 @@ public class Distributer {
 				Action action = new Action(src,dest);
 				System.out.println("Send pull" + action + " to pusher");
 				MessageComm.sendAction(RobotType.PULLER, action, pusher);
-				System.out.println("Send pull" + action + " to puller");
-				MessageComm.sendAction(RobotType.PULLER, action, puller);
 			}
 			else if(parts[0].equals("pusher")){
 				Pair pos = Pair.parsePair(parts[1]);
 				System.out.println("Send pusher " + pos + " to pusher");
 				MessageComm.sendMove(RobotType.PUSHER,pos,pusher);
-				System.out.println("Send pusher " + pos + " to puller");
-				MessageComm.sendMove(RobotType.PUSHER,pos,puller);
 
 			}
 			else if(parts[0].equals("push")){
@@ -98,24 +139,13 @@ public class Distributer {
 				Action action = new Action(src,dest);
 				System.out.println("Send push" + action + " to pusher");
 				MessageComm.sendAction(RobotType.PUSHER, new Action(src,dest), pusher);
-				System.out.println("Send push" + action + " to puller");
-				MessageComm.sendAction(RobotType.PUSHER, new Action(src,dest), puller);
 
 			}
 		}
 		
 		MessageComm.sendFinish(pusher);
-		MessageComm.sendFinish(puller);
-		
-		
-		try{
-			input.close();
-		}catch(IOException e){
-			
-		}
-		
 		pusher.close();
-		puller.close();
+		
 	}
 
 }

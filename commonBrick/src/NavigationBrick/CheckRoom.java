@@ -19,13 +19,13 @@ public class CheckRoom implements Behavior {
 	private boolean active;
 	private boolean terminated;
 	private boolean tachoReseted;
-	private int distanceUntilActivation;
-	private int tolerance;
+	private float distanceUntilActivation;
+	private float tolerance;
 	private RoomInformation information;
 	private boolean roomMissedActive;
 
 
-	public CheckRoom(Robot robot,int distanceUntilActivation,int tolerance,
+	public CheckRoom(Robot robot,float distanceUntilActivation,float tolerance,
 			RoomInformation information, boolean roomMissedActive){
 		this.robot = robot;
 		this.distanceUntilActivation = distanceUntilActivation;
@@ -85,6 +85,7 @@ public class CheckRoom implements Behavior {
 		robot.getPilot().setMoveSpeed(oldSpeed);
 		
 		active = false;
+		tachoReseted = false;
 		terminated = true;
 	}
 
@@ -95,7 +96,7 @@ public class CheckRoom implements Behavior {
 		while(!terminated){
 			Thread.yield();
 		}
-		
+		tachoReseted = false;
 		terminated = true;
 	}
 

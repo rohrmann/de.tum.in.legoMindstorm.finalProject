@@ -3,6 +3,7 @@ package NavigationBrick;
 import Color.Color;
 import lejos.robotics.subsumption.Arbitrator;
 import lejos.robotics.subsumption.Behavior;
+import miscBrick.Config;
 import miscBrick.Robot;
 import miscBrick.RoomInformation;
 
@@ -27,7 +28,7 @@ public class RoomPilot {
 		RoomInformation information= new RoomInformation();
 		Behavior driveForward = new DriveForward(robot,information);
 		Behavior followLine = new FollowLine(robot,information);
-		Behavior checkRoom = new CheckRoom(robot,15,5,information, roomMissedActive);
+		Behavior checkRoom = new CheckRoom(robot,Config.roomDistance-Config.lightSensorToColorSensorDistance,Config.checkRoomTolerance,information, roomMissedActive);
 		Behavior[] behaviors = {driveForward, followLine, checkRoom};
 		arbitrator = new Arbitrator(behaviors,true);
 		arbitrator.start();
