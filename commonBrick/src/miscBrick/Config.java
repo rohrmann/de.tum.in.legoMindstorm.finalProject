@@ -28,7 +28,7 @@ public class Config {
 	public static int pullerMoveSpeed = 15;
 	public static int pullerTurnSpeed = 40;
 	public static int pullerArmSpeed = 60;
-	public static int pullerArmAngle = 163;
+	public static int pullerArmAngle = 160;
 	public static float pullerReleaseDistance = 14.5f;
 	public static float pullerTakeDistance = 6.0f;
 	public static float pullerWheelToWheel = 10.7f;
