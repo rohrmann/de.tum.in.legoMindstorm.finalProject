@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<eclipse-userlibraries version="2">
+<library name="NXJ_JARS" systemlibrary="false">
+<archive path="/usr/proj/lego/lenny-i386/lejos_nxj/lib/classes.jar" source="/usr/proj/lego/lenny-i386/lejos_nxj/projects/classes"/>
+<archive path="/usr/proj/lego/lenny-i386/lejos_nxj/lib/jtools.jar" source="/usr/proj/lego/lenny-i386/lejos_nxj/projects/jtools"/>
+<archive path="/usr/proj/lego/lenny-i386/lejos_nxj/lib/pccomm.jar" source="/usr/proj/lego/lenny-i386/lejos_nxj/projects/pccomms"/>
+<archive path="/usr/proj/lego/lenny-i386/lejos_nxj/lib/pctools.jar" source="/usr/proj/lego/lenny-i386/lejos_nxj/projects/pctools"/>
+</library>
+</eclipse-userlibraries>
