@@ -49,7 +49,7 @@ public class Puller extends Actor
 
 	@Override
 	public void epilog() {		
-		navi.driveForward(14.5f);	
+		navi.driveForward(12f);	
 		Puller.liftArm(Config.pullerArmAngle);
 
 		robot.getPilot().forward();
