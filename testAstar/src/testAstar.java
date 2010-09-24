@@ -6,15 +6,16 @@ import lejos.nxt.addon.ColorSensor;
 import lejos.robotics.navigation.TachoPilot;
 import misc.AStar;
 import misc.Direction;
-import misc.Robot;
+import misc.GraphExample;
+import miscBrick.Robot;
 import Color.Color;
-import Color.ColorSettings;
+import ColorBrick.ColorSettings;
 import Graph.Graph;
 import Graph.Node;
 import Graph.Pair;
 import Graph.Type;
-import Light.LightSettings;
-import Navigation.RoomNavigator;
+import LightBrick.LightSettings;
+import NavigationBrick.RoomNavigator;
 
 
 public class testAstar {
@@ -52,7 +53,9 @@ public class testAstar {
 //		
 //		RoomNavigator natschi = new RoomNavigator(robot, GraphExample.getGraph());
 		
-		Pair[] path = AStar.findPath(GraphExample.getGraph(), new Pair(0,0),Direction.NORTH, new Pair(2,2)).toArray(new Pair[0]);
+		System.out.println(GraphExample.getGraph().getNode(new Pair(4,3)));
+		
+		Pair[] path = AStar.findPath(GraphExample.getGraph(), new Pair(4,3),Direction.NORTH, new Pair(5,0)).toArray(new Pair[0]);
 		
 		for(int i=0;i<path.length; i++)
 		{
