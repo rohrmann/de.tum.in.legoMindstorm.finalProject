@@ -18,7 +18,6 @@ public class CheckRoom implements Behavior {
 	private Robot robot;
 	private boolean active;
 	private boolean terminated;
-	private boolean tachoReseted;
 	private float distanceUntilActivation;
 	private float tolerance;
 	private RoomInformation information;
@@ -32,7 +31,6 @@ public class CheckRoom implements Behavior {
 		this.tolerance = tolerance;
 		active = false;
 		terminated = true;
-		tachoReseted = false;
 		this.information = information;
 		this.roomMissedActive = roomMissedActive;
 	}
@@ -52,9 +50,7 @@ public class CheckRoom implements Behavior {
 			startTime = System.currentTimeMillis();
 			lastColor = color;
 			color = robot.getColor().getColorName();
-			
-			Helper.drawText(color.toString());
-			
+						
 			if(color != lastColor){
 				startColor = System.currentTimeMillis();
 			}
@@ -81,11 +77,9 @@ public class CheckRoom implements Behavior {
 			information.setRoomColor(missColor);
 			}
 		
-		robot.getPilot().reset();
 		robot.getPilot().setMoveSpeed(oldSpeed);
 		
 		active = false;
-		tachoReseted = false;
 		terminated = true;
 	}
 
@@ -96,7 +90,6 @@ public class CheckRoom implements Behavior {
 		while(!terminated){
 			Thread.yield();
 		}
-		tachoReseted = false;
 		terminated = true;
 	}
 
@@ -104,18 +97,12 @@ public class CheckRoom implements Behavior {
 	public boolean takeControl() {
 		
 		if(!information.roomFound() && !active && terminated){
-			if(tachoReseted == false){
-				robot.getPilot().reset();
-				tachoReseted = true;
-			}
-			else{
-				if(robot.getPilot().getTravelDistance() >= distanceUntilActivation 
-						&& robot.getPilot().getTravelDistance() <= distanceUntilActivation+tolerance){
-					active = true;
-					terminated = false;
-					Helper.drawText("CheckRoom activated");
-					return true;
-				}
+			if(robot.getPilot().getTravelDistance() >= distanceUntilActivation 
+					&& robot.getPilot().getTravelDistance() <= distanceUntilActivation+tolerance){
+				active = true;
+				terminated = false;
+				Helper.drawText("CheckRoom activated");
+				return true;
 			}
 			return false;
 		}

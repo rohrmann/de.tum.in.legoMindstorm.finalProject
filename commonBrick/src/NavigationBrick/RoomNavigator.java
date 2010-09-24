@@ -292,7 +292,7 @@ public class RoomNavigator {
 		DriveForward driveForward = new DriveForward(robot, roomInfo);
 		FollowLine followLine = new FollowLine(robot, roomInfo);
 		CheckRoom checkRoom = new CheckRoom(robot, (int)(distanceToRoom-Config.checkRoomTolerance), Config.checkRoomTolerance, roomInfo, roomMissedActive);
-		
+		robot.getPilot().reset();
 		Behavior[] returnToRoom = new Behavior[]{driveForward, followLine, checkRoom};
 		Arbitrator a = new Arbitrator(returnToRoom, true);
 		a.start();

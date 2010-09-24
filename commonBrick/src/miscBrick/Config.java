@@ -21,15 +21,15 @@ public class Config {
 	public static float pusherBackOffDistance = 6f; // Stecke die zurueckgesetzt werden soll
 	public static int pusherCheckRoomTolerance = 4;
 	public static int pusherMoveSpeed = 15;
-	public static int pusherTurnSpeed = 50;
+	public static int pusherTurnSpeed = 75;
 	public static float pusherWheelToWheel = 10.35f;
 	public static int pusherLightTolerance = 7;
 
 	// Puller
 	public static int pullerMoveSpeed = 15;
-	public static int pullerTurnSpeed = 50;
+	public static int pullerTurnSpeed = 75;
 	public static int pullerArmSpeed = 60;
-	public static int pullerArmAngle = 160;
+	public static int pullerArmAngle = 150;
 	public static float pullerReleaseDistance = 14.5f;
 	public static float pullerTakeDistance = 6.0f;
 	public static float pullerWheelToWheel = 10.7f;

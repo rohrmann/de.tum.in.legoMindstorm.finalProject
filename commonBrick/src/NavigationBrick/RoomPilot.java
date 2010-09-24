@@ -30,6 +30,7 @@ public class RoomPilot {
 		Behavior followLine = new FollowLine(robot,information);
 		Behavior checkRoom = new CheckRoom(robot,Config.roomDistance-Config.lightSensorToColorSensorDistance,Config.checkRoomTolerance,information, roomMissedActive);
 		Behavior[] behaviors = {driveForward, followLine, checkRoom};
+		robot.getPilot().reset();
 		arbitrator = new Arbitrator(behaviors,true);
 		arbitrator.start();
 		return information.getRoomColor();
