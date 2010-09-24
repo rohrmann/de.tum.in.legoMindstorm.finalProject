@@ -16,9 +16,7 @@ public class AStar {
 	{
 		HashMap<Boolean> closedList = new HashMap<Boolean>();
 		Heap openList = new Heap();
-		
-		openList.insert(new HeapNode(startNode, 0, estimatedScore(startNode, targetNode), null, heading));
-		
+		openList.insert(new HeapNode(startNode, 0, estimatedScore(heading, startNode, targetNode), null, heading));
 		while(!openList.isEmpty())
 		{
 			HeapNode currentNode = openList.getMin();
@@ -50,11 +48,11 @@ public class AStar {
 				
 				if(neighborEntry==null)
 				{
-					openList.insert(new HeapNode(neighbor, newCurrentScore, newCurrentScore + estimatedScore(neighbor, targetNode), currentNode, dir));
+					openList.insert(new HeapNode(neighbor, newCurrentScore, newCurrentScore + estimatedScore(dir, neighbor, targetNode), currentNode, dir));
 				}
 				else if(newCurrentScore < neighborEntry.getCurrentScore())
 				{
-					openList.update(neighbor.getID(), newCurrentScore, newCurrentScore + estimatedScore(neighbor, targetNode), currentNode, dir);
+					openList.update(neighbor.getID(), newCurrentScore, newCurrentScore + estimatedScore(dir, neighbor, targetNode), currentNode, dir);
 				}
 			}
 		}	
@@ -77,11 +75,36 @@ public class AStar {
 		return path;
 	}
 	
-	private static int estimatedScore(Node currentNode, Node targetNode)
+	private static int estimatedScore(Direction heading, Node currentNode, Node targetNode)
 	{
 		int x = Math.abs(currentNode.getID().getX() - targetNode.getID().getX());
 		int y = Math.abs(currentNode.getID().getY() - targetNode.getID().getY());
+
+		int hx = 0;
+		int hy = 0;
 		
-		return x+y;
+		switch(heading)
+		{
+			case NORTH:
+				hy = 1;
+				break;
+			case SOUTH:
+				hy = -1;
+				break;
+			case EAST:
+				hx = 1;
+				break;
+			default:
+				hx = -1;
+				break;
+		}
+		
+		int dx = (int)Math.signum(targetNode.getID().getX() - currentNode.getID().getX());
+		int dy = (int)Math.signum(targetNode.getID().getY() - currentNode.getID().getY());
+		
+		int turns = Math.abs(dx-hx)+Math.abs(dy-hy);
+		turns = turns > 3 ? 2 : turns;
+		
+		return (x+y) * edgeScore + turns * turnScore;
 	}
 }
