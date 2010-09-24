@@ -95,4 +95,9 @@ public class Puller extends Actor
 	public float getWheelToWheel() {
 		return Config.pullerWheelToWheel;
 	}
+
+	@Override
+	public int getLightTolerance() {
+		return Config.pullerLightTolerance;
+	}
 }

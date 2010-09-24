@@ -36,7 +36,7 @@ public class RoomMissed {
 
 			// find line again
 			while (robot.getPilot().getTravelDistance() < Config.roomDistance
-					+ Config.roomDistanceTolerance - 5) {
+					+ Config.checkRoomTolerance - 5) {
 				if (robot.getLeftLight().groundChange()) {
 					Motor.B.forward();
 					Motor.A.stop();
@@ -54,7 +54,7 @@ public class RoomMissed {
 			color = robot.getColor().getColorName();
 
 			while (robot.getPilot().getTravelDistance() < Config.roomDistance
-					+ Config.roomDistanceTolerance) {
+					+ Config.checkRoomTolerance) {
 				robot.getPilot().forward();
 
 				startTime = System.currentTimeMillis();

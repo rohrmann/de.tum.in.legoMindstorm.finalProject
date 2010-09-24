@@ -83,5 +83,10 @@ public class Pusher extends Actor {
 		return Config.pusherWheelToWheel;
 	}
 
+	@Override
+	public int getLightTolerance() {
+		return Config.pusherLightTolerance;
+	}
+
 	
 }

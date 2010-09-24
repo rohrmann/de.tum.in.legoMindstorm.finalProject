@@ -44,8 +44,8 @@ abstract public class Actor {
 		color.init(colors,Config.colorScanTimes,Config.mapperPollingInterval);
 		LightSettings leftLightSettings = new LightSettings(leftLightSensor);
 		LightSettings rightLightSettings = new LightSettings(rightLightSensor);
-		leftLightSettings.init(Config.lightTolerance);
-		rightLightSettings.init(Config.lightTolerance);
+		leftLightSettings.init(getLightTolerance());
+		rightLightSettings.init(getLightTolerance());
 		
 		robot = new Robot(pilot,color,leftLightSettings, rightLightSettings);
 		Graph map = new Graph();
@@ -148,6 +148,7 @@ abstract public class Actor {
 	
 	public abstract RobotType getType();
 	public abstract float getWheelToWheel();
+	public abstract int getLightTolerance();
 	public abstract void prolog();
 	public abstract void epilog();
 	public abstract void init();

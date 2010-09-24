@@ -68,7 +68,7 @@ public class Mapper {
 		color.init(colors,Config.colorScanTimes,Config.mapperPollingInterval);
 		LightSettings leftLightSettings = new LightSettings(leftLightSensor);
 		LightSettings rightLightSettings = new LightSettings(rightLightSensor);
-		int tolerance =5;
+		int tolerance = Config.mapperLightTolerance;
 		leftLightSettings.init(tolerance);
 		rightLightSettings.init(tolerance);
 		

@@ -48,7 +48,7 @@ public class CheckRoom implements Behavior {
 		Color lastColor=Color.UNKNOWN;
 		long startColor=System.currentTimeMillis();
 		
-		while(active && robot.getPilot().getTravelDistance() < Config.roomDistance+Config.roomDistanceTolerance){
+		while(active && robot.getPilot().getTravelDistance() < distanceUntilActivation+tolerance){
 			startTime = System.currentTimeMillis();
 			lastColor = color;
 			color = robot.getColor().getColorName();
