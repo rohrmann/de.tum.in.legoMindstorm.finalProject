@@ -39,6 +39,13 @@ public class Pusher extends Actor {
 
 		getNavigator().driveForward(travelDistance);
 		
+		try {
+			Thread.sleep(500);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			//e.printStackTrace();
+		}
+		
 		getNavigator().driveBackward(Config.pusherBackOffDistance);
 		
 		getNavigator().turnOnLine();
@@ -69,6 +76,11 @@ public class Pusher extends Actor {
 	@Override
 	public BTStreams getBrickConnection() {
 		return new BTCConnector(Config.rightoo);
+	}
+
+	@Override
+	public float getWheelToWheel() {
+		return Config.pusherWheelToWheel;
 	}
 
 	

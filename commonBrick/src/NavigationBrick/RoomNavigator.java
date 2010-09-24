@@ -259,12 +259,11 @@ public class RoomNavigator {
 	
 	public void turnOnLine()
 	{
-		pilot.rotate(90);
-		pilot.rotate(180, true);					// guckt nach Linie, nach der er sich, nach seiner theoretischen 180 Grad Drehung dann richten kann
-		while(!leftLightSettings.groundChange())
-		{ Thread.yield(); }
-		while(leftLightSettings.groundChange())
-		{ Thread.yield(); }
+		pilot.rotate(180, false); // guckt nach Linie, nach der er sich, nach seiner theoretischen 180 Grad Drehung dann richten kann
+//		while(leftLightSettings.groundChange())
+//		{ pilot.rotate(1, false); }
+//		while(rightLightSettings.groundChange())
+//		{ pilot.rotate(-1, false); }
 		pilot.stop();
 		
 		updateHeading(180);
@@ -283,6 +282,7 @@ public class RoomNavigator {
 	public void driveBackward(float distance)
 	{
 		robot.getPilot().travel(-distance);
+	
 	}
 	
 	public void findRoom(float distanceToRoom)

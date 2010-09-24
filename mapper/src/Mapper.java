@@ -57,7 +57,7 @@ public class Mapper {
 	}
 	
 	public Mapper(){
-		TachoPilot pilot = new TachoPilot(Config.wheelHeight,Config.wheelToWheel,Motor.A,Motor.B);
+		TachoPilot pilot = new TachoPilot(Config.wheelHeight,Config.mapperWheelToWheel,Motor.A,Motor.B);
 		
 		pilot.setMoveSpeed(Config.mapperMoveSpeed);
 		ColorSensor colorSensor = new ColorSensor(SensorPort.S3);
