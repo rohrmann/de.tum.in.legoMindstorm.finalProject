@@ -108,17 +108,23 @@ public class Mapper {
 			
 			iterator = streets.listIterator();
 			while(iterator.hasNext()){
-				if(map.getType(Helper.calcPos(nav.getPosition(), dir = iterator.next()))==Type.UNKNOWN){
+				dir = iterator.next();
+				if(map.getType(Helper.calcPos(nav.getPosition(), dir)) == Type.UNKNOWN){
 					directions.push(dir);
 					nodes.push(current);
 				}
 			}
 			
-			if(nodes.empty()) break;
-			
-			next = (Node)nodes.pop();
-			dir = (Direction)directions.pop();
-			
+			while(true)
+			{
+				if(nodes.empty()) return;
+				
+				next = (Node)nodes.pop();
+				dir = (Direction)directions.pop();
+				
+				if(map.getType(Helper.calcPos(next.getID(), dir)) == Type.UNKNOWN) break;
+			}
+				
 			if(next != current)
 			{
 				Helper.drawText("returning to " + next.getID());
