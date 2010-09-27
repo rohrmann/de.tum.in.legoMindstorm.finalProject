@@ -1,5 +1,7 @@
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ListIterator;
+import java.util.Stack;
 
 import lejos.nxt.Button;
 import lejos.nxt.LightSensor;
@@ -82,7 +84,59 @@ public class Mapper {
 		Node startNode = new Node(Type.PULLSTART,nav.getPosition());
 		map.addNode(startNode);
 		
-		dfs(startNode,Direction.UNDEFINED);
+		//dfs(startNode,Direction.UNDEFINED);
+		dfsFastReturn(startNode);
+	}
+	
+	public void dfsFastReturn(Node startNode)
+	{
+		Stack nodes = new Stack();
+		Stack directions = new Stack();
+		
+		ListIterator<Direction> iterator;
+		List<Direction> streets;
+		Direction dir = Direction.UNDEFINED;
+		Node current = startNode;
+		Node next;
+		Color color;
+		
+		while(true)
+		{
+			streets = analyser.analyseCrossing(nav.getHeading());
+			
+			addNodes(streets,current);
+			
+			iterator = streets.listIterator();
+			while(iterator.hasNext()){
+				dir = iterator.next();
+				if(map.getType(Helper.calcPos(nav.getPosition(), dir)) == Type.UNKNOWN){
+					directions.push(dir);
+					nodes.push(current);
+				}
+			}
+			
+			while(true)
+			{
+				if(nodes.empty()) return;
+				
+				next = (Node)nodes.pop();
+				dir = (Direction)directions.pop();
+				
+				if(map.getType(Helper.calcPos(next.getID(), dir)) == Type.UNKNOWN) break;
+			}
+				
+			if(next != current)
+			{
+				Helper.drawText("returning to " + next.getID());
+				nav.moveTo(next.getID(), false);
+			}
+			current = next;
+			
+			Helper.drawText(dir.toString());
+			color = nav.move(dir);
+			current = current.get(dir);
+			current.setType(color);
+		}
 	}
 	
 	public void dfs(Node startNode,Direction sourceDirection){

@@ -4,15 +4,28 @@ import java.util.*;
 
 public class AStar {
 	
-	public final static int edgeScore = 1;
+	public final static int edgeScore = 2;
 	public final static int turnScore = 1; 
 	
+
+
 	public static ArrayList<Pair> findPath(Graph graph, Pair startPosition, Direction heading, Pair target)
 	{
-		return findPath(graph.getNode(startPosition), heading, graph.getNode(target));
+		return findPath(graph, startPosition, heading, target, false);
+	}
+
+	public static ArrayList<Pair> findPath(Graph graph, Pair startPosition, Direction heading, Pair target, boolean ignoreObstacles)
+	{
+		return findPath(graph.getNode(startPosition), heading, graph.getNode(target), ignoreObstacles);
 	}
 	
+	
 	public static ArrayList<Pair> findPath(Node startNode, Direction heading, Node targetNode)
+	{
+		return findPath(startNode, heading, targetNode, false);
+	}
+
+	public static ArrayList<Pair> findPath(Node startNode, Direction heading, Node targetNode, boolean ignoreObstacles)
 	{
 		HashMap<Boolean> closedList = new HashMap<Boolean>();
 		Heap openList = new Heap();
@@ -30,7 +43,7 @@ public class AStar {
 			for(int i=0; i<Direction.values().length; i++)
 			{
 				Direction dir = Direction.values()[i];
-				if(!currentNode.getGraphNode().has(dir) || !currentNode.getGraphNode().get(dir).isFree())
+				if(!currentNode.getGraphNode().has(dir) || !(ignoreObstacles || currentNode.getGraphNode().get(dir).isFree()))
 					continue;
 				
 				Node neighbor = currentNode.getGraphNode().get(dir);

@@ -376,7 +376,11 @@ public class RoomNavigator {
 	}
 	
 	public void moveTo(Pair to){
-		List<Pair> path = bfs(to);
+		moveTo(to,true);
+	}
+	
+	public void moveTo(Pair to, boolean checkBoxes){
+		List<Pair> path = bfs(to,checkBoxes);
 		
 		if(path == null){
 			Helper.error("RoomNavigator.moveTo: could not find a path from:" + getPosition() + " to:" + to);
@@ -414,6 +418,10 @@ public class RoomNavigator {
 	}
 	
 	public List<Pair> bfs(Pair to){
+		return bfs(to,true);
+	}
+	
+	public List<Pair> bfs(Pair to, boolean checkBoxes){
 		
 		//System.out.println("Start bfs");
 		//Button.waitForPress();
@@ -443,12 +451,20 @@ public class RoomNavigator {
 					System.out.println("Node:" + map.getNode(pos.getNeighbour(dir)));
 				}
 				Button.waitForPress();*/
-				if(map.hasNode(pos.getNeighbour(dir)) && visited.get(pos.getNeighbour(dir)) == null && map.getType(pos.getNeighbour(dir)).isAccessible()){
-					//System.out.println("RN:" + pos.getNeighbour(dir));
-					//Button.waitForPress();
-					queue.push(pos.getNeighbour(dir));
-					visited.put(pos.getNeighbour(dir), true);
-					prev.put(pos.getNeighbour(dir),pos);
+				if(map.hasNode(pos.getNeighbour(dir)) && visited.get(pos.getNeighbour(dir)) == null){
+					if(checkBoxes){
+						if(map.getType(pos.getNeighbour(dir)).isAccessible()){
+							queue.push(pos.getNeighbour(dir));
+							visited.put(pos.getNeighbour(dir), true);
+							prev.put(pos.getNeighbour(dir),pos);
+						}
+					}
+					else{
+						queue.push(pos.getNeighbour(dir));
+						visited.put(pos.getNeighbour(dir), true);
+						prev.put(pos.getNeighbour(dir),pos);
+					}
+					
 				}
 				
 			/*	if(!map.getType(pos.getNeighbour(dir)).isAccessible())
@@ -483,32 +499,33 @@ public class RoomNavigator {
 	
 	public void moveToAStar( Pair to)
 	{
-		ArrayList<Pair> path = misc.AStar.findPath(map, getPosition(), heading, to);
+		moveToAStar(to, false);
+	}
+
+	public void moveToAStar( Pair to, boolean ignoreObstacles)
+	{
+		ArrayList<Pair> path = misc.AStar.findPath(map, getPosition(), heading, to, ignoreObstacles);
 		
+		if(path == null){
+			Helper.error("RoomNavigator.moveTo: could not find a path from:" + getPosition() + " to:" + to);
+		}
+
+		Direction dir;		
 		ListIterator<Pair> iterator = path.listIterator();
 		
-		Pair pos = iterator.next();
-		Pair nextPos;
-		
+
+		iterator.next();
 		while(iterator.hasNext())
 		{
-			nextPos = iterator.next();
+			dir = findDir(iterator.next());
 			
-			int x = nextPos.getX() - pos.getX();
-			int y = nextPos.getY() - pos.getY();
+			if(dir == Direction.UNDEFINED){
+				Helper.error("RoomNavigator.moveTo: could not find the direction");
+			}
 			
-			if(x == 1 && y == 0)
-				move(Direction.EAST);
-			else if(x == -1 && y == 0)
-				move(Direction.WEST);
-			else if(x == 0 && y == 1)
-				move(Direction.NORTH);
-			else if(x == 0 && y == -1)
-				move(Direction.SOUTH);
-			
-			pos = nextPos;
-		}
-		
+			turn(dir);
+			goToNextRoom();
+		}		
 	}
 	
 	public Graph getGraph(){
