@@ -393,6 +393,7 @@ public class RoomNavigator {
 				Helper.error("RoomNavigator.moveTo: could not find the direction");
 			}
 			
+			System.out.println("to:"+path.get(i)+ " dir:" + dir);
 			turn(dir);
 			goToNextRoom();
 		}

@@ -73,7 +73,7 @@ point BoxMovement::destBot() const{
 std::string BoxMovement::toString(){
 	std::stringstream ss;
 
-	ss << (bot == RPUSHER? "pusher ": "puller ") << Helper::pair2Str(this->srcBot()) << " " << Helper::pair2Str(this->dest());
+	ss << (bot == RPUSHER? "push ": "pull ") << Helper::pair2Str(this->src()) << " " << Helper::pair2Str(this->dest());
 
 	return ss.str();
 }

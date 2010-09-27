@@ -613,3 +613,65 @@ void GameState::printConvertedMovements(std::ostream & os){
 		os << boxMovement->toConvertedString(dims.first) << std::endl;
 	}
 }
+
+void GameState::optimizeMovements(point lastPusher, point lastPuller){
+	RobotMovement* rM = robotMovement;
+	RobotMovement* last = NULL;
+
+	//merge movements
+	while(rM != NULL && rM->next != NULL){
+		if(rM->type == rM->next->type){
+			RobotMovement* temp = rM;
+			rM = rM->next;
+			temp->next = NULL;
+			delete temp;
+		}
+		else if(last != NULL){
+			last->next = rM;
+			last = rM;
+			rM = rM->next;
+		}
+		else if(last == NULL){
+			robotMovement = rM;
+			last = rM;
+			rM = rM->next;
+		}
+
+
+	}
+
+	rM = robotMovement;
+	last= NULL;
+
+	//remove non movements
+	while(rM!= NULL){
+		if(rM->type == RPUSHER && lastPusher != rM->dest){
+			lastPusher = rM->dest;
+			last = rM;
+			rM = rM->next;
+		}
+		else if(rM->type ==RPULLER && lastPuller != rM->dest){
+			lastPuller = rM->dest;
+			last= rM;
+			rM = rM->next;
+		}
+		else{
+			if(last == NULL){
+				robotMovement = rM->next;
+				RobotMovement* temp = rM;
+				rM = rM->next;
+				temp->next = NULL;
+				delete temp;
+			}
+			else{
+				RobotMovement* temp = rM;
+				rM = rM->next;
+				last->next = rM;
+				temp->next = NULL;
+				delete temp;
+			}
+		}
+
+	}
+
+}

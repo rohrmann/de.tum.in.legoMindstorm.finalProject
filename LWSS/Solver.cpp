@@ -144,11 +144,21 @@ void Solver::solve(){
 				currentState = currentState->prev;
 			}
 
-			MapUtils::printMap(*solution.top(),std::cout);
+			currentState = solution.top();
+			MapUtils::printMap(*currentState,std::cout);
+			solution.pop();
+			point pusher = currentState->pusher;
+			point puller = currentState->puller;
+
 			std::cout << "Commands:" << std::endl;
 			while(!solution.empty()){
 				currentState = solution.top();
 				solution.pop();
+
+				currentState->optimizeMovements(pusher,puller);
+
+				pusher = currentState->pusher;
+				puller = currentState->puller;
 
 				currentState->printConvertedMovements(std::cout);
 			}
