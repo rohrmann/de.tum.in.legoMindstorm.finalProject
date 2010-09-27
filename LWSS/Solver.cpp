@@ -160,7 +160,7 @@ void Solver::solve(){
 				pusher = currentState->pusher;
 				puller = currentState->puller;
 
-				currentState->printMovements(std::cout);
+				currentState->printConvertedMovements(std::cout);
 			}
 
 			exit(0);
