@@ -50,12 +50,41 @@ void IDAStar::recSolve(GameState* currentState, int costBoundary){
 			currentState = currentState->prev;
 		}
 
+		point pusher = currentState->pusher;
+		point puller = currentState->puller;
 		MapUtils::printMap(*solution.top(),std::cout);
+
+		std::queue<GameState*> queue;
+
 		std::cout << "Commands:" << std::endl;
 		while(!solution.empty()){
 			currentState = solution.top();
 			solution.pop();
 
+			currentState->optimizeMovements(pusher,puller);
+
+			pusher = currentState->pusher;
+			puller = currentState->puller;
+			queue.push(currentState);
+			//currentState->printConvertedMovements(std::cout);
+		}
+
+		currentState = queue.front();
+		GameState* nextState= NULL;
+		queue.pop();
+		while(!queue.empty()){
+			nextState = queue.front();
+			queue.pop();
+			if(nextState->robotMovement==NULL && nextState->boxMovement->bot == currentState->boxMovement->bot && currentState->boxMovement->nextDest() == nextState->boxMovement->dest()){
+				currentState->boxMovement->incDist();
+			}
+			else{
+				currentState->printConvertedMovements(std::cout);
+				currentState = nextState;
+			}
+		}
+
+		if(currentState != NULL){
 			currentState->printConvertedMovements(std::cout);
 		}
 

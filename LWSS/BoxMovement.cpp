@@ -22,14 +22,31 @@ point BoxMovement::src()const{
 point BoxMovement::dest()const{
 	switch(dir){
 	case NORTH:
-		return Helper::north(source);
+		return Helper::north(source,distance);
 	case SOUTH:
-		return Helper::south(source);
+		return Helper::south(source,distance);
 	case WEST:
-		return Helper::west(source);
+		return Helper::west(source,distance);
 	case EAST:
-		return Helper::east(source);
+		return Helper::east(source,distance);
 	}
+}
+
+point BoxMovement::nextDest() const {
+	switch(dir){
+		case NORTH:
+			return Helper::north(source,distance+1);
+		case SOUTH:
+			return Helper::south(source,distance+1);
+		case WEST:
+			return Helper::west(source,distance+1);
+		case EAST:
+			return Helper::east(source,distance+1);
+		}
+}
+
+void BoxMovement::incDist(){
+	distance++;
 }
 
 point BoxMovement::srcBot() const{

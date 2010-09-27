@@ -20,12 +20,14 @@ public:
 	point source;
 	Direction dir;
 	Robot bot;
+	unsigned int distance;
 
 	BoxMovement(unsigned int boxNum, point src, Direction dir, Robot bot){
 		this->boxNum = boxNum;
 		this->source = src;
 		this->dir = dir;
 		this->bot = bot;
+		this->distance = 1;
 	}
 
 	point src() const;
@@ -37,6 +39,9 @@ public:
 
 	std::string toString();
 	std::string toConvertedString(int dim);
+
+	point nextDest() const;
+	void incDist();
 };
 
 

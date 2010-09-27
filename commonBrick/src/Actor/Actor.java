@@ -86,6 +86,38 @@ abstract public class Actor {
 			command.update(this);
 		}
 		
+		playSound();
+		
+	}
+	
+	public void playSound(){
+		short h = 494;
+		short c = 523;
+		short d = 587;
+		short e = 659;
+		short f = 698;
+
+		short [] note = {c,100, 0,35,d,50, 0,5, e,50, 0,35, d,50, 0,35,f,100,0,35,e,35,0,35,d,5,0,35,h,35,0,5,c,100};
+		while(true){
+			for(int i=0;i <note.length; i+=2) {
+				short w = note[i+1];
+				int n = note[i];
+				if (n != 0) Sound.playNote(Sound.PIANO,n,w*10);
+				else{
+					try {
+						Thread.sleep(w*10);
+					} catch (InterruptedException e1) {
+						// TODO Auto-generated catch block
+					}
+				}
+			}
+			
+			try {
+				Thread.sleep(1000);
+			} catch (InterruptedException e1) {
+				// TODO Auto-generated catch block
+			}
+		}
 	}
 	
 	public void acquireToken(BTStreams conn){
