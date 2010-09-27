@@ -22,7 +22,7 @@ public class Config {
 	public static int pusherCheckRoomTolerance = 4;
 	public static int pusherMoveSpeed = 15;
 	public static int pusherTurnSpeed = 75;
-	public static float pusherWheelToWheel = 10.35f;
+	public static float pusherWheelToWheel = 10.4f;
 	public static int pusherLightTolerance = 7;
 
 	// Puller
@@ -32,7 +32,7 @@ public class Config {
 	public static int pullerArmAngle = 150;
 	public static float pullerReleaseDistance = 14.5f;
 	public static float pullerTakeDistance = 6.0f;
-	public static float pullerWheelToWheel = 10.7f;
+	public static float pullerWheelToWheel = 10.6f;
 	public static int pullerLightTolerance = 7;
 	
 	// Mapper
@@ -62,4 +62,5 @@ public class Config {
 	
 	public static String rightoo = "Rightoo";
 	public static String s_brick = "s_brick";
+	public static String explorer = "explorer";
 }

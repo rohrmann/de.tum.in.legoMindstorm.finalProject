@@ -109,6 +109,8 @@ public:
 
 	void printMovements(std::ostream& os);
 	void printConvertedMovements(std::ostream&os);
+
+	void optimizeMovements(point lastPusher, point lastPuller);
 };
 
 #endif /* ARRAYMAP_H_ */

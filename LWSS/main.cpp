@@ -12,6 +12,7 @@
 #include "GameState.h"
 #include "ZobristHashing.h"
 #include "Solver.h"
+#include "IDAStar.h"
 
 int main(int argc, char** argv){
 	std::string str;
